@@ -1,0 +1,38 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-wine shadow fixed-top">
+  <div class="container">
+    <a class="navbar-brand fw-bold text-light" [routerLink]="['/']">
+      <img src="assets/images/logo-municipal-aqp.png" alt="img-logo" width="40" class="me-2"> Municipalidad de Arequipa
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link text-light fw-bold" [routerLink]="['/']"><i class="fas fa-home"></i> Inicio</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-light" [routerLink]="['/noticias']"><i class="fas fa-newspaper"></i> Noticias</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-light" [routerLink]="['/multas']"><i class="fas fa-file-invoice-dollar"></i> Multas</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-light" [routerLink]="['/contacto']"><i class="fas fa-phone-alt"></i> Contacto</a>
+        </li>
+        <li class="nav-item" *ngIf="!isLoggedIn">
+          <a class="nav-link text-light" [routerLink]="['/login']"><i class="fas fa-user"></i> Iniciar sesión</a>
+        </li>
+        <li class="nav-item" *ngIf="!isLoggedIn">
+          <a class="nav-link text-light" [routerLink]="['/signup']"><i class="fas fa-user-plus"></i> Registrar</a>
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn">
+          <a class="nav-link text-light" (click)="logout()" style="cursor: pointer;"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn && user">
+          <button class="nav-link text-light btn btn-link" style="cursor: default;">{{ user.username }}</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

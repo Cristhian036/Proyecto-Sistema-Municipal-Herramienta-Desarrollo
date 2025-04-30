@@ -1,0 +1,17 @@
+/* PALETA DE COLORES */
+.bg-wine {
+  background-color: #721121 !important;
+}
+
+/* NAVBAR */
+.navbar {
+  transition: background 0.3s ease-in-out;
+}
+
+.navbar-nav .nav-link:hover {
+  color: #FFD700; /* Efecto dorado */
+}
+
+.navbar-nav .nav-link i {
+  margin-right: 5px; /* Espacio entre el ícono y el texto */
+}
