@@ -1,10 +1,10 @@
-package com.utp.sistema_municipal_backend;
+package com.example.sistemamultasss;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SistemaMunicipalBackendApplicationTests {
+class SistemamultasssApplicationTests {
 
 	@Test
 	void contextLoads() {

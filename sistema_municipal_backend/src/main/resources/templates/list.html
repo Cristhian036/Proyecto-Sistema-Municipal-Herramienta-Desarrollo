@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Lista de Multas</title>
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+	<h1 class="my-4">Lista de Multas</h1>
+	<a href="/multas/new" class="btn btn-primary mb-3">Agregar Nueva Multa</a>
+
+	<!-- Formulario de Búsqueda -->
+	<form class="form-inline mb-3" th:action="@{/multas}" method="get">
+		<div class="form-group mx-sm-3 mb-2">
+			<input type="text" class="form-control" id="search" name="search" placeholder="Buscar por código o placa">
+		</div>
+		<button type="submit" class="btn btn-primary mb-2">Buscar</button>
+	</form>
+
+	<table class="table table-striped">
+		<thead>
+		<tr>
+			<th>Código</th>
+			<th>Descripción</th>
+			<th>Monto</th>
+			<th>Código de Infracción</th>
+			<th>Lugar</th>
+			<th>Fecha y Hora</th>
+			<th>Placa del Vehículo</th>
+			<th>Nombre del Dueño</th>
+			<th>Acciones</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr th:each="multa : ${multas}">
+			<td th:text="${multa.codigo}"></td>
+			<td th:text="${multa.descripcion}"></td>
+			<td th:text="${multa.monto}"></td>
+			<td th:text="${multa.codigoInfraccion}"></td>
+			<td th:text="${multa.lugar}"></td>
+			<td th:text="${#temporals.format(multa.fechaHora, 'yyyy-MM-dd HH:mm')}"></td>
+			<td th:text="${multa.numeroTarjetaIdentificacionVehicular}"></td>
+			<td th:text="${multa.nombresConductor}"></td>
+			<td>
+				<a th:href="@{/multas/{codigo}(codigo=${multa.codigo})}" class="btn btn-info btn-sm">Ver</a>
+				<a th:href="@{/multas/delete/{id}(id=${multa.id})}" class="btn btn-danger btn-sm">Eliminar</a>
+			</td>
+		</tr>
+		</tbody>
+	</table>
+</div>
+</body>
+</html>

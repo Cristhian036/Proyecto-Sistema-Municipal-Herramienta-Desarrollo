@@ -1,13 +1,13 @@
-package com.utp.sistema_municipal_backend;
+package com.example.sistemamultasss;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SistemaMunicipalBackendApplication {
+public class SistemamultasssApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SistemaMunicipalBackendApplication.class, args);
+		SpringApplication.run(SistemamultasssApplication.class, args);
 	}
 
 }

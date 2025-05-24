@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Resultado de Búsqueda</title>
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+	<style>
+		@media print {
+            .no-print {
+                display: none;
+            }
+        }
+	</style>
+</head>
+<body>
+<div class="container">
+	<h1 class="my-4">Resultado de Búsqueda</h1>
+	<div class="card">
+		<div class="card-body">
+			<div class="text-center mb-4">
+				<img src="/images/municipalidad-logo.png" alt="Logo Municipalidad" class="img-fluid" style="max-height: 100px;">
+				<img src="/images/policia-logo.png" alt="Logo Policía" class="img-fluid" style="max-height: 100px;">
+			</div>
+			<h5 class="card-title">Detalles de la Multa</h5>
+			<p class="card-text">
+				Código: <span th:text="${multa.codigo}"></span>
+			</p>
+			<p class="card-text">
+				Descripción: <span th:text="${multa.descripcionConductaInfractora}"></span>
+			</p>
+			<p class="card-text">
+				Monto: <span th:text="${multa.monto}"></span>
+			</p>
+			<p class="card-text">
+				Código de Infracción: <span th:text="${multa.codigoInfraccion}"></span>
+			</p>
+			<p class="card-text">
+				Lugar: <span th:text="${multa.nombreVia}"></span>
+			</p>
+			<p class="card-text">
+				Fecha y Hora: <span th:text="${#temporals.format(multa.fechaHora, 'yyyy-MM-dd HH:mm')}"></span>
+			</p>
+			<p class="card-text">
+				Placa del Vehículo: <span th:text="${multa.numeroTarjetaIdentificacionVehicular}"></span>
+			</p>
+			<p class="card-text">
+				Nombre del Dueño: <span th:text="${multa.nombresConductor}"></span>
+			</p>
+			<div class="text-center mt-4">
+				<p>Firma del Policía</p>
+				<img src="/images/firma-policia.png" alt="Firma Policía" class="img-fluid" style="max-height: 100px;">
+			</div>
+			<div class="mt-4 no-print">
+				<a href="#" class="btn btn-primary" onclick="window.print()">Imprimir</a>
+				<a href="#" class="btn btn-success">Pagar</a>
+				<a href="/multas/buscar" class="btn btn-secondary">Regresar</a>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

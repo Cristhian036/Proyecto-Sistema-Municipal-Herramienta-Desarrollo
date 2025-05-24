@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Buscar Multa</title>
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+	<h1 class="my-4">Buscar Multa</h1>
+	<form th:action="@{/multas/buscar}" method="post">
+		<div class="form-group">
+			<label for="codigo">Código de la Multa:</label>
+			<input type="text" id="codigo" name="codigo" class="form-control" required>
+		</div>
+		<button type="submit" class="btn btn-primary">Buscar</button>
+	</form>
+	<div th:if="${error}" class="alert alert-danger mt-3" th:text="${error}"></div>
+	<a href="/usuarios/login" class="btn btn-secondary mt-3">Iniciar Sesión</a>
+</div>
+</body>
+</html>

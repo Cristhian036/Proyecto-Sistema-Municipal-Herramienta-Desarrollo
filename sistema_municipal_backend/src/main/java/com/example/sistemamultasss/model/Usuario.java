@@ -1,31 +1,30 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package model;
+package com.example.sistemamultasss.model;
 
-/**
- *
- * @author lenovo
- */
+import java.util.List;
+
+import com.example.sistemamultasss.model.Multa;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Usuario {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String nombre;
     private String email;
     private String password;
-    private String rol; // ADMIN, ENCARGADO, USUARIO
+    private String rol; // "USUARIO" o "TRABAJADOR"
+
+    @OneToMany(mappedBy = "usuario")
+    private List<Multa> multas;
 
     // Getters y Setters
-
     public Long getId() {
         return id;
     }
@@ -65,6 +64,12 @@ public class Usuario {
     public void setRol(String rol) {
         this.rol = rol;
     }
-    
-}
 
+    public List<Multa> getMultas() {
+        return multas;
+    }
+
+    public void setMultas(List<Multa> multas) {
+        this.multas = multas;
+    }
+}
