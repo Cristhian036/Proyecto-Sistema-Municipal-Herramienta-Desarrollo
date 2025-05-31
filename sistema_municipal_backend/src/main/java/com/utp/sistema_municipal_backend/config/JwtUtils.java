@@ -1,4 +1,4 @@
-package com.utp.sistema_municipal_backend.configuracion;
+package com.utp.sistema_municipal_backend.config;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -47,7 +47,7 @@ public class JwtUtils {
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, userDetails.getUsername());
+        return createToken(claims, userDetails.getUsername());  // Aquí username es el email
     }
 
     private String createToken(Map<String, Object> claims, String subject) {

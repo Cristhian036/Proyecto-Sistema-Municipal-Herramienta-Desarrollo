@@ -1,4 +1,4 @@
-package com.utp.sistema_municipal_backend.modelo;
+package com.utp.sistema_municipal_backend.model;
 
 import org.springframework.security.core.GrantedAuthority;
 
