@@ -22,6 +22,10 @@ import {MatIconModule} from '@angular/material/icon';
 import { authInterceptorProviders } from './services/auth.interceptor';
 import { DashboardComponent } from './pages/admin/dashboard/dashboard.component';
 import { UserDashboardComponent } from './pages/user/user-dashboard/user-dashboard.component';
+import { BuscarMultaComponent } from './buscar-multa/buscar-multa.component';
+import { CrudMultaComponent } from './crud-multa/crud-multa.component';
+import { ListaMultasComponent } from './lista-multas/lista-multas.component';
+import { ResultadoBusquedaComponent } from './resultado-busqueda/resultado-busqueda.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +35,11 @@ import { UserDashboardComponent } from './pages/user/user-dashboard/user-dashboa
     LoginComponent,
     HomeComponent,
     DashboardComponent,
-    UserDashboardComponent
+    UserDashboardComponent,
+    BuscarMultaComponent,
+    CrudMultaComponent,
+    ListaMultasComponent,
+    ResultadoBusquedaComponent
   ],
   imports: [
     BrowserModule,
