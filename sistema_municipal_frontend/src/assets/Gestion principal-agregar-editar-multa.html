@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Agregar/Editar Multa - Municipalidad de Arequipa</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #8B1538;
+            --secondary-color: #2c5530;
+            --accent-color: #20c997;
+            --light-bg: #f8f9fa;
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --border-radius: 12px;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+            box-shadow: var(--card-shadow);
+            text-align: center;
+        }
+
+        .page-header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 300;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .page-header .subtitle {
+            margin-top: 0.5rem;
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .form-section {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--card-shadow);
+            border-left: 4px solid var(--primary-color);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .form-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .section-header h2 {
+            margin: 0;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .form-control {
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(139, 21, 56, 0.25);
+        }
+
+        .form-control:hover {
+            border-color: #ced4da;
+        }
+
+        .form-check-input {
+            transform: scale(1.2);
+            margin-right: 0.5rem;
+        }
+
+        .form-check-label {
+            font-weight: 500;
+            color: #495057;
+        }
+
+        .row .col-md-6 {
+            padding-left: 0.75rem;
+            padding-right: 0.75rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border: none;
+            padding: 1rem 3rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(139, 21, 56, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 21, 56, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            margin-right: 1rem;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-1px);
+        }
+
+        .action-buttons {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            margin-top: 2rem;
+        }
+
+        .required-field::after {
+            content: " *";
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .form-text {
+            font-size: 0.875rem;
+            color: #6c757d;
+            margin-top: 0.25rem;
+        }
+
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2rem;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .form-section {
+                padding: 1.5rem;
+            }
+
+            .section-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.5rem;
+            }
+
+            .btn-primary, .btn-secondary {
+                width: 100%;
+                margin-bottom: 1rem;
+            }
+        }
+
+        .progress-indicator {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .progress-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .progress-step::after {
+            content: '';
+            position: absolute;
+            top: 15px;
+            right: -50%;
+            width: 100%;
+            height: 2px;
+            background: #e9ecef;
+            z-index: 1;
+        }
+
+        .progress-step:last-child::after {
+            display: none;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.5rem;
+            font-weight: bold;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-label {
+            font-size: 0.8rem;
+            color: #6c757d;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>
+                <i class="fas fa-file-invoice-dollar"></i>
+                Gestión de Multas de Tránsito
+            </h1>
+            <div class="subtitle">Municipalidad de Arequipa - Sistema de Infracciones</div>
+        </div>
+
+        <!-- Progress Indicator -->
+        <div class="progress-indicator">
+            <div class="progress-steps">
+                <div class="progress-step">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">Conductor</div>
+                </div>
+                <div class="progress-step">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">Vehículo</div>
+                </div>
+                <div class="progress-step">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">Infracción</div>
+                </div>
+                <div class="progress-step">
+                    <div class="step-circle">4</div>
+                    <div class="step-label">Ubicación</div>
+                </div>
+                <div class="progress-step">
+                    <div class="step-circle">5</div>
+                    <div class="step-label">Agente</div>
+                </div>
+            </div>
+        </div>
+
+        <form th:action="@{/multas}" th:object="${multa}" method="post">
+            <!-- Datos del Conductor -->
+            <div class="form-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h2>Datos del Conductor</h2>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="licenciaConducir" class="required-field">Licencia de Conducir</label>
+                            <input type="text" id="licenciaConducir" th:field="*{licenciaConducir}" class="form-control" required>
+                            <small class="form-text">Ingrese el número de licencia de conducir</small>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="tipoDocumentoIdentidad" class="required-field">Tipo de Documento</label>
+                            <select id="tipoDocumentoIdentidad" th:field="*{tipoDocumentoIdentidad}" class="form-control" required>
+                                <option value="">Seleccione...</option>
+                                <option value="DNI">DNI</option>
+                                <option value="CARNET_EXTRANJERIA">Carnet de Extranjería</option>
+                                <option value="PASAPORTE">Pasaporte</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="documentoIdentidad" class="required-field">Número de Documento</label>
+                            <input type="text" id="documentoIdentidad" th:field="*{documentoIdentidad}" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="nombresConductor" class="required-field">Nombres</label>
+                            <input type="text" id="nombresConductor" th:field="*{nombresConductor}" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="apellidosConductor" class="required-field">Apellidos</label>
+                            <input type="text" id="apellidosConductor" th:field="*{apellidosConductor}" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="domicilio" class="required-field">Domicilio</label>
+                            <input type="text" id="domicilio" th:field="*{domicilio}" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="departamentoNacimiento" class="required-field">Departamento</label>
+                            <input type="text" id="departamentoNacimiento" th:field="*{departamentoNacimiento}" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="provinciaNacimiento" class="required-field">Provincia</label>
+                            <input type="text" id="provinciaNacimiento" th:field="*{provinciaNacimiento}" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="distritoNacimiento" class="required-field">Distrito</label>
+                            <input type="text" id="distritoNacimiento" th:field="*{distritoNacimiento}" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Datos del Vehículo -->
+            <div class="form-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-car"></i>
+                    </div>
+                    <h2>Datos del Vehículo</h2>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="numeroTarjetaIdentificacionVehicular" class="required-field">Tarjeta de Identificación Vehicular</label>
+                            <input type="text" id="numeroTarjetaIdentificacionVehicular" th:field="*{numeroTarjetaIdentificacionVehicular}" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="tipoPlaca" class="required-field">Tipo de Placa</label>
+                            <select id="tipoPlaca" th:field="*{tipoPlaca}" class="form-control" required>
+                                <option value="">Seleccione...</option>
+                                <option value="PERU">Perú</option>
+                                <option value="EXTRANJERA">Extranjera</option>
+                                <option value="SIN_PLACA">Sin Placa</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="modalidadServicio" class="required-field">Modalidad de Servicio</label>
+                    <select id="modalidadServicio" th:field="*{modalidadServicio}" class="form-control" required>
+                        <option value="">Seleccione...</option>
+                        <option value="PARTICULAR">Particular</option>
+                        <option value="MERCANCIAS">Manejo de Mercancías</option>
+                        <option value="PASAJEROS">Pasajeros</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Datos de la Infracción -->
+            <div class="form-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h2>Datos de la Infracción</h2>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="codigoInfraccion" class="required-field">Código de Infracción</label>
+                            <input type="text" id="codigoInfraccion" th:field="*{codigoInfraccion}" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="calificacion" class="required-field">Calificación</label>
+                            <select id="calificacion" th:field="*{calificacion}" class="form-control" required>
+                                <option value="">Seleccione...</option>
+                                <option value="LEVE">Leve</option>
+                                <option value="GRAVE">Grave</option>
+                                <option value="MUY_GRAVE">Muy Grave</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="sancion" class="required-field">Sanción</label>
+                            <select id="sancion" th:field="*{sancion}" class="form-control" required>
+                                <option value="">Seleccione...</option>
+                                <option value="MULTA">Multa</option>
+                                <option value="NO_PECUNIARIA">No Pecuniaria</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="medidaPreventiva" class="required-field">Medida Preventiva</label>
+                            <select id="medidaPreventiva" th:field="*{medidaPreventiva}" class="form-control" required>
+                                <option value="">Seleccione...</option>
+                                <option value="RETENCION_LICENCIA">Retención de Licencia</option>
+                                <option value="INTERNAMIENTO_VEHICULO">Internamiento de Vehículo</option>
+                                <option value="RETENCION_VEHICULO">Retención de Vehículo</option>
+                                <option value="REMOVION_VEHICULO">Remoción de Vehículo</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input type="checkbox" id="esReincidente" th:field="*{esReincidente}" class="form-check-input">
+                                <label for="esReincidente" class="form-check-label">Es Reincidente</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="puntosAcumulados">Puntos Acumulados</label>
+                            <input type="number" id="puntosAcumulados" th:field="*{puntosAcumulados}" class="form-control" readonly>
+                            <small class="form-text">Este campo se calcula automáticamente</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ubicación de la Infracción -->
+            <div class="form-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h2>Ubicación de la Infracción</h2>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="codigoDepartamento" class="required-field">Código Departamento</label>
+                            <input type="text" id="codigoDepartamento" th:field="*{codigoDepartamento}" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="codigoProvincia" class="required-field">Código Provincia</label>
+                            <input type="text" id="codigoProvincia" th:field="*{codigoProvincia}" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="codigoDistrito" class="required-field">Código Distrito</label>
+                            <input type="text" id="codigoDistrito" th:field="*{codigoDistrito}" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="fechaHora" class="required-field">Fecha y Hora</label>
+                            <input type="datetime-local" id="fechaHora" th:field="*{fechaHora}" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="codigoRutaVia" class="required-field">Código de Ruta/Vía</label>
+                            <input type="text" id="codigoRutaVia" th:field="*{codigoRutaVia}" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="kilometroCuadra" class="required-field">Kilómetro/Cuadra</label>
+                            <input type="text" id="kilometroCuadra" th:field="*{kilometroCuadra}" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="nombreVia" class="required-field">Nombre de la Vía</label>
+                            <input type="text" id="nombreVia" th:field="*{nombreVia}" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="descripcionConductaInfractora">Descripción de la Conducta Infractora</label>
+                    <textarea id="descripcionConductaInfractora" th:field="*{descripcionConductaInfractora}" class="form-control" rows="3"></textarea>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="descripcionHeridos">Descripción de Heridos</label>
+                            <textarea id="descripcionHeridos" th:field="*{descripcionHeridos}" class="form-control" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="observacionPNP">Observación PNP</label>
+                            <textarea id="observacionPNP" th:field="*{observacionPNP}" class="form-control" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="detallesTestigo">Detalles del Testigo</label>
+                    <textarea id="detallesTestigo" th:field="*{detallesTestigo}" class="form-control" rows="3"></textarea>
+                </div>
+            </div>
+
+            <!-- Datos del Agente -->
+            <div class="form-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <h2>Datos del Agente</h2>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="apellidoPaternoAgente" class="required-field">Apellido Paterno</label>
+                            <input type="text" id="apellidoPaternoAgente" th:field="*{apellidoPaternoAgente}" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="apellidoMaternoAgente" class="required-field">Apellido Materno</label>
+                            <input type="text" id="apellidoMaternoAgente" th:field="*{apellidoMaternoAgente}" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="nombreAgente" class="required-field">Nombre</label>
+                            <input type="text" id="nombreAgente" th:field="*{nombreAgente}" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="numeroCIP" class="required-field">Número de CIP</label>
+                            <input type="text" id="numeroCIP" th:field="*{numeroCIP}" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detalles Adicionales -->
+            <div class="form-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <h2>Detalles Adicionales</h2>
+                </div>
+
+                <div class="form-group">
+                    <label for="detallesConductor">Detalles del Conductor</label>
+                    <textarea id="detallesConductor" th:field="*{detallesConductor}" class="form-control" rows="4" placeholder="Información adicional relevante sobre el conductor..."></textarea>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button type="button" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Guardar Multa
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
