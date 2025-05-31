@@ -1,7 +1,6 @@
-package com.utp.sistema_municipal_backend.configuracion;
+package com.utp.sistema_municipal_backend.config;
 
-
-import com.utp.sistema_municipal_backend.servicios.impl.UserDetailsServiceImpl;
+import com.utp.sistema_municipal_backend.service.impl.UserDetailsServiceImpl;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -29,35 +28,35 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String requestTokenHeader = request.getHeader("Authorization");
-        String username = null;
+        String email = null;
         String jwtToken = null;
 
-        if(requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")){
+        if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
             jwtToken = requestTokenHeader.substring(7);
 
-            try{
-                username = this.jwtUtils.extractUsername(jwtToken);
-            }catch (ExpiredJwtException exception){
+            try {
+                email = this.jwtUtils.extractUsername(jwtToken);  // email está en subject del token
+            } catch (ExpiredJwtException exception) {
                 System.out.println("El token ha expirado");
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
-        }else{
-            System.out.println("Token invalido , no empieza con bearer string");
+        } else {
+            System.out.println("Token inválido, no empieza con Bearer string");
         }
 
-        if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-            if(this.jwtUtils.validateToken(jwtToken,userDetails)){
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
+        if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(email);
+            if (this.jwtUtils.validateToken(jwtToken, userDetails)) {
+                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }
-        }else{
-            System.out.println("El token no es valido");
+        } else {
+            System.out.println("El token no es válido");
         }
-        filterChain.doFilter(request,response);
+        filterChain.doFilter(request, response);
     }
 }

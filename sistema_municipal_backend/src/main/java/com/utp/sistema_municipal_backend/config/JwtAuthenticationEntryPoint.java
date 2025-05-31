@@ -1,4 +1,4 @@
-package com.utp.sistema_municipal_backend.configuracion;
+package com.utp.sistema_municipal_backend.config;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

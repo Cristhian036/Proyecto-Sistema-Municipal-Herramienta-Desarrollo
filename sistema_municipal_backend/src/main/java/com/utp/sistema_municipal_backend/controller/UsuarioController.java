@@ -1,9 +1,7 @@
-package com.utp.sistema_municipal_backend.controladores;
+package com.utp.sistema_municipal_backend.controller;
 
-import com.utp.sistema_municipal_backend.modelo.Rol;
-import com.utp.sistema_municipal_backend.modelo.Usuario;
-import com.utp.sistema_municipal_backend.modelo.UsuarioRol;
-import com.utp.sistema_municipal_backend.servicios.UsuarioService;
+import com.utp.sistema_municipal_backend.model.*;
+import com.utp.sistema_municipal_backend.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,8 +17,9 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @PostMapping("/")
-    public Usuario guardarUsuario(@RequestBody Usuario usuario) throws Exception{
-        usuario.setPerfil("default.png");
+    public Usuario guardarUsuario(@RequestBody Usuario usuario) throws Exception {
+        // perfil eliminado
+
         Set<UsuarioRol> usuarioRoles = new HashSet<>();
 
         Rol rol = new Rol();
@@ -32,18 +31,16 @@ public class UsuarioController {
         usuarioRol.setRol(rol);
 
         usuarioRoles.add(usuarioRol);
-        return usuarioService.guardarUsuario(usuario,usuarioRoles);
+        return usuarioService.guardarUsuario(usuario, usuarioRoles);
     }
 
-
-    @GetMapping("/{username}")
-    public Usuario obtenerUsuario(@PathVariable("username") String username){
-        return usuarioService.obtenerUsuario(username);
+    @GetMapping("/{email}")
+    public Usuario obtenerUsuario(@PathVariable("email") String email) {
+        return usuarioService.obtenerUsuario(email);
     }
 
     @DeleteMapping("/{usuarioId}")
-    public void eliminarUsuario(@PathVariable("usuarioId") Long usuarioId){
+    public void eliminarUsuario(@PathVariable("usuarioId") Long usuarioId) {
         usuarioService.eliminarUsuario(usuarioId);
     }
-
 }

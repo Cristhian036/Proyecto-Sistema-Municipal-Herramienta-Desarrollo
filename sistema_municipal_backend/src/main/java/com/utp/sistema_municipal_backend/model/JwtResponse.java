@@ -1,4 +1,4 @@
-package com.utp.sistema_municipal_backend.modelo;
+package com.utp.sistema_municipal_backend.model;
 
 public class JwtResponse {
 

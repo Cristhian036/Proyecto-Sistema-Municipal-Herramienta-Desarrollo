@@ -1,6 +1,6 @@
-package com.utp.sistema_municipal_backend.configuracion;
+package com.utp.sistema_municipal_backend.config;
 
-import com.utp.sistema_municipal_backend.servicios.impl.UserDetailsServiceImpl;
+import com.utp.sistema_municipal_backend.service.impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
