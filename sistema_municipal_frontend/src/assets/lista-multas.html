@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Lista de Multas - Municipalidad de Arequipa</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #8B1538;
+            --secondary-color: #2c5530;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px 0;
+        }
+
+        .container {
+            max-width: 1200px;
+        }
+
+        .page-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .page-header h1 {
+            margin: 0;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+            padding: 15px 20px;
+            font-weight: 600;
+        }
+
+        .search-form {
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: #7a1230;
+            border-color: #7a1230;
+        }
+
+        .btn-success {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+
+        .btn-success:hover {
+            background-color: #224426;
+            border-color: #224426;
+        }
+
+        .table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #f1f3f5;
+        }
+
+        .code-badge {
+            background-color: #e9ecef;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+        }
+
+        .plate-badge {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+        }
+
+        .amount-text {
+            font-weight: 700;
+            color: #28a745;
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 30px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        .action-buttons {
+            white-space: nowrap;
+        }
+
+        @media (max-width: 768px) {
+            .table-responsive {
+                font-size: 14px;
+            }
+            
+            .btn-sm {
+                padding: 0.25rem 0.5rem;
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>
+                <i class="fas fa-list-alt"></i>
+                Lista de Multas de Tránsito
+            </h1>
+        </div>
+
+        <!-- Search and Add Section -->
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span><i class="fas fa-search"></i> Buscar Multas</span>
+                <a href="/multas/new" class="btn btn-success btn-sm">
+                    <i class="fas fa-plus"></i> Agregar Nueva Multa
+                </a>
+            </div>
+            <div class="card-body">
+                <!-- Search Form -->
+                <form class="search-form" th:action="@{/multas}" method="get">
+                    <div class="form-row align-items-end">
+                        <div class="col-md-8 mb-2">
+                            <label for="search">Buscar por código o placa:</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="search" 
+                                   name="search" 
+                                   placeholder="Ingrese código o placa..."
+                                   th:value="${param.search}">
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <button type="submit" class="btn btn-primary mr-2">
+                                <i class="fas fa-search"></i> Buscar
+                            </button>
+                            <a href="/multas" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> Limpiar
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Table Card -->
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-table"></i> Registro de Multas
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0" th:if="${multas != null and !multas.empty}">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Descripción</th>
+                                <th>Monto</th>
+                                <th>Cód. Infracción</th>
+                                <th>Lugar</th>
+                                <th>Fecha y Hora</th>
+                                <th>Placa</th>
+                                <th>Conductor</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="multa : ${multas}">
+                                <td>
+                                    <span class="code-badge" th:text="${multa.codigo}">MTA-001</span>
+                                </td>
+                                <td th:text="${multa.descripcion}">Descripción de la infracción</td>
+                                <td>
+                                    <span class="amount-text">S/. <span th:text="${multa.monto}">150.00</span></span>
+                                </td>
+                                <td th:text="${multa.codigoInfraccion}">C-001</td>
+                                <td th:text="${multa.nombreVia}">Av. Ejército</td>
+                                <td th:text="${#temporals.format(multa.fechaHora, 'dd/MM/yyyy HH:mm')}">15/12/2024 14:30</td>
+                                <td>
+                                    <span class="plate-badge" th:text="${multa.numeroTarjetaIdentificacionVehicular}">ABC-123</span>
+                                </td>
+                                <td th:text="${multa.nombresConductor}">Juan Pérez</td>
+                                <td class="action-buttons">
+                                    <a th:href="@{/multas/{codigo}(codigo=${multa.codigo})}" 
+                                       class="btn btn-info btn-sm"
+                                       title="Ver detalles">
+                                        <i class="fas fa-eye"></i> Ver
+                                    </a>
+                                    <a th:href="@{/multas/delete/{id}(id=${multa.id})}" 
+                                       class="btn btn-danger btn-sm"
+                                       title="Eliminar multa"
+                                       onclick="return confirm('¿Está seguro de eliminar esta multa?')">
+                                        <i class="fas fa-trash"></i> Eliminar
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <!-- Empty State -->
+                    <div th:if="${multas == null or multas.empty}" class="empty-message">
+                        <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                        <h4>No se encontraron multas</h4>
+                        <p class="text-muted">
+                            <span th:if="${param.search}">
+                                No hay multas que coincidan con su búsqueda.
+                                <br>
+                                <a href="/multas" class="btn btn-primary mt-2">
+                                    Ver todas las multas
+                                </a>
+                            </span>
+                            <span th:unless="${param.search}">
+                                Aún no hay multas registradas en el sistema.
+                                <br>
+                                <a href="/multas/new" class="btn btn-success mt-2">
+                                    Agregar primera multa
+                                </a>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Info Alert -->
+        <div class="alert alert-info" role="alert">
+            <i class="fas fa-info-circle"></i>
+            <strong>Información:</strong> 
+            Utilice el buscador para encontrar multas específicas por código o número de placa.
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Simple confirmation for delete
+        function confirmDelete(event, code) {
+            if (!confirm('¿Está seguro de eliminar esta multa?')) {
+                event.preventDefault();
+            }
+        }
+    </script>
+</body>
+</html>
