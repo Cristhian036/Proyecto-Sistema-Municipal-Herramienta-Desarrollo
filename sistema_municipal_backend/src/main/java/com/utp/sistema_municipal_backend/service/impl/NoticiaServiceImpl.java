@@ -21,7 +21,6 @@ public class NoticiaServiceImpl implements NoticiaService {
 
     @Override
     public List<Noticia> listarNoticias() {
-        // Ordenar por fecha descendente (más recientes primero)
         return noticiaRepository.findAll(Sort.by(Sort.Direction.DESC, "fecha"));
     }
 

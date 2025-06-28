@@ -19,13 +19,11 @@ public class ImageUtils {
         if (file == null || file.isEmpty()) {
             return false;
         }
-        
-        // Verificar tamaño
+
         if (file.getSize() > MAX_FILE_SIZE) {
             return false;
         }
-        
-        // Verificar extensión
+
         String originalFilename = file.getOriginalFilename();
         if (originalFilename == null) {
             return false;

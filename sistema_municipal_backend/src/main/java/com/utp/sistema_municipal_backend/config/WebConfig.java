@@ -6,20 +6,32 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.nio.file.Paths;
+
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    @Value("${app.upload.dir:C:/Users/Usuario/Desktop/UTP/Herramientas-Desarrollo/V10 - Noticia/sistema_municipal_backend/uploads/}")
+    @Value("${app.upload.dir:uploads}")
     private String uploadDir;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // Servir archivos estáticos desde la carpeta uploads usando ruta absoluta
-        String uploadsPath = "file:" + uploadDir;
-        if (!uploadDir.endsWith("/")) {
+        // Convertir a ruta absoluta si es relativa
+        String absoluteUploadDir;
+        if (Paths.get(uploadDir).isAbsolute()) {
+            absoluteUploadDir = uploadDir;
+        } else {
+            // Si es relativa, la resolvemos desde el directorio de trabajo actual
+            absoluteUploadDir = Paths.get(System.getProperty("user.dir"), uploadDir).toAbsolutePath().toString();
+        }
+        
+        String uploadsPath = "file:" + absoluteUploadDir;
+        if (!absoluteUploadDir.endsWith("/") && !absoluteUploadDir.endsWith("\\")) {
             uploadsPath += "/";
         }
+        
         System.out.println("📁 Configurando recursos estáticos desde: " + uploadsPath);
+        System.out.println("📂 Directorio absoluto: " + absoluteUploadDir);
         
         registry.addResourceHandler("/uploads/**")
                 .addResourceLocations(uploadsPath);
