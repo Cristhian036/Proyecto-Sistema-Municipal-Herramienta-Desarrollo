@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <h1>Sistema de Gestión de Multas</h1>
+            <a th:href="@{/multas/buscar}" class="btn btn-primary btn-lg mr-2">Multas</a>
+            <a th:href="@{/usuarios/login}" class="btn btn-secondary btn-lg">Iniciar Sesión</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

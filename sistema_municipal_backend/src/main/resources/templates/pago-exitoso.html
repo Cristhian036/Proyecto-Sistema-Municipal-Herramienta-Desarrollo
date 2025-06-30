@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pago Exitoso</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 text-center">
+      <h2 class="mb-4">Pago Exitoso</h2>
+      <!-- GIF con un check verde -->
+      <img src="https://www.purodiseno.lat/wp-content/uploads/2020/04/checkmarksuccess-1.gif" alt="Pago Exitoso" class="img-fluid mb-4" style="max-width: 200px;">
+      <p>Tu pago ha sido procesado exitosamente.</p>
+      <a href="/multas/buscar" class="btn btn-primary">Volver a Búsqueda</a>
+      <a th:href="@{/multas/resultado(id=${multaId})}" class="btn btn-secondary">Ver Detalles</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

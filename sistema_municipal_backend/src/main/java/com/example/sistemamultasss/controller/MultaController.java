@@ -1,26 +1,82 @@
 package com.example.sistemamultasss.controller;
 
-import java.util.List;
-import java.util.Optional;
-
 import com.example.sistemamultasss.model.Multa;
+import com.example.sistemamultasss.model.Pago;
 import com.example.sistemamultasss.service.MultaService;
+import com.example.sistemamultasss.service.PagoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+
+
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/multas")
 public class MultaController {
+
 	@Autowired
 	private MultaService multaService;
+	@Autowired
+	private PagoService pagoService;
+
+
+
+
+	@GetMapping("/pago")
+	public String mostrarPago(@RequestParam Long id, Model model) {
+		Multa multa = multaService.findById(id)
+				.orElseThrow(() -> new IllegalArgumentException("ID de multa inválido: " + id));
+		model.addAttribute("multa", multa);
+		return "pago";
+	}
+
+	@PostMapping("/pagar")
+	public String procesarPago(@RequestParam Long id, @RequestParam String cardNumber, @RequestParam String monto) {
+		Multa multa = multaService.findById(id)
+				.orElseThrow(() -> new IllegalArgumentException("ID de multa inválido: " + id));
+		multa.setEstado("PAGADO");
+		multaService.save(multa);
+
+		// Guardar detalles del pago
+		pagoService.guardarPago(multa.getCodigo(), cardNumber, monto);
+
+		return "redirect:/multas/pago-exitoso?id=" + id;
+	}
+
+
+
+
+	@GetMapping("/pago-exitoso")
+	public String pagoExitoso(Model model, @RequestParam Long id) {
+		model.addAttribute("multaId", id);
+		return "pago-exitoso";
+	}
+
+
+
+
+
+	@GetMapping("/buscar")
+	public String buscarMulta() {
+		return "buscar";
+	}
+
+	@PostMapping("/buscar")
+	public String resultadoMulta(@RequestParam String codigoMulta, Model model) {
+		Multa multa = multaService.findByCodigo(codigoMulta)
+				.orElseThrow(() -> new IllegalArgumentException("Código de multa inválido"));
+		model.addAttribute("multa", multa);
+		return "resultado";
+	}
 
 	@GetMapping
 	public String findAll(@RequestParam(value = "search", required = false) String search, Model model) {
@@ -31,53 +87,77 @@ public class MultaController {
 			multas = multaService.findAll();
 		}
 		model.addAttribute("multas", multas);
-		return "list"; // Asegúrate de que "list" sea el nombre correcto de tu vista
+		return "list";
 	}
 
-	@GetMapping("/{codigo}")
-	public String findByCodigo(@PathVariable String codigo, Model model) {
-		Optional<Multa> multa = multaService.findByCodigo(codigo);
-		if (multa.isPresent()) {
-			model.addAttribute("multa", multa.get());
-			return "resultado"; // Asegúrate de que "resultado" sea el nombre correcto de tu vista
-		} else {
-			model.addAttribute("error", "Multa no encontrada");
-			return "buscar"; // Asegúrate de que "buscar" sea el nombre correcto de tu vista
-		}
-	}
-
-	@GetMapping("/new")
+	@GetMapping("/nuevo")
 	public String showFormForAdd(Model model) {
-		model.addAttribute("multa", new Multa());
-		return "form"; // Asegúrate de que "form" sea el nombre correcto de tu vista
+		Multa multa = new Multa();
+		model.addAttribute("multa", multa);
+		return "form";
 	}
 
 	@PostMapping
 	public String save(@ModelAttribute Multa multa) {
+		if (multa.getCodigo() == null || multa.getCodigo().isEmpty()) {
+			multa.setCodigo(generateUniqueCode());
+		}
 		multaService.save(multa);
 		return "redirect:/multas";
 	}
 
-	@GetMapping("/delete/{id}")
+	@GetMapping("/editar/{id}")
+	public String showFormForUpdate(@PathVariable Long id, Model model) {
+		Multa multa = multaService.findById(id)
+				.orElseThrow(() -> new IllegalArgumentException("ID de multa inválido: " + id));
+		model.addAttribute("multa", multa);
+		return "form";
+	}
+
+	@GetMapping("/eliminar/{id}")
 	public String deleteById(@PathVariable Long id) {
 		multaService.deleteById(id);
 		return "redirect:/multas";
 	}
 
-	@GetMapping("/buscar")
-	public String buscarMulta() {
-		return "buscar"; // Asegúrate de que "buscar" sea el nombre correcto de tu vista
+	@GetMapping("/pagar/{id}")
+	public String pagarMulta(@PathVariable Long id) {
+		multaService.pagarMulta(id);
+		return "redirect:/multas";
 	}
 
-	@PostMapping("/buscar")
-	public String buscarMultaPorCodigo(@RequestParam String codigo, Model model) {
-		Optional<Multa> multa = multaService.findByCodigo(codigo);
-		if (multa.isPresent()) {
-			model.addAttribute("multa", multa.get());
-			return "resultado"; // Asegúrate de que "resultado" sea el nombre correcto de tu vista
+	private String generateUniqueCode() {
+		return "MUL" + System.currentTimeMillis();
+	}
+
+
+	@GetMapping("/resultado")
+	public String verResultado(@RequestParam Long id, Model model) {
+		Multa multa = multaService.findById(id)
+				.orElseThrow(() -> new IllegalArgumentException("ID de multa inválido: " + id));
+		model.addAttribute("multa", multa);
+		return "resultado";
+	}
+
+	@GetMapping("/pagos")
+	public String verPagos(@RequestParam(required = false) String search, Model model) {
+		List<Pago> pagos;
+		if (search != null && !search.isEmpty()) {
+			pagos = pagoService.buscarPorDniOCodigoMulta(search);
 		} else {
-			model.addAttribute("error", "Multa no encontrada");
-			return "buscar"; // Asegúrate de que "buscar" sea el nombre correcto de tu vista
+			pagos = pagoService.obtenerTodosLosPagos();
 		}
+
+		List<Map<String, Object>> pagosConDetalles = pagos.stream().map(pago -> {
+			Multa multa = multaService.findByCodigo(pago.getCodigoMulta()).orElse(null);
+			Map<String, Object> detalles = new HashMap<>();
+			detalles.put("pago", pago);
+			detalles.put("dniInfractor", multa != null ? multa.getDniRuc() : "No disponible");
+			detalles.put("placaCarro", multa != null ? multa.getPlaca() : "No disponible");
+			return detalles;
+		}).collect(Collectors.toList());
+
+		model.addAttribute("pagos", pagosConDetalles);
+		return "pagos";
 	}
 }

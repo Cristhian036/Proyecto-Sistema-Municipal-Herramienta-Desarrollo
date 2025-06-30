@@ -1,13 +1,7 @@
 package com.example.sistemamultasss.model;
 
+import jakarta.persistence.*;
 import java.util.List;
-
-import com.example.sistemamultasss.model.Multa;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 
 @Entity
 public class Usuario {
@@ -21,7 +15,7 @@ public class Usuario {
     private String password;
     private String rol; // "USUARIO" o "TRABAJADOR"
 
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Multa> multas;
 
     // Getters y Setters

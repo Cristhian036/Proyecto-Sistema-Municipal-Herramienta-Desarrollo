@@ -1,12 +1,9 @@
 package com.example.sistemamultasss.model;
 
-import java.time.LocalDateTime;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
 
 @Entity
 public class Multa {
@@ -15,57 +12,37 @@ public class Multa {
     private Long id;
     private String codigo;
 
-    // Datos del Conductor
-    private String licenciaConducir;
-    private String tipoDocumentoIdentidad;
-    private String documentoIdentidad;
-    private String nombresConductor;
-    private String apellidosConductor;
+    private String apellidosNombres;
     private String domicilio;
-    private String departamentoNacimiento;
-    private String provinciaNacimiento;
-    private String distritoNacimiento;
-
-    // Datos del Vehículo
-    private String numeroTarjetaIdentificacionVehicular;
-    private String tipoPlaca; // "PERU", "EXTRANJERA", "SIN_PLACA"
-    private String modalidadServicio; // "PARTICULAR", "MERCANCIAS", "PASAJEROS", etc.
-
-    // Datos de la Infracción
+    private String dniRuc;
     private String codigoInfraccion;
-    private String calificacion; // "LEVE", "GRAVE", "MUY_GRAVE"
-    private String sancion; // "MULTA", "NO_PECUNIARIA"
-    private Boolean esReincidente;
-    private Integer puntosAcumulados;
-    private String medidaPreventiva; // "RETENCION_LICENCIA", "INTERNAMIENTO_VEHICULO", etc.
-
-    // Ubicación de la Infracción
-    private String codigoDepartamento;
-    private String codigoProvincia;
-    private String codigoDistrito;
-    private LocalDateTime fechaHora;
-    private String codigoRutaVia;
-    private String kilometroCuadra;
-    private String nombreVia;
-    private String descripcionConductaInfractora;
-    private String descripcionHeridos;
-    private String observacionPNP;
-    private String detallesTestigo;
-
-    // Datos del Agente
-    private String apellidoPaternoAgente;
-    private String apellidoMaternoAgente;
-    private String nombreAgente;
-    private String numeroCIP;
-
-    // Detalles adicionales del Conductor
-    private String detallesConductor;
+    private String calificacion;
+    private String sancion;
+    private Integer puntosAcumula;
+    private String medidaPreventiva;
+    private LocalDate fechaInfraccion;
+    private LocalTime horaInfraccion;
+    private String descripcionInfraccion;
+    private String informacionAdicional;
+    private String lugarInfraccion;
+    private String distrito;
+    private String provincia;
+    private String departamento;
+    private String referencia;
+    private String placa;
+    private String tarjetaIdentificacion;
+    private String apellidosAutoridad;
+    private String nombresAutoridad;
+    private String cipDni;
+    private String estado; // "ACTIVO" o "PAGADO"
 
     @ManyToOne
+    @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
-    // Getters y setters
 
+
+    // Getters y Setters
     public Long getId() {
         return id;
     }
@@ -82,44 +59,12 @@ public class Multa {
         this.codigo = codigo;
     }
 
-    public String getLicenciaConducir() {
-        return licenciaConducir;
+    public String getApellidosNombres() {
+        return apellidosNombres;
     }
 
-    public void setLicenciaConducir(String licenciaConducir) {
-        this.licenciaConducir = licenciaConducir;
-    }
-
-    public String getTipoDocumentoIdentidad() {
-        return tipoDocumentoIdentidad;
-    }
-
-    public void setTipoDocumentoIdentidad(String tipoDocumentoIdentidad) {
-        this.tipoDocumentoIdentidad = tipoDocumentoIdentidad;
-    }
-
-    public String getDocumentoIdentidad() {
-        return documentoIdentidad;
-    }
-
-    public void setDocumentoIdentidad(String documentoIdentidad) {
-        this.documentoIdentidad = documentoIdentidad;
-    }
-
-    public String getNombresConductor() {
-        return nombresConductor;
-    }
-
-    public void setNombresConductor(String nombresConductor) {
-        this.nombresConductor = nombresConductor;
-    }
-
-    public String getApellidosConductor() {
-        return apellidosConductor;
-    }
-
-    public void setApellidosConductor(String apellidosConductor) {
-        this.apellidosConductor = apellidosConductor;
+    public void setApellidosNombres(String apellidosNombres) {
+        this.apellidosNombres = apellidosNombres;
     }
 
     public String getDomicilio() {
@@ -130,52 +75,12 @@ public class Multa {
         this.domicilio = domicilio;
     }
 
-    public String getDepartamentoNacimiento() {
-        return departamentoNacimiento;
+    public String getDniRuc() {
+        return dniRuc;
     }
 
-    public void setDepartamentoNacimiento(String departamentoNacimiento) {
-        this.departamentoNacimiento = departamentoNacimiento;
-    }
-
-    public String getProvinciaNacimiento() {
-        return provinciaNacimiento;
-    }
-
-    public void setProvinciaNacimiento(String provinciaNacimiento) {
-        this.provinciaNacimiento = provinciaNacimiento;
-    }
-
-    public String getDistritoNacimiento() {
-        return distritoNacimiento;
-    }
-
-    public void setDistritoNacimiento(String distritoNacimiento) {
-        this.distritoNacimiento = distritoNacimiento;
-    }
-
-    public String getNumeroTarjetaIdentificacionVehicular() {
-        return numeroTarjetaIdentificacionVehicular;
-    }
-
-    public void setNumeroTarjetaIdentificacionVehicular(String numeroTarjetaIdentificacionVehicular) {
-        this.numeroTarjetaIdentificacionVehicular = numeroTarjetaIdentificacionVehicular;
-    }
-
-    public String getTipoPlaca() {
-        return tipoPlaca;
-    }
-
-    public void setTipoPlaca(String tipoPlaca) {
-        this.tipoPlaca = tipoPlaca;
-    }
-
-    public String getModalidadServicio() {
-        return modalidadServicio;
-    }
-
-    public void setModalidadServicio(String modalidadServicio) {
-        this.modalidadServicio = modalidadServicio;
+    public void setDniRuc(String dniRuc) {
+        this.dniRuc = dniRuc;
     }
 
     public String getCodigoInfraccion() {
@@ -202,20 +107,12 @@ public class Multa {
         this.sancion = sancion;
     }
 
-    public Boolean getEsReincidente() {
-        return esReincidente;
+    public Integer getPuntosAcumula() {
+        return puntosAcumula;
     }
 
-    public void setEsReincidente(Boolean esReincidente) {
-        this.esReincidente = esReincidente;
-    }
-
-    public Integer getPuntosAcumulados() {
-        return puntosAcumulados;
-    }
-
-    public void setPuntosAcumulados(Integer puntosAcumulados) {
-        this.puntosAcumulados = puntosAcumulados;
+    public void setPuntosAcumula(Integer puntosAcumula) {
+        this.puntosAcumula = puntosAcumula;
     }
 
     public String getMedidaPreventiva() {
@@ -226,132 +123,124 @@ public class Multa {
         this.medidaPreventiva = medidaPreventiva;
     }
 
-    public String getCodigoDepartamento() {
-        return codigoDepartamento;
+    public LocalDate getFechaInfraccion() {
+        return fechaInfraccion;
     }
 
-    public void setCodigoDepartamento(String codigoDepartamento) {
-        this.codigoDepartamento = codigoDepartamento;
+    public void setFechaInfraccion(LocalDate fechaInfraccion) {
+        this.fechaInfraccion = fechaInfraccion;
     }
 
-    public String getCodigoProvincia() {
-        return codigoProvincia;
+    public LocalTime getHoraInfraccion() {
+        return horaInfraccion;
     }
 
-    public void setCodigoProvincia(String codigoProvincia) {
-        this.codigoProvincia = codigoProvincia;
+    public void setHoraInfraccion(LocalTime horaInfraccion) {
+        this.horaInfraccion = horaInfraccion;
     }
 
-    public String getCodigoDistrito() {
-        return codigoDistrito;
+    public String getDescripcionInfraccion() {
+        return descripcionInfraccion;
     }
 
-    public void setCodigoDistrito(String codigoDistrito) {
-        this.codigoDistrito = codigoDistrito;
+    public void setDescripcionInfraccion(String descripcionInfraccion) {
+        this.descripcionInfraccion = descripcionInfraccion;
     }
 
-    public LocalDateTime getFechaHora() {
-        return fechaHora;
+    public String getInformacionAdicional() {
+        return informacionAdicional;
     }
 
-    public void setFechaHora(LocalDateTime fechaHora) {
-        this.fechaHora = fechaHora;
+    public void setInformacionAdicional(String informacionAdicional) {
+        this.informacionAdicional = informacionAdicional;
     }
 
-    public String getCodigoRutaVia() {
-        return codigoRutaVia;
+    public String getLugarInfraccion() {
+        return lugarInfraccion;
     }
 
-    public void setCodigoRutaVia(String codigoRutaVia) {
-        this.codigoRutaVia = codigoRutaVia;
+    public void setLugarInfraccion(String lugarInfraccion) {
+        this.lugarInfraccion = lugarInfraccion;
     }
 
-    public String getKilometroCuadra() {
-        return kilometroCuadra;
+    public String getDistrito() {
+        return distrito;
     }
 
-    public void setKilometroCuadra(String kilometroCuadra) {
-        this.kilometroCuadra = kilometroCuadra;
+    public void setDistrito(String distrito) {
+        this.distrito = distrito;
     }
 
-    public String getNombreVia() {
-        return nombreVia;
+    public String getProvincia() {
+        return provincia;
     }
 
-    public void setNombreVia(String nombreVia) {
-        this.nombreVia = nombreVia;
+    public void setProvincia(String provincia) {
+        this.provincia = provincia;
     }
 
-    public String getDescripcionConductaInfractora() {
-        return descripcionConductaInfractora;
+    public String getDepartamento() {
+        return departamento;
     }
 
-    public void setDescripcionConductaInfractora(String descripcionConductaInfractora) {
-        this.descripcionConductaInfractora = descripcionConductaInfractora;
+    public void setDepartamento(String departamento) {
+        this.departamento = departamento;
     }
 
-    public String getDescripcionHeridos() {
-        return descripcionHeridos;
+    public String getReferencia() {
+        return referencia;
     }
 
-    public void setDescripcionHeridos(String descripcionHeridos) {
-        this.descripcionHeridos = descripcionHeridos;
+    public void setReferencia(String referencia) {
+        this.referencia = referencia;
     }
 
-    public String getObservacionPNP() {
-        return observacionPNP;
+    public String getPlaca() {
+        return placa;
     }
 
-    public void setObservacionPNP(String observacionPNP) {
-        this.observacionPNP = observacionPNP;
+    public void setPlaca(String placa) {
+        this.placa = placa;
     }
 
-    public String getDetallesTestigo() {
-        return detallesTestigo;
+    public String getTarjetaIdentificacion() {
+        return tarjetaIdentificacion;
     }
 
-    public void setDetallesTestigo(String detallesTestigo) {
-        this.detallesTestigo = detallesTestigo;
+    public void setTarjetaIdentificacion(String tarjetaIdentificacion) {
+        this.tarjetaIdentificacion = tarjetaIdentificacion;
     }
 
-    public String getApellidoPaternoAgente() {
-        return apellidoPaternoAgente;
+    public String getApellidosAutoridad() {
+        return apellidosAutoridad;
     }
 
-    public void setApellidoPaternoAgente(String apellidoPaternoAgente) {
-        this.apellidoPaternoAgente = apellidoPaternoAgente;
+    public void setApellidosAutoridad(String apellidosAutoridad) {
+        this.apellidosAutoridad = apellidosAutoridad;
     }
 
-    public String getApellidoMaternoAgente() {
-        return apellidoMaternoAgente;
+    public String getNombresAutoridad() {
+        return nombresAutoridad;
     }
 
-    public void setApellidoMaternoAgente(String apellidoMaternoAgente) {
-        this.apellidoMaternoAgente = apellidoMaternoAgente;
+    public void setNombresAutoridad(String nombresAutoridad) {
+        this.nombresAutoridad = nombresAutoridad;
     }
 
-    public String getNombreAgente() {
-        return nombreAgente;
+    public String getCipDni() {
+        return cipDni;
     }
 
-    public void setNombreAgente(String nombreAgente) {
-        this.nombreAgente = nombreAgente;
+    public void setCipDni(String cipDni) {
+        this.cipDni = cipDni;
     }
 
-    public String getNumeroCIP() {
-        return numeroCIP;
+    public String getEstado() {
+        return estado;
     }
 
-    public void setNumeroCIP(String numeroCIP) {
-        this.numeroCIP = numeroCIP;
-    }
-
-    public String getDetallesConductor() {
-        return detallesConductor;
-    }
-
-    public void setDetallesConductor(String detallesConductor) {
-        this.detallesConductor = detallesConductor;
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
     public Usuario getUsuario() {
@@ -361,6 +250,4 @@ public class Multa {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
-
-    public Multa() {}
 }

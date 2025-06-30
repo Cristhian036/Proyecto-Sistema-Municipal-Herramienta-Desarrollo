@@ -1,17 +1,16 @@
 package com.example.sistemamultasss.service;
 
-import java.util.List;
-import java.util.Optional;
-
 import com.example.sistemamultasss.model.Multa;
 import com.example.sistemamultasss.repository.MultaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MultaService {
+
     @Autowired
     private MultaRepository multaRepository;
 
@@ -24,18 +23,31 @@ public class MultaService {
     }
 
     public List<Multa> findByCodigoOrPlaca(String search) {
-        return multaRepository.findByCodigoOrNumeroTarjetaIdentificacionVehicular(search, search);
+        return multaRepository.findByCodigoOrTarjetaIdentificacion(search, search);
+    }
+
+    public Optional<Multa> findById(Long id) {
+        return multaRepository.findById(id);
     }
 
     public Multa save(Multa multa) {
-        // Calcular puntos acumulados
+        if (multa.getEstado() == null) {
+            multa.setEstado("ACTIVO");
+        }
         int puntos = calcularPuntos(multa.getCalificacion());
-        multa.setPuntosAcumulados(puntos);
+        multa.setPuntosAcumula(puntos);
         return multaRepository.save(multa);
     }
 
     public void deleteById(Long id) {
         multaRepository.deleteById(id);
+    }
+
+    public void pagarMulta(Long id) {
+        Multa multa = multaRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("ID de multa inválido: " + id));
+        multa.setEstado("PAGADO");
+        multaRepository.save(multa);
     }
 
     private int calcularPuntos(String calificacion) {

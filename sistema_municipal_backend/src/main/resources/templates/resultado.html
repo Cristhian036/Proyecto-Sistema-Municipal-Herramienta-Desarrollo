@@ -1,58 +1,34 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Resultado de Búsqueda</title>
 	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-	<style>
-		@media print {
-            .no-print {
-                display: none;
-            }
-        }
-	</style>
 </head>
 <body>
-<div class="container">
-	<h1 class="my-4">Resultado de Búsqueda</h1>
-	<div class="card">
-		<div class="card-body">
-			<div class="text-center mb-4">
-				<img src="/images/municipalidad-logo.png" alt="Logo Municipalidad" class="img-fluid" style="max-height: 100px;">
-				<img src="/images/policia-logo.png" alt="Logo Policía" class="img-fluid" style="max-height: 100px;">
-			</div>
-			<h5 class="card-title">Detalles de la Multa</h5>
-			<p class="card-text">
-				Código: <span th:text="${multa.codigo}"></span>
-			</p>
-			<p class="card-text">
-				Descripción: <span th:text="${multa.descripcionConductaInfractora}"></span>
-			</p>
-			<p class="card-text">
-				Monto: <span th:text="${multa.monto}"></span>
-			</p>
-			<p class="card-text">
-				Código de Infracción: <span th:text="${multa.codigoInfraccion}"></span>
-			</p>
-			<p class="card-text">
-				Lugar: <span th:text="${multa.nombreVia}"></span>
-			</p>
-			<p class="card-text">
-				Fecha y Hora: <span th:text="${#temporals.format(multa.fechaHora, 'yyyy-MM-dd HH:mm')}"></span>
-			</p>
-			<p class="card-text">
-				Placa del Vehículo: <span th:text="${multa.numeroTarjetaIdentificacionVehicular}"></span>
-			</p>
-			<p class="card-text">
-				Nombre del Dueño: <span th:text="${multa.nombresConductor}"></span>
-			</p>
-			<div class="text-center mt-4">
-				<p>Firma del Policía</p>
-				<img src="/images/firma-policia.png" alt="Firma Policía" class="img-fluid" style="max-height: 100px;">
-			</div>
-			<div class="mt-4 no-print">
-				<a href="#" class="btn btn-primary" onclick="window.print()">Imprimir</a>
-				<a href="#" class="btn btn-success">Pagar</a>
-				<a href="/multas/buscar" class="btn btn-secondary">Regresar</a>
+<div class="container mt-5">
+	<div class="row justify-content-center">
+		<div class="col-md-8">
+			<h2 class="text-center mb-4">Detalles de la Multa</h2>
+			<div class="card">
+				<div class="card-body">
+					<h5 class="card-title">Código: <span th:text="${multa.codigo}"></span></h5>
+					<p class="card-text">Apellidos y Nombres: <span th:text="${multa.apellidosNombres}"></span></p>
+					<p class="card-text">DNI/RUC: <span th:text="${multa.dniRuc}"></span></p>
+					<p class="card-text">Descripción: <span th:text="${multa.descripcionInfraccion}"></span></p>
+					<p class="card-text">Monto: <span th:text="${multa.sancion}"></span></p>
+					<p class="card-text">Lugar: <span th:text="${multa.lugarInfraccion}"></span></p>
+					<p class="card-text">Fecha: <span th:text="${#temporals.format(multa.fechaInfraccion, 'yyyy-MM-dd')}"></span></p>
+					<p class="card-text">
+						Estado: <span th:text="${multa.estado}"></span>
+						<span th:if="${multa.estado == 'PAGADO'}" class="text-success"> - Multa Pagada</span>
+					</p>
+					<div class="text-center mt-4">
+						<a th:href="@{/multas/pago(id=${multa.id})}" class="btn btn-success" th:unless="${multa.estado == 'PAGADO'}">Pagar</a>
+						<a href="/multas/buscar" class="btn btn-secondary">Regresar</a>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
