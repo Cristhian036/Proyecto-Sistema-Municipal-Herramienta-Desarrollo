@@ -30,8 +30,8 @@ public class WebConfig implements WebMvcConfigurer {
             uploadsPath += "/";
         }
         
-        System.out.println("📁 Configurando recursos estáticos desde: " + uploadsPath);
-        System.out.println("📂 Directorio absoluto: " + absoluteUploadDir);
+        System.out.println("Configurando recursos estáticos desde: " + uploadsPath);
+        System.out.println("Directorio absoluto: " + absoluteUploadDir);
         
         registry.addResourceHandler("/uploads/**")
                 .addResourceLocations(uploadsPath);

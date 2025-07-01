@@ -38,9 +38,11 @@ public class MySecurityConfig {
                 .cors(cors -> cors.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/generate-token", "/usuarios/").permitAll()
+                        .requestMatchers("/usuarios/trabajador").hasAuthority("TRABAJADOR")
                         .requestMatchers(HttpMethod.GET, "/noticias/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/noticias/**").authenticated()
-                        .requestMatchers(HttpMethod.DELETE, "/noticias/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/noticias/**").hasAnyAuthority("TRABAJADOR", "USUARIO")
+                        .requestMatchers(HttpMethod.PUT, "/noticias/**").hasAuthority("TRABAJADOR")
+                        .requestMatchers(HttpMethod.DELETE, "/noticias/**").hasAuthority("TRABAJADOR")
                         .requestMatchers("/uploads/**").permitAll()
                         .requestMatchers("/noticias/imagen/**").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS).permitAll()
