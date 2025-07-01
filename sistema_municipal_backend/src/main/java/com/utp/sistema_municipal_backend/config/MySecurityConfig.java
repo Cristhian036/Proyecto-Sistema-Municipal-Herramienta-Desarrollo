@@ -38,6 +38,11 @@ public class MySecurityConfig {
                 .cors(cors -> cors.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/generate-token", "/usuarios/").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/noticias/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/noticias/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/noticias/**").authenticated()
+                        .requestMatchers("/uploads/**").permitAll()
+                        .requestMatchers("/noticias/imagen/**").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS).permitAll()
                         .anyRequest().authenticated()
                 )
