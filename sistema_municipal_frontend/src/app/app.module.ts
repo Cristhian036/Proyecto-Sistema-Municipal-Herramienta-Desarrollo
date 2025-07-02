@@ -20,13 +20,15 @@ import {MatCardModule} from '@angular/material/card';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatIconModule} from '@angular/material/icon';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatDividerModule} from '@angular/material/divider';
 import { authInterceptorProviders } from './services/auth.interceptor';
 import { DashboardComponent } from './pages/admin/dashboard/dashboard.component';
 import { UserDashboardComponent } from './pages/user/user-dashboard/user-dashboard.component';
 import { ForumListComponent } from './pages/forum-list/forum-list.component';
 import { CrearNoticiaComponent } from './pages/noticias/crear-noticia/crear-noticia.component';
 import { ListarNoticiasComponent } from './pages/noticias/listar-noticias/listar-noticias.component';
-import { NoticiasTestComponent } from './pages/noticias/noticias-test/noticias-test.component';
+import { NoticiasComponent } from './pages/noticias/noticias/noticias.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +42,7 @@ import { NoticiasTestComponent } from './pages/noticias/noticias-test/noticias-t
     ForumListComponent,
     CrearNoticiaComponent,
     ListarNoticiasComponent,
-    NoticiasTestComponent
+    NoticiasComponent
   ],
   imports: [
     BrowserModule,
@@ -55,7 +57,9 @@ import { NoticiasTestComponent } from './pages/noticias/noticias-test/noticias-t
     MatCardModule,
     MatToolbarModule,
     MatIconModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatProgressSpinnerModule,
+    MatDividerModule
   ],
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent]

@@ -8,7 +8,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { ForumListComponent } from './pages/forum-list/forum-list.component';
 import { CrearNoticiaComponent } from './pages/noticias/crear-noticia/crear-noticia.component';
 import { ListarNoticiasComponent } from './pages/noticias/listar-noticias/listar-noticias.component';
-import { NoticiasTestComponent } from './pages/noticias/noticias-test/noticias-test.component';
+import { NoticiasComponent } from './pages/noticias/noticias/noticias.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
@@ -46,6 +46,20 @@ const routes: Routes = [
   },
   {
     path: 'noticias',
+    component: NoticiasComponent
+  },
+  {
+    path: 'noticias-admin',
+    component: NoticiasComponent,
+    canActivate: [AdminGuard]
+  },
+  {
+    path: 'noticias-trabajador',
+    component: NoticiasComponent,
+    canActivate: [NormalGuard]
+  },
+  {
+    path: 'listar-noticias',
     component: ListarNoticiasComponent
   },
   {
@@ -55,7 +69,7 @@ const routes: Routes = [
   },
   {
     path: 'test-noticias',
-    component: NoticiasTestComponent
+    component: NoticiasComponent
   },
   { path: '', redirectTo: '/foros', pathMatch: 'full' }
 ];

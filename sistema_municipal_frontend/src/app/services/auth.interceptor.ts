@@ -12,7 +12,6 @@ export class AuthInterceptor implements HttpInterceptor{
   private readonly publicEndpoints = [
     '/generate-token',
     '/usuarios/',
-    '/noticias/', // Para GET requests
     '/uploads/',
     '/noticias/imagen/'
   ];
@@ -29,10 +28,10 @@ export class AuthInterceptor implements HttpInterceptor{
     console.log('🔍 Interceptor - URL:', req.url);
     console.log('🔍 Interceptor - Method:', req.method);
     
-    // Si es un endpoint público o es un GET a noticias, no agregar token
+    // Si es un endpoint público O es un GET a noticias (solo lectura), no agregar token
     if (this.isPublicEndpoint(req.url) || 
         (req.method === 'GET' && req.url.includes('/noticias'))) {
-      console.log('🔍 Interceptor - Endpoint público, sin token');
+      console.log('🔍 Interceptor - Endpoint público o GET a noticias, sin token');
       return next.handle(authReq);
     }
     
@@ -45,16 +44,24 @@ export class AuthInterceptor implements HttpInterceptor{
       // Asegurar que el token esté limpio (sin Bearer previo)
       const cleanToken = token.replace(/^Bearer\s+/, '').trim();
       
+      // Preparar headers básicos
+      const headers: { [key: string]: string } = {
+        Authorization: `Bearer ${cleanToken}`
+      };
+      
+      // Solo agregar Content-Type si no es FormData (para requests con archivos)
+      if (!(req.body instanceof FormData)) {
+        headers['Content-Type'] = 'application/json';
+      }
+      
       authReq = authReq.clone({
-        setHeaders: { 
-          Authorization: `Bearer ${cleanToken}`,
-          'Content-Type': 'application/json'
-        }
+        setHeaders: headers
       });
       
       console.log('✅ Interceptor - Headers agregados');
       console.log('✅ Interceptor - Authorization header:', `Bearer ${cleanToken.substring(0, 20)}...`);
       console.log('✅ Interceptor - Token length:', cleanToken.length);
+      console.log('✅ Interceptor - Request body type:', req.body?.constructor?.name || 'null');
       
       // Verificar headers finales
       const authHeader = authReq.headers.get('Authorization');
