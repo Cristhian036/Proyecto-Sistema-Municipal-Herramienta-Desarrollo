@@ -21,6 +21,15 @@ export class NoticiasComponent implements OnInit {
   // Lista de noticias
   noticias: Noticia[] = [];
   
+  // Noticia seleccionada para mostrar como principal
+  noticiaSeleccionada: Noticia | null = null;
+  
+  // Estado de edición
+  editando = false;
+  noticiaEditando: Noticia | null = null;
+  imagenEditandoPreview: string | null = null;
+  imagenEditandoSeleccionada: File | null = null;
+  
   // Imagen seleccionada
   imagenSeleccionada: File | null = null;
   imagenPreview: string | null = null;
@@ -131,8 +140,8 @@ export class NoticiasComponent implements OnInit {
       return;
     }
 
-    if (this.noticia.descripcion.length > 1000) {
-      this.snack.open('❌ La descripción no debe superar los 1000 caracteres', 'Aceptar', { duration: 3000 });
+    if (this.noticia.descripcion.trim().length < 10) {
+      this.snack.open('❌ La descripción debe tener al menos 10 caracteres', 'Aceptar', { duration: 3000 });
       return;
     }
 
@@ -209,6 +218,14 @@ export class NoticiasComponent implements OnInit {
           // Ordenar por fecha descendente (más recientes primero)
           return new Date(b.fecha!).getTime() - new Date(a.fecha!).getTime();
         });
+        
+        // Establecer la primera noticia como seleccionada por defecto
+        if (this.noticias.length > 0) {
+          this.noticiaSeleccionada = this.noticias[0];
+        } else {
+          this.noticiaSeleccionada = null;
+        }
+        
         this.cargando = false;
       },
       (error) => {
@@ -239,6 +256,11 @@ export class NoticiasComponent implements OnInit {
     if (confirm('¿Está seguro de que desea eliminar esta noticia?\n\nEsta acción no se puede deshacer.')) {
       this.noticiaService.eliminarNoticia(id).subscribe(
         () => {
+          // Si se elimina la noticia seleccionada, resetear la selección
+          if (this.noticiaSeleccionada && this.noticiaSeleccionada.id === id) {
+            this.noticiaSeleccionada = null;
+          }
+          
           this.snack.open('🗑️ Noticia eliminada exitosamente', 'Aceptar', { duration: 3000 });
           this.cargarNoticias(); // Recargar la lista
         },
@@ -307,6 +329,174 @@ export class NoticiasComponent implements OnInit {
   // Verificar si es solo usuario de lectura
   isReadOnlyUser(): boolean {
     return this.isLoggedIn && this.userRole === 'USUARIO';
+  }
+
+  // Obtener las noticias más recientes para el sidebar (máximo 6 noticias más recientes)
+  getNoticiasRecientes(): Noticia[] {
+    // Retornar las primeras 6 noticias (ya están ordenadas por fecha descendente)
+    // Esto mostrará las 6 noticias más recientes en el sidebar
+    return this.noticias.slice(0, 6);
+  }
+
+  // Obtener la noticia principal (seleccionada o la primera)
+  getNoticiaPrincipal(): Noticia {
+    return this.noticiaSeleccionada || this.noticias[0];
+  }
+
+  // Seleccionar una noticia para mostrar como principal
+  seleccionarNoticia(noticia: Noticia): void {
+    this.noticiaSeleccionada = noticia;
+    console.log('📰 Noticia seleccionada:', noticia.titulo);
+  }
+
+  // Iniciar edición de una noticia
+  iniciarEdicion(noticia: Noticia): void {
+    this.editando = true;
+    this.noticiaEditando = { ...noticia }; // Crear una copia para editar
+    this.imagenEditandoPreview = `http://localhost:8080/noticias/imagen/${noticia.imagen}`;
+    this.imagenEditandoSeleccionada = null;
+    console.log('✏️ Iniciando edición de noticia:', noticia.titulo);
+  }
+
+  // Cancelar edición
+  cancelarEdicion(): void {
+    this.editando = false;
+    this.noticiaEditando = null;
+    this.imagenEditandoPreview = null;
+    this.imagenEditandoSeleccionada = null;
+    
+    // Limpiar el input de archivo de edición
+    const fileInput = document.querySelector('input[id="imagenEdit"]') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
+    }
+    
+    console.log('❌ Edición cancelada');
+  }
+
+  // Manejar selección de imagen para edición
+  onImageEditSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      // Validar tamaño del archivo (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        this.snack.open('❌ La imagen no debe superar los 5MB', 'Aceptar', { duration: 4000 });
+        return;
+      }
+
+      // Validar tipo de archivo
+      if (!file.type.startsWith('image/')) {
+        this.snack.open('❌ Solo se permiten archivos de imagen', 'Aceptar', { duration: 4000 });
+        return;
+      }
+
+      this.imagenEditandoSeleccionada = file;
+      
+      // Crear preview de la imagen
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.imagenEditandoPreview = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  // Actualizar noticia
+  actualizarNoticia(): void {
+    if (!this.noticiaEditando) {
+      return;
+    }
+
+    console.log('📝 Iniciando actualización de noticia');
+
+    // Forzar verificación de autenticación
+    if (!this.forceAuthCheck()) {
+      return;
+    }
+
+    // Verificar permisos (Solo TRABAJADOR puede editar noticias)
+    if (this.userRole !== 'TRABAJADOR') {
+      console.log('❌ Permisos insuficientes. Rol:', this.userRole);
+      this.snack.open('❌ Solo los trabajadores pueden editar noticias', 'Aceptar', { duration: 4000 });
+      return;
+    }
+
+    // Validaciones del formulario
+    if (!this.noticiaEditando.titulo.trim()) {
+      this.snack.open('❌ El título es requerido', 'Aceptar', { duration: 3000 });
+      return;
+    }
+
+    if (this.noticiaEditando.titulo.length > 200) {
+      this.snack.open('❌ El título no debe superar los 200 caracteres', 'Aceptar', { duration: 3000 });
+      return;
+    }
+
+    if (!this.noticiaEditando.descripcion.trim()) {
+      this.snack.open('❌ La descripción es requerida', 'Aceptar', { duration: 3000 });
+      return;
+    }
+
+    if (this.noticiaEditando.descripcion.trim().length < 10) {
+      this.snack.open('❌ La descripción debe tener al menos 10 caracteres', 'Aceptar', { duration: 3000 });
+      return;
+    }
+
+    if (!this.noticiaEditando.autor.trim()) {
+      this.snack.open('❌ El autor es requerido', 'Aceptar', { duration: 3000 });
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('titulo', this.noticiaEditando.titulo.trim());
+    formData.append('descripcion', this.noticiaEditando.descripcion.trim());
+    formData.append('autor', this.noticiaEditando.autor.trim());
+    
+    // Solo agregar imagen si se seleccionó una nueva
+    if (this.imagenEditandoSeleccionada) {
+      formData.append('imagen', this.imagenEditandoSeleccionada);
+    }
+
+    console.log('📤 Preparando actualización de FormData');
+    console.log('📤 ID:', this.noticiaEditando.id);
+    console.log('📤 Título:', this.noticiaEditando.titulo.trim());
+    console.log('📤 Nueva imagen:', this.imagenEditandoSeleccionada?.name || 'No');
+
+    this.enviando = true;
+
+    this.noticiaService.actualizarNoticia(this.noticiaEditando.id!, formData).subscribe(
+      (response) => {
+        console.log('✅ Noticia actualizada exitosamente:', response);
+        this.snack.open('✅ Noticia actualizada exitosamente', 'Aceptar', { duration: 3000 });
+        
+        // Actualizar la noticia seleccionada si es la que se editó
+        if (this.noticiaSeleccionada && this.noticiaSeleccionada.id === this.noticiaEditando!.id) {
+          this.noticiaSeleccionada = response;
+        }
+        
+        this.cancelarEdicion();
+        this.cargarNoticias(); // Recargar la lista
+        this.enviando = false;
+      },
+      (error) => {
+        console.error('❌ Error al actualizar noticia:', error);
+        this.enviando = false;
+        
+        if (error.status === 401) {
+          this.snack.open('❌ Error de autenticación. Inicie sesión nuevamente', 'Ir a Login', { duration: 4000 })
+            .onAction().subscribe(() => {
+              this.loginService.logout();
+              this.router.navigate(['/login']);
+            });
+        } else if (error.status === 403) {
+          this.snack.open('❌ No tiene permisos para realizar esta acción', 'Aceptar', { duration: 4000 });
+        } else if (error.status === 500) {
+          this.snack.open('❌ Error del servidor al actualizar la noticia', 'Aceptar', { duration: 6000 });
+        } else {
+          this.snack.open('❌ Error al actualizar la noticia. Intente nuevamente.', 'Aceptar', { duration: 4000 });
+        }
+      }
+    );
   }
 
   // Forzar re-verificación de autenticación
