@@ -1,0 +1,262 @@
+<div class="bootstrap-wrapper">
+  <div class="container-fluid">
+    
+    <!-- Header -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <h1 class="text-center title-wine">📰 Sistema de Noticias Municipales</h1>
+        <p class="text-center text-muted">
+          <span *ngIf="!isLoggedIn">Consulte las últimas noticias oficiales del municipio</span>
+          <span *ngIf="isLoggedIn && userRole === 'TRABAJADOR'">Panel de trabajador - Gestione las noticias oficiales</span>
+          <span *ngIf="isLoggedIn && (userRole === 'ADMIN' || userRole === 'USUARIO')">Consulte las noticias oficiales publicadas</span>
+        </p>
+      </div>
+    </div>
+
+    <!-- Panel Principal -->
+    <div class="row">
+      
+      <!-- FORMULARIO DE CREACIÓN (Solo para TRABAJADOR) -->
+      <div class="col-lg-5" *ngIf="canManageNoticias()">
+        <mat-card class="form-card">
+          <mat-card-header>
+            <div mat-card-avatar class="worker-avatar">
+              <mat-icon>work</mat-icon>
+            </div>
+            <mat-card-title class="text-wine">📝 Crear Nueva Noticia</mat-card-title>
+            <mat-card-subtitle>
+              <span *ngIf="userRole === 'ADMIN'">Publicar información oficial del municipio</span>
+              <span *ngIf="userRole === 'TRABAJADOR'">Informar a la ciudadanía sobre actividades municipales</span>
+            </mat-card-subtitle>
+          </mat-card-header>
+          
+          <mat-card-content>
+            <form (ngSubmit)="crearNoticia()">
+              
+              <!-- Título -->
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Título de la Noticia</mat-label>
+                <input 
+                  matInput 
+                  [(ngModel)]="noticia.titulo" 
+                  name="titulo" 
+                  maxlength="200"
+                  placeholder="Ej: Nueva obra de pavimentación en el centro de la ciudad">
+                <mat-icon matSuffix>title</mat-icon>
+                <mat-hint>{{noticia.titulo.length}}/200 caracteres</mat-hint>
+              </mat-form-field>
+
+              <!-- Autor -->
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Autor/Responsable</mat-label>
+                <input 
+                  matInput 
+                  [(ngModel)]="noticia.autor" 
+                  name="autor" 
+                  maxlength="100"
+                  placeholder="Nombre del autor o área responsable">
+                <mat-icon matSuffix>person</mat-icon>
+              </mat-form-field>
+
+              <!-- Descripción -->
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Contenido de la Noticia</mat-label>
+                <textarea 
+                  matInput 
+                  [(ngModel)]="noticia.descripcion" 
+                  name="descripcion" 
+                  rows="4"
+                  maxlength="1000"
+                  placeholder="Describa la noticia con todos los detalles relevantes para los ciudadanos...">
+                </textarea>
+                <mat-icon matSuffix>description</mat-icon>
+                <mat-hint>{{noticia.descripcion.length}}/1000 caracteres</mat-hint>
+              </mat-form-field>
+
+              <!-- Selección de Imagen -->
+              <div class="mb-3">
+                <label class="form-label fw-bold text-wine">
+                  <mat-icon class="me-1">add_photo_alternate</mat-icon>
+                  Imagen Ilustrativa
+                </label>
+                <input 
+                  type="file" 
+                  class="form-control" 
+                  accept="image/*"
+                  (change)="onImageSelected($event)">
+                <small class="text-muted">Máximo 5MB. Formatos: JPG, PNG, GIF</small>
+              </div>
+
+              <!-- Preview de la imagen -->
+              <div *ngIf="imagenPreview" class="mb-3 text-center">
+                <div class="preview-container">
+                  <img [src]="imagenPreview" alt="Vista previa" class="img-preview">
+                  <div class="preview-overlay">
+                    <mat-icon>visibility</mat-icon>
+                    <p>Vista previa</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Botones -->
+              <div class="d-flex gap-2">
+                <button 
+                  type="button" 
+                  mat-raised-button 
+                  color="accent"
+                  (click)="limpiarFormulario()"
+                  class="flex-fill">
+                  <mat-icon>clear</mat-icon>
+                  Limpiar
+                </button>
+                
+                <button 
+                  type="submit" 
+                  mat-raised-button 
+                  class="btn-wine flex-fill"
+                  [disabled]="enviando">
+                  <mat-icon>{{ enviando ? 'hourglass_empty' : 'publish' }}</mat-icon>
+                  {{ enviando ? 'Publicando...' : 'Publicar Noticia' }}
+                </button>
+              </div>
+
+            </form>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <!-- Panel de Solo Lectura (Para usuarios USUARIO) -->
+      <div *ngIf="isLoggedIn && isReadOnlyUser()" class="col-12 mb-4">
+        <div class="alert alert-info-custom text-center">
+          <mat-icon class="large-icon">visibility</mat-icon>
+          <h5>👀 Modo Solo Lectura</h5>
+          <p>Conectado como <strong>{{userRole}}</strong>. Puede visualizar todas las noticias publicadas.</p>
+          <p>Para crear o gestionar noticias, contacte con el administrador del sistema.</p>
+        </div>
+      </div>
+
+      <!-- Panel informativo para usuarios no logueados -->
+      <div *ngIf="!isLoggedIn" class="col-12 mb-4">
+        <div class="alert alert-light text-center">
+          <mat-icon class="large-icon">info</mat-icon>
+          <h5>📰 Noticias Públicas</h5>
+          <p>Estas son las noticias oficiales del municipio. Si desea publicar contenido, <a routerLink="/login" class="text-wine">inicie sesión</a> como trabajador.</p>
+        </div>
+      </div>
+
+      <!-- LISTA DE NOTICIAS (Visible para TODOS) -->
+      <div [class]="canManageNoticias() ? 'col-lg-7' : 'col-12'">
+        <mat-card class="list-card">
+          <mat-card-header>
+            <div mat-card-avatar class="news-avatar">
+              <mat-icon>newspaper</mat-icon>
+            </div>
+            <mat-card-title class="text-wine">
+              📰 Noticias Publicadas
+              <span class="badge badge-wine ms-2">{{ noticias.length }}</span>
+            </mat-card-title>
+            <mat-card-subtitle>
+              Últimas noticias oficiales del municipio
+            </mat-card-subtitle>
+          </mat-card-header>
+          
+          <mat-card-content>
+            
+            <!-- Botón de Recarga -->
+            <div class="text-end mb-3">
+              <button mat-icon-button (click)="cargarNoticias()" matTooltip="Actualizar noticias">
+                <mat-icon>refresh</mat-icon>
+              </button>
+            </div>
+
+            <!-- Loading -->
+            <div *ngIf="cargando" class="text-center p-4">
+              <mat-spinner diameter="50"></mat-spinner>
+              <p class="mt-3">Cargando noticias...</p>
+            </div>
+
+            <!-- Sin noticias -->
+            <div *ngIf="!cargando && noticias.length === 0" class="text-center p-5">
+              <mat-icon class="empty-icon">article</mat-icon>
+              <h5>📰 No hay noticias publicadas</h5>
+              <p class="text-muted">
+                <span *ngIf="canManageNoticias()">Cree la primera noticia usando el formulario</span>
+                <span *ngIf="!canManageNoticias()">Aún no se han publicado noticias oficiales</span>
+              </p>
+            </div>
+
+            <!-- Lista de noticias -->
+            <div *ngIf="!cargando && noticias.length > 0" class="noticias-container">
+              <div class="noticia-item" *ngFor="let noticia of noticias; let i = index">
+                
+                <!-- Header de la noticia -->
+                <div class="noticia-header">
+                  <div class="author-info">
+                    <div class="author-avatar">
+                      {{ getInitials(noticia.autor) }}
+                    </div>
+                    <div class="author-details">
+                      <p class="author-name">{{ noticia.autor }}</p>
+                      <p class="publish-date">
+                        <mat-icon class="icon-small">schedule</mat-icon>
+                        {{ formatearFecha(noticia.fecha!) }}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <!-- Acciones (Para ADMIN y TRABAJADOR) -->
+                  <div class="noticia-acciones" *ngIf="canManageNoticias()">
+                    <button 
+                      mat-icon-button 
+                      color="warn"
+                      (click)="eliminarNoticia(noticia.id!)"
+                      matTooltip="Eliminar noticia">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+                </div>
+                
+                <!-- Título -->
+                <h4 class="noticia-titulo">{{ noticia.titulo }}</h4>
+                
+                <!-- Imagen -->
+                <div class="noticia-imagen" *ngIf="noticia.imagen">
+                  <img 
+                    [src]="'http://localhost:8080/uploads/' + noticia.imagen" 
+                    [alt]="noticia.titulo"
+                    (error)="$any($event.target).src='assets/images/noticia.jpeg'"
+                    class="img-fluid">
+                </div>
+                
+                <!-- Contenido -->
+                <div class="noticia-contenido">
+                  <p class="noticia-descripcion">{{ noticia.descripcion }}</p>
+                </div>
+                
+                <!-- Separador -->
+                <mat-divider *ngIf="i < noticias.length - 1" class="my-4"></mat-divider>
+                
+              </div>
+            </div>
+
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+    </div>
+    <!-- Fin del row principal -->
+
+    <!-- Footer informativo -->
+    <div class="row mt-5">
+      <div class="col-12">
+        <div class="footer-info text-center text-muted">
+          <small>
+            <mat-icon class="icon-small">info</mat-icon>
+            Sistema de Gestión Municipal - Noticias Oficiales
+          </small>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

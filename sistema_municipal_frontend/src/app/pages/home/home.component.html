@@ -1,0 +1,62 @@
+<!-- HERO SECTION -->
+<header class="hero text-center text-white d-flex align-items-center justify-content-center">
+  <div class="container">
+    <h1 class="display-3 fw-bold">Gestión Municipal</h1>
+    <p class="lead">Accede a trámites, pagos y noticias de forma rápida y segura.</p>
+  </div>
+</header>
+
+<!-- SECCIÓN DE INFORMACIÓN -->
+<section class="container my-5 page-section">
+  <div class="row g-4">
+    <div class="col-md-4">
+      <div class="card wine-shadow h-100">
+        <img src="assets/images/noticia.jpeg" class="card-img-top" alt="img-noticia">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title">Últimas Noticias</h5>
+          <p class="card-text flex-grow-1">Mantente informado sobre eventos y regulaciones municipales.</p>
+          <a [routerLink]="['/test-noticias']" class="btn btn-wine mt-auto">Ver más</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card wine-shadow h-100">
+        <img src="assets/images/multas.jpg" class="card-img-top" alt="img-multas">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title">Gestión de Multas</h5>
+          <p class="card-text flex-grow-1">Consulta y paga tus multas municipales de manera rápida.</p>
+          <a [routerLink]="['/multas']" class="btn btn-wine mt-auto">Ver más</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card wine-shadow h-100">
+        <img src="assets/images/tramites.jpg" class="card-img-top" alt="img-servicios">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title">Trámites Digitales</h5>
+          <p class="card-text flex-grow-1">Gestiona tus trámites desde casa.</p>
+          <a href="#" class="btn btn-wine mt-auto">Ver más</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECCIÓN DE CONTACTO -->
+<section class="bg-light py-5 page-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 mx-auto text-center">
+        <h2 class="fw-bold mb-4">¿Necesitas ayuda?</h2>
+        <p class="lead mb-4">Nuestro equipo está disponible para asistirte con cualquier consulta o trámite.</p>
+        <a [routerLink]="['/contacto']" class="btn btn-wine btn-lg">Contáctanos</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="bg-wine text-light text-center py-4">
+  <div class="container">
+    <p class="mb-0">© 2025 Municipalidad de Arequipa. Todos los derechos reservados.</p>
+  </div>
+</footer>
