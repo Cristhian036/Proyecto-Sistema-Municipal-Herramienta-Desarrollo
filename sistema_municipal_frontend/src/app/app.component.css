@@ -7,8 +7,8 @@
 
 /* Main content container to handle fixed navbar */
 .main-content {
-  padding-top: 80px; /* Adjust based on navbar height */
-  min-height: calc(100vh - 80px);
+  padding-top: 70px; /* Ajustado para la nueva altura del navbar */
+  min-height: calc(100vh - 70px);
   flex: 1;
   display: flex;
   flex-direction: column;

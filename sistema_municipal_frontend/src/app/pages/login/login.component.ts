@@ -15,12 +15,46 @@ export class LoginComponent implements OnInit {
     password: '',
   }
 
+  showPassword = false;
+  rememberMe = false;
+  loading = false;
+  error = '';
+
   constructor(private snack: MatSnackBar, private loginService: LoginService, private router: Router) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    // Verificar si el usuario ya está logueado
+    if (this.loginService.isLoggedIn()) {
+      console.log('🔍 Login - Usuario ya autenticado, redirigiendo...');
+      this.redirectToUserDashboard();
+    }
+  }
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
+  }
+
+  private redirectToUserDashboard() {
+    const role = this.loginService.getUserRole();
+    console.log('🎯 Login - Redirigiendo usuario con rol:', role);
+    
+    if (role === 'TRABAJADOR') {
+      this.router.navigate(['test-noticias']);
+    } else if (role === 'USUARIO') {
+      this.router.navigate(['foros']);
+    } else {
+      // Si no hay rol claro, ir al home
+      this.router.navigate(['']);
+    }
+  }
 
   formSubmit() {
+    this.error = '';
+    this.loading = true;
+
     if (!this.loginData.email || this.loginData.email.trim() === '') {
+      this.error = 'El email es requerido';
+      this.loading = false;
       this.snack.open('El email es requerido !!', 'Aceptar', {
         duration: 3000
       });
@@ -28,6 +62,8 @@ export class LoginComponent implements OnInit {
     }
 
     if (!this.loginData.password || this.loginData.password.trim() === '') {
+      this.error = 'La contraseña es requerida';
+      this.loading = false;
       this.snack.open('La contraseña es requerida !!', 'Aceptar', {
         duration: 3000
       });
@@ -42,6 +78,8 @@ export class LoginComponent implements OnInit {
         // Validar que recibimos un token
         if (!data.token) {
           console.error('❌ Login - No se recibió token en la respuesta');
+          this.error = 'Error: No se recibió token de autenticación';
+          this.loading = false;
           this.snack.open('Error: No se recibió token de autenticación', 'Aceptar', {
             duration: 3000
           });
@@ -53,6 +91,8 @@ export class LoginComponent implements OnInit {
         
         if (!tokenSaved) {
           console.error('❌ Login - Falló el guardado del token');
+          this.error = 'Error: No se pudo guardar el token';
+          this.loading = false;
           this.snack.open('Error: No se pudo guardar el token', 'Aceptar', {
             duration: 3000
           });
@@ -66,6 +106,8 @@ export class LoginComponent implements OnInit {
           
           if (!savedToken) {
             console.error('❌ Login - Token desapareció después del guardado');
+            this.error = 'Error crítico: Token no persistió';
+            this.loading = false;
             this.snack.open('Error crítico: Token no persistió', 'Aceptar', {
               duration: 5000
             });
@@ -78,32 +120,44 @@ export class LoginComponent implements OnInit {
             console.log('✅ Login - Usuario obtenido del backend:', user);
             this.loginService.setUser(user);
 
+            // IMPORTANTE: Notificar explícitamente el cambio de estado
+            this.loginService.loginStatusSubjec.next(true);
+            console.log('🔄 Login - Estado de autenticación notificado');
+
             const role = this.loginService.getUserRole();
             console.log('🔍 Login - Rol detectado:', role);
 
-            // Redirigir según el rol
-            if (role === 'TRABAJADOR') {
-              console.log('🎯 Login - Redirigiendo a dashboard de trabajador');
-              this.router.navigate(['test-noticias']);
-            }
-            else if (role === 'USUARIO') {
-              console.log('🎯 Login - Redirigiendo a dashboard de usuario'); 
-              this.router.navigate(['foros']);
-            }
-            else {
-              console.warn('⚠️ Login - Rol no reconocido:', role);
-              this.snack.open('Rol de usuario no válido: ' + role, 'Aceptar', { duration: 5000 });
-              this.loginService.logout();
-            }
+            this.loading = false;
 
             // Mostrar mensaje de éxito
             this.snack.open('¡Bienvenido ' + (user.nombre || user.email) + '!', 'Aceptar', {
               duration: 3000
             });
 
+            // Pequeño delay para asegurar que la UI se actualice antes de navegar
+            setTimeout(() => {
+              // Redirigir según el rol
+              if (role === 'TRABAJADOR') {
+                console.log('🎯 Login - Redirigiendo a dashboard de trabajador');
+                this.router.navigate(['test-noticias']);
+              }
+              else if (role === 'USUARIO') {
+                console.log('🎯 Login - Redirigiendo a dashboard de usuario'); 
+                this.router.navigate(['foros']);
+              }
+              else {
+                console.warn('⚠️ Login - Rol no reconocido:', role);
+                this.error = 'Rol de usuario no válido: ' + role;
+                this.snack.open('Rol de usuario no válido: ' + role, 'Aceptar', { duration: 5000 });
+                this.loginService.logout();
+              }
+            }, 500);
+
           },
           (userError) => {
             console.error('❌ Login - Error al obtener información del usuario:', userError);
+            this.error = 'Error al obtener información del usuario';
+            this.loading = false;
             this.snack.open('Error al obtener información del usuario', 'Aceptar', {
               duration: 3000
             });
@@ -114,6 +168,8 @@ export class LoginComponent implements OnInit {
       },
       (error) => {
         console.error('❌ Login - Error en autenticación:', error);
+        this.error = 'Credenciales inválidas, vuelva a intentar';
+        this.loading = false;
         this.snack.open('Credenciales inválidas, vuelva a intentar', 'Aceptar', {
           duration: 3000
         });

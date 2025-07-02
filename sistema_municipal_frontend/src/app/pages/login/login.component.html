@@ -1,55 +1,112 @@
-<div class="page-container">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-md-6 col-lg-5">
-        <div class="form-container">
-          <div class="text-center mb-4">
-            <img src="assets/login.png" width="100" height="100" alt="Icono inicio de sesión" class="mb-3">
-            <h1 class="text-wine">Inicio de sesión</h1>
-            <p class="text-muted">Ingresa tus credenciales para acceder</p>
-          </div>
-
-          <form (ngSubmit)="formSubmit()">
-            <mat-form-field class="full-width" appearance="outline">
-              <mat-label>Email</mat-label>
-              <input [(ngModel)]="loginData.email" name="email" required type="email" matInput placeholder="Digite su email">
-              <mat-hint>El email debe ser válido</mat-hint>
-            </mat-form-field>
-
-            <mat-form-field class="full-width" appearance="outline">
-              <mat-label>Contraseña</mat-label>
-              <input [(ngModel)]="loginData.password" name="password" required type="password" matInput placeholder="Digite su contraseña">
-              <mat-hint>La contraseña debe ser válida</mat-hint>
-            </mat-form-field>
-
-            <div class="d-grid gap-2 mt-4">
-              <button type="submit" mat-raised-button color="primary" class="btn-lg">
-                <mat-icon>login</mat-icon>
-                Iniciar sesión
-              </button>
-              <button type="reset" mat-stroked-button color="accent">
-                <mat-icon>clear</mat-icon>
-                Limpiar
-              </button>
-              <!-- Botones temporales para debug -->
-              <button type="button" mat-stroked-button color="warn" (click)="debugLoginState()">
-                <mat-icon>bug_report</mat-icon>
-                Debug Estado
-              </button>
-              <button type="button" mat-stroked-button color="warn" (click)="testTokenSending()">
-                <mat-icon>send</mat-icon>
-                Test Token
-              </button>
-            </div>
-          </form>
-
-          <div class="text-center mt-4">
-            <p class="text-muted">¿No tienes cuenta? 
-              <a [routerLink]="['/signup']" class="text-wine text-decoration-none fw-bold">Regístrate aquí</a>
-            </p>
+<div class="container-fluid login-container">
+  <div class="row h-100">
+    <!-- Lado izquierdo con imagen -->
+    <div class="col-lg-6 d-none d-lg-block p-0">
+      <div class="login-image-section">
+        <img src="https://images.pexels.com/photos/1181467/pexels-photo-1181467.jpeg?auto=compress&cs=tinysrgb&w=800" 
+             class="img-fluid h-100 w-100" alt="Arequipa" style="object-fit: cover;">
+        <div class="login-overlay">
+          <div class="text-center text-white p-5">
+            <h2 class="display-6 fw-bold mb-3">Bienvenido a la</h2>
+            <h1 class="display-4 fw-bold mb-4">Municipalidad de Arequipa</h1>
+            <p class="lead">Accede a todos los servicios municipales de manera segura y eficiente</p>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Lado derecho con formulario -->
+    <div class="col-lg-6 d-flex align-items-center justify-content-center">
+      <div class="w-100" style="max-width: 400px;">
+        <div class="login-form-card">
+              <div class="text-center mb-4">
+                <h3 class="fw-bold text-wine">Iniciar Sesión</h3>
+                <p class="text-muted">Ingresa tus credenciales para acceder al sistema</p>
+              </div>
+
+              <form (ngSubmit)="formSubmit()" #loginForm="ngForm">
+                <div class="mb-3">
+                  <label for="email" class="form-label">Correo Electrónico</label>
+                  <div class="input-group">
+                    <span class="input-group-text">
+                      <mat-icon class="text-wine">email</mat-icon>
+                    </span>
+                    <input 
+                      type="email" 
+                      class="form-control" 
+                      id="email"
+                      [(ngModel)]="loginData.email"
+                      name="email"
+                      placeholder="ejemplo@correo.com"
+                      required>
+                  </div>
+                  <small class="text-muted">El email debe ser válido</small>
+                </div>
+
+                <div class="mb-3">
+                  <label for="password" class="form-label">Contraseña</label>
+                  <div class="input-group">
+                    <span class="input-group-text">
+                      <mat-icon class="text-wine">lock</mat-icon>
+                    </span>
+                    <input 
+                      [type]="showPassword ? 'text' : 'password'" 
+                      class="form-control" 
+                      id="password"
+                      [(ngModel)]="loginData.password"
+                      name="password"
+                      placeholder="Ingresa tu contraseña"
+                      required>
+                    <button 
+                      type="button" 
+                      class="btn btn-outline-secondary"
+                      (click)="togglePassword()">
+                      <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                    </button>
+                  </div>
+                  <small class="text-muted">La contraseña debe ser válida</small>
+                </div>
+
+                <div class="mb-3 form-check">
+                  <input 
+                    type="checkbox" 
+                    class="form-check-input" 
+                    id="remember"
+                    [(ngModel)]="rememberMe"
+                    name="remember">
+                  <label class="form-check-label" for="remember">
+                    Recordar mis datos
+                  </label>
+                </div>
+
+                <div class="d-grid mb-4">
+                  <button 
+                    type="submit" 
+                    class="btn btn-wine btn-lg"
+                    [disabled]="!loginForm.form.valid || loading">
+                    <span *ngIf="loading" class="loading-spinner me-2"></span>
+                    <mat-icon *ngIf="!loading" class="me-2">login</mat-icon>
+                    {{ loading ? 'Iniciando sesión...' : 'Iniciar Sesión' }}
+                  </button>
+                </div>
+              </form>
+
+              <hr class="my-4">
+
+              <div class="text-center">
+                <p class="mb-3">¿No tienes una cuenta?</p>
+                <a [routerLink]="['/signup']" class="btn btn-outline-wine">
+                  <mat-icon class="me-2">person_add</mat-icon>
+                  Registrarse
+                </a>
+              </div>
+
+              <div class="alert alert-danger mt-3" *ngIf="error">
+                <mat-icon class="me-2">warning</mat-icon>
+                {{ error }}
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
   </div>
-</div>
