@@ -38,4 +38,14 @@ export class NoticiaService {
   eliminarNoticia(id: number): Observable<any> {
     return this.http.delete(`${baseUrl}/noticias/${id}`);
   }
+
+  // Actualizar una noticia existente
+  actualizarNoticia(id: number, formData: FormData): Observable<Noticia> {
+    return this.http.put<Noticia>(`${baseUrl}/noticias/${id}`, formData);
+  }
+
+  // Obtener URL de imagen
+  obtenerUrlImagen(nombreImagen: string): string {
+    return `${baseUrl}/noticias/imagen/${nombreImagen}`;
+  }
 }
