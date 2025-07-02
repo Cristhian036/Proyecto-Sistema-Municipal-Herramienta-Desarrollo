@@ -7,45 +7,21 @@
         <h1 class="text-center title-wine">📰 Sistema de Noticias Municipales</h1>
         <p class="text-center text-muted">
           <span *ngIf="!isLoggedIn">Consulte las últimas noticias oficiales del municipio</span>
-          <span *ngIf="isLoggedIn && userRole === 'ADMIN'">Panel administrativo - Gestione las noticias oficiales</span>
-          <span *ngIf="isLoggedIn && userRole === 'TRABAJADOR'">Panel de trabajador - Publique noticias municipales</span>
-          <span *ngIf="isLoggedIn && userRole === 'USUARIO'">Consulte las noticias oficiales publicadas</span>
+          <span *ngIf="isLoggedIn && userRole === 'TRABAJADOR'">Panel de trabajador - Gestione las noticias oficiales</span>
+          <span *ngIf="isLoggedIn && (userRole === 'ADMIN' || userRole === 'USUARIO')">Consulte las noticias oficiales publicadas</span>
         </p>
       </div>
     </div>
 
-    <!-- Panel de Autenticación (Solo si no está logueado) -->
-    <div *ngIf="!isLoggedIn" class="row mb-4">
-      <div class="col-12">
-        <div class="auth-required-panel text-center">
-          <div class="alert alert-info">
-            <mat-icon class="large-icon">info</mat-icon>
-            <h5>🔐 Autenticación Requerida</h5>
-            <p><strong>Permisos del sistema:</strong></p>
-            <ul class="text-start">
-              <li><strong>👁️ USUARIO:</strong> Solo visualización de noticias</li>
-              <li><strong>🔧 TRABAJADOR:</strong> Crear, editar y eliminar noticias</li>
-              <li><strong>👨‍💼 ADMIN:</strong> Gestión completa del sistema</li>
-            </ul>
-            <p>Inicie sesión para acceder según su rol asignado</p>
-            <button mat-raised-button color="primary" (click)="irALogin()">
-              <mat-icon>login</mat-icon>
-              Iniciar Sesión
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Panel Principal (Solo para usuarios autenticados) -->
-    <div *ngIf="isLoggedIn" class="row">
+    <!-- Panel Principal -->
+    <div class="row">
       
-      <!-- FORMULARIO DE CREACIÓN (Para ADMIN y TRABAJADOR) -->
+      <!-- FORMULARIO DE CREACIÓN (Solo para TRABAJADOR) -->
       <div class="col-lg-5" *ngIf="canManageNoticias()">
         <mat-card class="form-card">
           <mat-card-header>
-            <div mat-card-avatar [class]="userRole === 'ADMIN' ? 'admin-avatar' : 'worker-avatar'">
-              <mat-icon>{{ userRole === 'ADMIN' ? 'admin_panel_settings' : 'work' }}</mat-icon>
+            <div mat-card-avatar class="worker-avatar">
+              <mat-icon>work</mat-icon>
             </div>
             <mat-card-title class="text-wine">📝 Crear Nueva Noticia</mat-card-title>
             <mat-card-subtitle>
@@ -150,7 +126,7 @@
       </div>
 
       <!-- Panel de Solo Lectura (Para usuarios USUARIO) -->
-      <div *ngIf="isReadOnlyUser()" class="col-12 mb-4">
+      <div *ngIf="isLoggedIn && isReadOnlyUser()" class="col-12 mb-4">
         <div class="alert alert-info-custom text-center">
           <mat-icon class="large-icon">visibility</mat-icon>
           <h5>👀 Modo Solo Lectura</h5>
@@ -159,7 +135,16 @@
         </div>
       </div>
 
-      <!-- LISTA DE NOTICIAS -->
+      <!-- Panel informativo para usuarios no logueados -->
+      <div *ngIf="!isLoggedIn" class="col-12 mb-4">
+        <div class="alert alert-light text-center">
+          <mat-icon class="large-icon">info</mat-icon>
+          <h5>📰 Noticias Públicas</h5>
+          <p>Estas son las noticias oficiales del municipio. Si desea publicar contenido, <a routerLink="/login" class="text-wine">inicie sesión</a> como trabajador.</p>
+        </div>
+      </div>
+
+      <!-- LISTA DE NOTICIAS (Visible para TODOS) -->
       <div [class]="canManageNoticias() ? 'col-lg-7' : 'col-12'">
         <mat-card class="list-card">
           <mat-card-header>
@@ -259,6 +244,7 @@
       </div>
 
     </div>
+    <!-- Fin del row principal -->
 
     <!-- Footer informativo -->
     <div class="row mt-5">

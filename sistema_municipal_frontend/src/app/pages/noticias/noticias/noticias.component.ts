@@ -108,10 +108,10 @@ export class NoticiasComponent implements OnInit {
     console.log('🔍 NoticiasComponent - userRole:', this.userRole);
     console.log('🔍 NoticiasComponent - token:', this.loginService.getToken() ? 'EXISTS' : 'NULL');
 
-    // Verificar permisos (ADMIN o TRABAJADOR pueden crear noticias)
-    if (this.userRole !== 'ADMIN' && this.userRole !== 'TRABAJADOR') {
+    // Verificar permisos (Solo TRABAJADOR puede crear noticias)
+    if (this.userRole !== 'TRABAJADOR') {
       console.log('❌ NoticiasComponent - Permisos insuficientes. Rol:', this.userRole);
-      this.snack.open('❌ Solo los administradores y trabajadores pueden crear noticias', 'Aceptar', { duration: 4000 });
+      this.snack.open('❌ Solo los trabajadores pueden crear noticias', 'Aceptar', { duration: 4000 });
       return;
     }
 
@@ -299,9 +299,9 @@ export class NoticiasComponent implements OnInit {
       .substring(0, 2);
   }
 
-  // Verificar si el usuario puede gestionar noticias (crear/editar/eliminar)
+  // Verificar si el usuario puede gestionar noticias (crear/editar/eliminar) - Solo TRABAJADOR
   canManageNoticias(): boolean {
-    return this.isLoggedIn && (this.userRole === 'ADMIN' || this.userRole === 'TRABAJADOR');
+    return this.isLoggedIn && this.userRole === 'TRABAJADOR';
   }
 
   // Verificar si es solo usuario de lectura

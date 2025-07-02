@@ -100,6 +100,10 @@ export class LoginService {
     console.log('👤 LoginService - Guardando usuario:', user.email || user.nombre);
     localStorage.setItem('user', JSON.stringify(user));
     console.log('✅ LoginService - Usuario guardado en localStorage');
+    
+    // Notificar cambio de estado después de guardar el usuario
+    this.loginStatusSubjec.next(true);
+    console.log('🔄 LoginService - Estado de autenticación actualizado después de setUser');
   }
 
   public getUser(){

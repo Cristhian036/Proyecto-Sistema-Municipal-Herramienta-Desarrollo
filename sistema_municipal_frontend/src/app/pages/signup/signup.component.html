@@ -1,63 +1,156 @@
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Plataforma Municipal</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="signup.component.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
+<div class="container-fluid signup-container">
+  <div class="row h-100">
+    <!-- Lado izquierdo con formulario -->
+    <div class="col-lg-6 d-flex align-items-center justify-content-center">
+      <div class="w-100" style="max-width: 500px;">
+        <div class="signup-form-card">
+          <div class="text-center mb-4">
+            <h3 class="fw-bold text-wine">Regístrate</h3>
+            <p class="text-muted">Crea tu cuenta para acceder a los servicios municipales</p>
+          </div>
 
-<div class="bootstrap-wrapper">
-  <div class="container">
-    <div class="row mt-20">
-      <div class="col-md-6 offset-md-3">
-        <div class="card-container">
-          <mat-card>
-            <div class="container text-center">
-              <img src="../../../assets/icon.png" width="100" height="100" alt="Icono Plataforma Municipal">
+          <form (ngSubmit)="formSubmit()" #signupForm="ngForm">
+            <!-- Primera fila: Nombre y Apellido -->
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="nombre" class="form-label">Nombre</label>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <mat-icon class="text-wine">person</mat-icon>
+                  </span>
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    id="nombre"
+                    [(ngModel)]="user.nombre"
+                    name="nombre"
+                    placeholder="Ingresa tu nombre"
+                    required>
+                </div>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label for="apellido" class="form-label">Apellido</label>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <mat-icon class="text-wine">person_outline</mat-icon>
+                  </span>
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    id="apellido"
+                    [(ngModel)]="user.apellido"
+                    name="apellido"
+                    placeholder="Ingresa tu apellido"
+                    required>
+                </div>
+              </div>
             </div>
 
-            <h1 class="text-center">Regístrate aquí</h1>
-            <form (ngSubmit)="formSubmit()">
-              <!-- Quitamos username -->
-
-              <mat-form-field class="full-width" appearance="outline">
-                <mat-label>Email</mat-label>
-                <input required [(ngModel)]="user.email" name="email" type="email" matInput placeholder="Digite su email">
-                <mat-hint>El email debe ser único</mat-hint>
-              </mat-form-field>
-
-              <mat-form-field class="full-width" appearance="outline">
-                <mat-label>Contraseña</mat-label>
-                <input required [(ngModel)]="user.password" name="password" type="password" matInput placeholder="Digite su contraseña">
-              </mat-form-field>
-
-              <mat-form-field class="full-width" appearance="outline">
-                <mat-label>Nombre</mat-label>
-                <input required [(ngModel)]="user.nombre" name="nombre" matInput placeholder="Digite su nombre">
-              </mat-form-field>
-
-              <mat-form-field class="full-width" appearance="outline">
-                <mat-label>Apellido</mat-label>
-                <input required [(ngModel)]="user.apellido" name="apellido" matInput placeholder="Digite su apellido">
-              </mat-form-field>
-
-              <mat-form-field class="full-width" appearance="outline">
-                <mat-label>Teléfono</mat-label>
-                <input required [(ngModel)]="user.telefono" name="telefono" matInput placeholder="Digite su teléfono">
-              </mat-form-field>
-
-              <br><br>
-
-              <div class="container text-center">
-                <button type="submit" mat-raised-button color="primary">Registrar</button>
-                <button type="reset" style="margin-left: 20px;" mat-raised-button color="accent">Limpiar</button>
+            <!-- Segunda fila: Email y Teléfono -->
+            <div class="row">
+              <div class="col-mb-3">
+                <label for="email" class="form-label">Correo Electrónico</label>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <mat-icon class="text-wine">email</mat-icon>
+                  </span>
+                  <input 
+                    type="email" 
+                    class="form-control" 
+                    id="email"
+                    [(ngModel)]="user.email"
+                    name="email"
+                    placeholder="ejemplo@correo.com"
+                    required>
+                </div>
+                <small class="text-muted">El email debe ser único</small>
               </div>
-            </form>
-          </mat-card>
+            </div>
+
+            <!-- Tercera fila: Contraseña (ancho completo) -->
+            <div class="mb-3">
+              <label for="password" class="form-label">Contraseña</label>
+              <div class="input-group">
+                <span class="input-group-text">
+                  <mat-icon class="text-wine">lock</mat-icon>
+                </span>
+                <input 
+                  [type]="showPassword ? 'text' : 'password'" 
+                  class="form-control" 
+                  id="password"
+                  [(ngModel)]="user.password"
+                  name="password"
+                  placeholder="Crea una contraseña segura"
+                  required>
+                <button 
+                  type="button" 
+                  class="btn btn-outline-secondary"
+                  (click)="togglePassword()">
+                  <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                </button>
+              </div>
+            </div>
+
+            <div class="d-grid mb-4">
+              <button 
+                type="submit" 
+                class="btn btn-wine btn-lg"
+                [disabled]="!signupForm.form.valid || loading">
+                <span *ngIf="loading" class="loading-spinner me-2"></span>
+                <mat-icon *ngIf="!loading" class="me-2">person_add</mat-icon>
+                {{ loading ? 'Registrando...' : 'Registrarse' }}
+              </button>
+            </div>
+          </form>
+
+          <hr class="my-4">
+
+          <div class="text-center">
+            <p class="mb-3">¿Ya tienes una cuenta?</p>
+            <a [routerLink]="['/login']" class="btn btn-outline-wine">
+              <mat-icon class="me-2">login</mat-icon>
+              Iniciar Sesión
+            </a>
+          </div>
+
+          <div class="alert alert-danger mt-3" *ngIf="error">
+            <mat-icon class="me-2">warning</mat-icon>
+            {{ error }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lado derecho con imagen -->
+    <div class="col-lg-6 d-none d-lg-block p-0">
+      <div class="signup-image-section">
+        <img src="https://images.pexels.com/photos/1181467/pexels-photo-1181467.jpeg?auto=compress&cs=tinysrgb&w=800" 
+             class="img-fluid h-100 w-100" alt="Arequipa" style="object-fit: cover;">
+        <div class="signup-overlay">
+          <div class="text-center text-white p-5">
+            <h2 class="display-6 fw-bold mb-3">Únete a la</h2>
+            <h1 class="display-4 fw-bold mb-4">Comunidad Digital</h1>
+            <p class="lead">Accede a servicios públicos, participa en foros y mantente informado sobre la ciudad de Arequipa</p>
+            <div class="mt-4">
+              <div class="d-flex justify-content-center gap-4">
+                <div class="text-center">
+                  <mat-icon class="fa-2x mb-2">forum</mat-icon>
+                  <p class="small">Participa en Foros</p>
+                </div>
+                <div class="text-center">
+                  <mat-icon class="fa-2x mb-2">article</mat-icon>
+                  <p class="small">Lee Noticias</p>
+                </div>
+                <div class="text-center">
+                  <mat-icon class="fa-2x mb-2">description</mat-icon>
+                  <p class="small">Gestiona Trámites</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
