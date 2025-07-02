@@ -28,6 +28,12 @@ public class ForumPostController {
         return forumPostService.obtenerTodos();
     }
 
+    // Endpoint específico para foros públicos (sin autenticación)
+    @GetMapping("/publicos")
+    public List<ForumPost> listarForosPublicos() {
+        return forumPostService.obtenerTodos();
+    }
+
     // Obtener foro por id (público)
     @GetMapping("/{id}")
     public ResponseEntity<?> obtenerForo(@PathVariable Long id) {

@@ -39,6 +39,18 @@ public class CommentController {
         }
     }
 
+    // Endpoint específico para comentarios públicos (sin autenticación)
+    @GetMapping("/foro/{foroId}/publicos")
+    public ResponseEntity<?> obtenerComentariosPublicos(@PathVariable Long foroId) {
+        try {
+            ForumPost foro = forumPostService.obtenerPorId(foroId);
+            List<Comment> comentarios = commentService.obtenerComentariosPorForo(foro);
+            return ResponseEntity.ok(comentarios);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     // Crear comentario en foro (requiere autenticación)
     @PostMapping("/foro/{foroId}")
     public ResponseEntity<?> crearComentario(@PathVariable Long foroId, @RequestBody Comment comment, Authentication authentication) {

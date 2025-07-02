@@ -45,6 +45,17 @@ public class MySecurityConfig {
                         .requestMatchers("/generate-token", "/usuarios/").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Permitir preflight requests
                         
+                        // Endpoints de foros (públicos para lectura)
+                        .requestMatchers(HttpMethod.GET, "/foros/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/foros/**").hasAnyAuthority("TRABAJADOR", "USUARIO")
+                        
+                        // Endpoints de comentarios (públicos para lectura)
+                        .requestMatchers(HttpMethod.GET, "/comentarios/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/comentarios/**").hasAnyAuthority("TRABAJADOR", "USUARIO")
+                        
+                        // Endpoints de likes/dislikes (requieren autenticación)
+                        .requestMatchers("/likes/**", "/dislikes/**").hasAnyAuthority("TRABAJADOR", "USUARIO")
+                        
                         // Endpoints para trabajadores
                         .requestMatchers("/usuarios/trabajador").hasAuthority("TRABAJADOR")
                         
