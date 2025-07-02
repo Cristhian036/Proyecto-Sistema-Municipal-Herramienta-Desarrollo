@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 @EnableWebSecurity
 @Configuration
@@ -29,23 +30,35 @@ public class MySecurityConfig {
     private UserDetailsServiceImpl userDetailsServiceImpl;
 
     @Autowired
+    private CorsConfigurationSource corsConfigurationSource;
+
+    @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .authorizeHttpRequests(auth -> auth
+                        // Endpoints públicos (no requieren autenticación)
                         .requestMatchers("/generate-token", "/usuarios/").permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Permitir preflight requests
+                        
+                        // Endpoints para trabajadores
                         .requestMatchers("/usuarios/trabajador").hasAuthority("TRABAJADOR")
+                        
+                        // Endpoints de noticias
                         .requestMatchers(HttpMethod.GET, "/noticias/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/noticias/**").hasAnyAuthority("TRABAJADOR", "USUARIO")
                         .requestMatchers(HttpMethod.PUT, "/noticias/**").hasAuthority("TRABAJADOR")
                         .requestMatchers(HttpMethod.DELETE, "/noticias/**").hasAuthority("TRABAJADOR")
+                        
+                        // Archivos estáticos
                         .requestMatchers("/uploads/**").permitAll()
                         .requestMatchers("/noticias/imagen/**").permitAll()
-                        .requestMatchers(HttpMethod.OPTIONS).permitAll()
+                        
+                        // Todos los demás endpoints requieren autenticación
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(unauthorizedHandler))
