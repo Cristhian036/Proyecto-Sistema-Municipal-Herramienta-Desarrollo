@@ -1,0 +1,57 @@
+/* Ensure the body and html take the full height of the viewport */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Prevent scrolling */
+}
+
+/* PALETA DE COLORES */
+.bg-wine {
+  background-color: #721121 !important;
+}
+
+.text-light {
+  color: #ffffff !important;
+}
+
+.btn-wine {
+  background-color: #9a031e;
+  color: white;
+  border-radius: 8px;
+}
+
+.btn-wine:hover {
+  background-color: #d90429;
+}
+
+.btn-accent {
+  background-color: #FFD700;
+  color: #721121;
+  border-radius: 8px;
+}
+
+.btn-accent:hover {
+  background-color: #e0c249;
+}
+
+/* Asegurar que las imágenes se vean */
+.card-img-top {
+  width: 100%;
+  object-fit: cover;
+}
+
+/* Centrar mat-card */
+.bootstrap-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%; 
+}
+
+.card-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: auto; 
+}

@@ -1,0 +1,105 @@
+/* PALETA DE COLORES */
+.btn-wine {
+  background-color: #9a031e !important;
+  color: white !important;
+  border-radius: 8px;
+}
+
+.btn-wine:hover {
+  background-color: #d90429 !important;
+}
+
+.title-wine {
+  color: #721121;
+  font-weight: bold;
+}
+
+/* LAYOUT */
+.bootstrap-wrapper {
+  padding: 20px 0;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+/* TARJETAS DE NOTICIAS */
+.noticia-card {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(114, 17, 33, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+}
+
+.noticia-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(114, 17, 33, 0.2);
+}
+
+/* IMAGEN */
+.image-container {
+  height: 200px;
+  overflow: hidden;
+}
+
+.noticia-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.noticia-card:hover .noticia-image {
+  transform: scale(1.05);
+}
+
+/* CONTENIDO */
+.noticia-titulo {
+  color: #721121;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  line-height: 1.3;
+}
+
+.noticia-descripcion {
+  color: #555;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.noticia-meta {
+  border-top: 1px solid #eee;
+  padding-top: 8px;
+}
+
+.icon-small {
+  font-size: 14px;
+  vertical-align: middle;
+  margin-right: 4px;
+}
+
+/* ACCIONES */
+mat-card-actions {
+  border-top: 1px solid #eee;
+  background-color: #fafafa;
+}
+
+/* ALERT */
+.alert {
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .bootstrap-wrapper {
+    padding: 10px 0;
+  }
+  
+  .noticia-titulo {
+    font-size: 1.1rem;
+  }
+}

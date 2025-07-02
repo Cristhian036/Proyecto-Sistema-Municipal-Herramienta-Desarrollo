@@ -1,0 +1,67 @@
+/* PALETA DE COLORES */
+.bg-wine {
+  background-color: #721121 !important;
+}
+
+/* NAVBAR */
+.navbar {
+  transition: background 0.3s ease-in-out;
+  min-height: 70px;
+  padding: 0.75rem 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  z-index: 1030;
+}
+
+.navbar-brand {
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-brand img {
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.navbar-nav {
+  align-items: center;
+}
+
+.navbar-nav .nav-link {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  margin: 0 0.25rem;
+}
+
+.navbar-nav .nav-link:hover {
+  color: #FFD700 !important; /* Efecto dorado */
+  background-color: rgba(255, 215, 0, 0.1);
+}
+
+.navbar-nav .nav-link i {
+  margin-right: 5px; /* Espacio entre el ícono y el texto */
+}
+
+.navbar-nav .nav-link.btn {
+  background: none !important;
+  border: none !important;
+  text-decoration: none !important;
+}
+
+/* Responsive navbar */
+@media (max-width: 768px) {
+  .navbar {
+    min-height: 60px;
+    padding: 0.5rem 0;
+  }
+  
+  .navbar-brand {
+    font-size: 1rem;
+  }
+  
+  .navbar-nav .nav-link {
+    padding: 0.5rem 0.75rem;
+    margin: 0.1rem 0;
+  }
+}

@@ -5,6 +5,10 @@ import { DashboardComponent } from './pages/admin/dashboard/dashboard.component'
 import { LoginComponent } from './pages/login/login.component';
 import { SignupComponent } from './pages/signup/signup.component';
 import { HomeComponent } from './pages/home/home.component';
+import { ForumListComponent } from './pages/forum-list/forum-list.component';
+import { CrearNoticiaComponent } from './pages/noticias/crear-noticia/crear-noticia.component';
+import { ListarNoticiasComponent } from './pages/noticias/listar-noticias/listar-noticias.component';
+import { NoticiasTestComponent } from './pages/noticias/noticias-test/noticias-test.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
@@ -35,7 +39,25 @@ const routes: Routes = [
     component:UserDashboardComponent,
     pathMatch:'full',
     canActivate:[NormalGuard]
-  }
+  },
+  {
+    path: 'foros', 
+    component: ForumListComponent
+  },
+  {
+    path: 'noticias',
+    component: ListarNoticiasComponent
+  },
+  {
+    path: 'crear-noticia',
+    component: CrearNoticiaComponent,
+    canActivate: [AdminGuard]
+  },
+  {
+    path: 'test-noticias',
+    component: NoticiasTestComponent
+  },
+  { path: '', redirectTo: '/foros', pathMatch: 'full' }
 ];
 
 @NgModule({

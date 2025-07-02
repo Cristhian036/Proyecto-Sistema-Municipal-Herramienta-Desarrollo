@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Foro - Plataforma Municipal</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+
+<div class="container my-4">
+  <h1 class="forum-header mb-4">Foro de Discusión - Plataforma Municipal</h1>
+
+  <!-- Formulario para crear nuevo tema -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Crear nuevo tema</h5>
+      <form (submit)="crearTema(); $event.preventDefault()">
+        <div class="mb-3">
+          <label for="topicTitle" class="form-label">Título del tema</label>
+          <input
+            id="topicTitle"
+            type="text"
+            class="form-control"
+            [(ngModel)]="nuevoTitulo"
+            name="titulo"
+            placeholder="Escribe el título del tema"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="topicContent" class="form-label">Contenido</label>
+          <textarea
+            id="topicContent"
+            class="form-control"
+            [(ngModel)]="nuevoContenido"
+            name="contenido"
+            placeholder="Describe tu consulta o comentario"
+            rows="4"
+            required
+          ></textarea>
+        </div>
+        <button type="submit" class="btn btn-submit text-white">
+          <i class="fa fa-paper-plane"></i> Publicar tema
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Lista de temas -->
+  <div class="row gy-3">
+    <div *ngIf="cargando" class="text-center my-4">
+      <div class="spinner-border text-primary" role="status"></div>
+    </div>
+
+    <div *ngIf="!cargando && temas.length === 0" class="alert alert-info">
+      No hay temas disponibles.
+    </div>
+
+    <div class="col-md-6" *ngFor="let tema of temas">
+      <div class="card card-topic">
+        <div class="card-body">
+          <h5 class="topic-title">{{ tema.titulo }}</h5>
+          <p>{{ tema.contenido }}</p>
+          <div class="topic-meta">
+            Publicado por
+            <strong>{{ tema.usuario?.nombre || 'Anónimo' }}</strong> -
+            {{ tiempoRelativo(tema.fechaCreacion) }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="foroModal" tabindex="-1" aria-labelledby="foroModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title" id="foroModalLabel">{{ foroSeleccionado?.titulo }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+
+      <div class="modal-body" *ngIf="foroSeleccionado">
+        <p>{{ foroSeleccionado.contenido }}</p>
+
+        <div class="mb-3">
+          <button class="btn btn-sm btn-outline-success me-2" (click)="votarForo('LIKE')">👍 Like</button>
+          <button class="btn btn-sm btn-outline-danger me-2" (click)="votarForo('DISLIKE')">👎 Dislike</button>
+        </div>
+
+        <hr />
+
+        <h6>Comentarios</h6>
+        <div *ngIf="comentarios.length === 0">No hay comentarios aún.</div>
+
+        <div *ngFor="let comment of comentarios" class="mb-3 border rounded p-2">
+          <p>{{ comment.contenido }}</p>
+          <small>Publicado por {{ comment.usuario?.nombre || 'Anónimo' }} - {{ tiempoRelativo(comment.fechaCreacion) }}</small>
+          <br />
+          <button class="btn btn-sm btn-outline-success me-2" (click)="votarComentario(comment.id!, 'LIKE')">👍</button>
+          <button class="btn btn-sm btn-outline-danger me-2" (click)="votarComentario(comment.id!, 'DISLIKE')">👎</button>
+        </div>
+
+        <hr />
+
+        <textarea
+          class="form-control"
+          rows="3"
+          placeholder="Escribe un comentario..."
+          [(ngModel)]="nuevoComentario"
+        ></textarea>
+        <button class="btn btn-primary mt-2" (click)="agregarComentario()">Agregar Comentario</button>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+
+    </div>
+  </div>
+</div>
