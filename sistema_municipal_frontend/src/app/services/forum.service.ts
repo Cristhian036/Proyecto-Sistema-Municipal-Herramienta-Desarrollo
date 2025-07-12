@@ -6,8 +6,11 @@ export interface ForumPost {
   id?: number;
   titulo: string;
   contenido: string;
-  usuario?: { nombre: string };
+  nombreUsuario?: string;
   fechaCreacion?: string;
+  totalComentarios?: number;
+  totalLikes?: number;
+  totalDislikes?: number;
 }
 
 @Injectable({
@@ -20,7 +23,11 @@ export class ForumService {
   constructor(private http: HttpClient) {}
 
   obtenerForos() {
-    return this.http.get<ForumPost[]>(`${this.baseUrl}/foros/`);
+    return this.http.get<ForumPost[]>(`${this.baseUrl}/foros/publicos`);
+  }
+
+  obtenerForosPorId(id: number) {
+    return this.http.get<ForumPost>(`${this.baseUrl}/foros/${id}`);
   }
 
   crearForo(foro: Partial<ForumPost>) {

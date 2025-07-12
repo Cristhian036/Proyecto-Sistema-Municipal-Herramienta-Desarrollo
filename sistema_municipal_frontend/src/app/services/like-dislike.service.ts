@@ -4,6 +4,11 @@ import baseUrl from './helper';
 
 export type VoteType = 'LIKE' | 'DISLIKE';
 
+export interface ConteoVotos {
+  likes: number;
+  dislikes: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -18,5 +23,14 @@ export class LikeDislikeService {
 
   votarComentario(comentarioId: number, tipo: VoteType) {
     return this.http.post(`${this.baseUrl}/votos/comentario/${comentarioId}?tipoVoto=${tipo}`, {});
+  }
+
+  // Métodos para obtener conteos
+  obtenerConteosForo(foroId: number) {
+    return this.http.get<ConteoVotos>(`${this.baseUrl}/votos/foro/${foroId}/conteos`);
+  }
+
+  obtenerConteosComentario(comentarioId: number) {
+    return this.http.get<ConteoVotos>(`${this.baseUrl}/votos/comentario/${comentarioId}/conteos`);
   }
 }
