@@ -41,33 +41,31 @@ public class MySecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .authorizeHttpRequests(auth -> auth
-                        // Endpoints públicos (no requieren autenticación)
+                        // Endpoints completamente públicos (no requieren autenticación)
                         .requestMatchers("/generate-token", "/usuarios/").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Permitir preflight requests
+                        .requestMatchers("/uploads/**").permitAll()
+                        .requestMatchers("/noticias/imagen/**").permitAll()
                         
                         // Endpoints de foros (públicos para lectura)
                         .requestMatchers(HttpMethod.GET, "/foros/**").permitAll()
+                        .requestMatchers("/foros/publicos").permitAll()
                         .requestMatchers(HttpMethod.POST, "/foros/**").hasAnyAuthority("TRABAJADOR", "USUARIO")
                         
                         // Endpoints de comentarios (públicos para lectura)
                         .requestMatchers(HttpMethod.GET, "/comentarios/**").permitAll()
+                        .requestMatchers("/comentarios/foro/*/publicos").permitAll()
                         .requestMatchers(HttpMethod.POST, "/comentarios/**").hasAnyAuthority("TRABAJADOR", "USUARIO")
-                        
-                        // Endpoints de likes/dislikes (requieren autenticación)
-                        .requestMatchers("/likes/**", "/dislikes/**").hasAnyAuthority("TRABAJADOR", "USUARIO")
-                        
-                        // Endpoints para trabajadores
-                        .requestMatchers("/usuarios/trabajador").hasAuthority("TRABAJADOR")
                         
                         // Endpoints de noticias
                         .requestMatchers(HttpMethod.GET, "/noticias/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/noticias/**").hasAnyAuthority("TRABAJADOR", "USUARIO")
+                        .requestMatchers(HttpMethod.POST, "/noticias/**").hasAnyAuthority("TRABAJADOR")
                         .requestMatchers(HttpMethod.PUT, "/noticias/**").hasAuthority("TRABAJADOR")
                         .requestMatchers(HttpMethod.DELETE, "/noticias/**").hasAuthority("TRABAJADOR")
                         
-                        // Archivos estáticos
-                        .requestMatchers("/uploads/**").permitAll()
-                        .requestMatchers("/noticias/imagen/**").permitAll()
+                        // Endpoints que requieren autenticación
+                        .requestMatchers("/votos/**").hasAnyAuthority("TRABAJADOR", "USUARIO")
+                        .requestMatchers("/usuarios/trabajador").hasAuthority("TRABAJADOR")
                         
                         // Todos los demás endpoints requieren autenticación
                         .anyRequest().authenticated()
