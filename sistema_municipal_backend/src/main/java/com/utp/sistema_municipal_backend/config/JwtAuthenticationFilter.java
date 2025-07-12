@@ -37,15 +37,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             requestPath.equals("/usuarios/") ||
             requestPath.startsWith("/uploads/") ||
             requestPath.startsWith("/noticias/imagen/") ||
-            (requestPath.startsWith("/noticias/") && request.getMethod().equals("GET"))) {
+            (requestPath.startsWith("/noticias/") && request.getMethod().equals("GET")) ||
+            (requestPath.startsWith("/foros/") && request.getMethod().equals("GET")) ||
+            (requestPath.startsWith("/comentarios/") && request.getMethod().equals("GET")) ||
+            requestPath.startsWith("/error")) {
             
             // No procesar JWT para endpoints públicos
+            System.out.println("🟢 JWT Filter - Endpoint público detectado: " + requestPath + " [" + request.getMethod() + "]");
             filterChain.doFilter(request, response);
             return;
         }
 
         // Solo mostrar logs para endpoints que SÍ deberían tener token
         System.out.println("🔍 JWT Filter - URL: " + request.getRequestURL());
+        System.out.println("🔍 JWT Filter - Method: " + request.getMethod());
         System.out.println("🔍 JWT Filter - Authorization Header: " + requestTokenHeader);
 
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
@@ -78,6 +83,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
                 System.out.println("✅ JWT Filter - Usuario autenticado: " + email);
+                System.out.println("✅ JWT Filter - Autoridades del usuario: " + userDetails.getAuthorities());
             } else {
                 System.out.println("❌ JWT Filter - Token no válido para el usuario: " + email);
             }

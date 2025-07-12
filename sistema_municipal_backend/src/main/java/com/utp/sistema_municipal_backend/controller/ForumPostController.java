@@ -1,5 +1,6 @@
 package com.utp.sistema_municipal_backend.controller;
 
+import com.utp.sistema_municipal_backend.dto.ForumPostDTO;
 import com.utp.sistema_municipal_backend.model.ForumPost;
 import com.utp.sistema_municipal_backend.model.Usuario;
 import com.utp.sistema_municipal_backend.service.ForumPostService;
@@ -10,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/foros")
@@ -24,14 +26,36 @@ public class ForumPostController {
 
     // Listar todos los foros (público)
     @GetMapping("/")
-    public List<ForumPost> listarForos() {
-        return forumPostService.obtenerTodos();
+    public ResponseEntity<List<ForumPost>> listarForos() {
+        try {
+            List<ForumPost> foros = forumPostService.obtenerTodos();
+            return ResponseEntity.ok(foros);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).build();
+        }
     }
 
     // Endpoint específico para foros públicos (sin autenticación)
     @GetMapping("/publicos")
-    public List<ForumPost> listarForosPublicos() {
-        return forumPostService.obtenerTodos();
+    public ResponseEntity<List<ForumPostDTO>> listarForosPublicos() {
+        try {
+            List<ForumPost> foros = forumPostService.obtenerTodos();
+            List<ForumPostDTO> forosDTO = foros.stream()
+                .map(foro -> new ForumPostDTO(
+                    foro.getId(),
+                    foro.getTitulo(),
+                    foro.getContenido(),
+                    foro.getUsuario() != null ? foro.getUsuario().getNombre() + " " + foro.getUsuario().getApellido() : "Usuario Anónimo",
+                    foro.getFechaCreacion()
+                ))
+                .collect(Collectors.toList());
+            
+            return ResponseEntity.ok(forosDTO);
+        } catch (Exception e) {
+            System.err.println("Error al obtener foros públicos: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
     }
 
     // Obtener foro por id (público)

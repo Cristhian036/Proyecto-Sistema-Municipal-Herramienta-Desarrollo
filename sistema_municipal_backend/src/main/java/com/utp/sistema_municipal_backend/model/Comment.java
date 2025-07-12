@@ -2,6 +2,7 @@ package com.utp.sistema_municipal_backend.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.util.Date;
 
 @Entity
@@ -24,8 +25,8 @@ public class Comment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "forum_post_id")
-    private ForumPost forumPost;  // foro al que pertenece el comentario
-
+    @JsonBackReference
+    private ForumPost forumPost;
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCreacion = new Date();
 }

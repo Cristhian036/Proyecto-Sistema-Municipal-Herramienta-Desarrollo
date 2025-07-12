@@ -2,6 +2,7 @@ package com.utp.sistema_municipal_backend.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -30,5 +31,6 @@ public class ForumPost {
     private Date fechaCreacion = new Date();
 
     @OneToMany(mappedBy = "forumPost", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private Set<Comment> comentarios = new HashSet<>();
 }
