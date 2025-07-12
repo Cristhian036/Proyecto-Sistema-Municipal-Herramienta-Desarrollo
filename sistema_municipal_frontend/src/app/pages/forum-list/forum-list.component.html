@@ -1,123 +1,453 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Foro - Plataforma Municipal</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-</head>
-
-<div class="container my-4">
-  <h1 class="forum-header mb-4">Foro de Discusión - Plataforma Municipal</h1>
-
-  <!-- Formulario para crear nuevo tema -->
-  <div class="card mb-4">
-    <div class="card-body">
-      <h5 class="card-title">Crear nuevo tema</h5>
-      <form (submit)="crearTema(); $event.preventDefault()">
-        <div class="mb-3">
-          <label for="topicTitle" class="form-label">Título del tema</label>
-          <input
-            id="topicTitle"
-            type="text"
-            class="form-control"
-            [(ngModel)]="nuevoTitulo"
-            name="titulo"
-            placeholder="Escribe el título del tema"
-            required
-          />
-        </div>
-        <div class="mb-3">
-          <label for="topicContent" class="form-label">Contenido</label>
-          <textarea
-            id="topicContent"
-            class="form-control"
-            [(ngModel)]="nuevoContenido"
-            name="contenido"
-            placeholder="Describe tu consulta o comentario"
-            rows="4"
-            required
-          ></textarea>
-        </div>
-        <button type="submit" class="btn btn-submit text-white">
-          <i class="fa fa-paper-plane"></i> Publicar tema
-        </button>
-      </form>
+<div class="container-fluid">
+  <div class="hero-section">
+    <div class="container text-center">
+      <h1 class="display-5 fw-bold mb-3">Foros Ciudadanos</h1>
+      <p class="lead">Participa en las discusiones sobre temas importantes para nuestra comunidad</p>
     </div>
   </div>
 
-  <!-- Lista de temas -->
-  <div class="row gy-3">
-    <div *ngIf="cargando" class="text-center my-4">
-      <div class="spinner-border text-primary" role="status"></div>
-    </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="card">
+          <div class="card-header bg-light">
+            <h4 class="mb-0">Descripción</h4>
+          </div>
+          <div class="card-body">
+            <p class="mb-4">
+              ¡Hola!<br>
+              Te damos la bienvenida a este espacio, donde podrás compartir tus inquietudes o aportar nuevos 
+              conocimientos que tengas acerca de los diferentes temas municipales. Recuerda que toda participación 
+              y aporte a los temas de la comunidad es válido; siéntete en la confianza de preguntar las veces que 
+              consideres necesario.
+            </p>
+            
+            <p class="mb-4">
+              Ten en cuenta que este es un espacio colaborativo, por lo que, alguien más pudo tener las mismas 
+              preguntas que tú, por ello revisa las participaciones anteriores. Si quieres, también puedes colaborar 
+              respondiendo las participaciones de otras personas, siempre respetando a los demás.
+            </p>
 
-    <div *ngIf="!cargando && temas.length === 0" class="alert alert-info">
-      No hay temas disponibles.
-    </div>
+            <!-- Formulario para crear nuevo tema -->
+            <div class="card bg-light mb-4" *ngIf="mostrarFormularioTema">
+              <div class="card-body">
+                <h6 class="fw-bold mb-3">Crear nuevo tema de discusión</h6>
+                <form (ngSubmit)="crearTema()" #temaForm="ngForm">
+                  <div class="mb-3">
+                    <label class="form-label">Título del tema:</label>
+                    <input 
+                      type="text" 
+                      class="form-control" 
+                      [(ngModel)]="nuevoTitulo"
+                      name="titulo"
+                      placeholder="Ingresa el título del tema"
+                      required>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Contenido:</label>
+                    <textarea 
+                      class="form-control" 
+                      rows="4"
+                      [(ngModel)]="nuevoContenido"
+                      name="contenido"
+                      placeholder="Describe el tema de discusión..."
+                      required></textarea>
+                  </div>
+                  <div class="d-flex gap-2">
+                    <button 
+                      type="submit" 
+                      class="btn btn-primary"
+                      [disabled]="!temaForm.form.valid">
+                      <i class="fas fa-paper-plane me-2"></i>
+                      Crear Tema
+                    </button>
+                    <button 
+                      type="button" 
+                      class="btn btn-secondary"
+                      (click)="cancelarTema()">
+                      <i class="fas fa-times me-2"></i>
+                      Cancelar
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
 
-    <div class="col-md-6" *ngFor="let tema of temas">
-      <div class="card card-topic">
-        <div class="card-body">
-          <h5 class="topic-title">{{ tema.titulo }}</h5>
-          <p>{{ tema.contenido }}</p>
-          <div class="topic-meta">
-            Publicado por
-            <strong>{{ tema.usuario?.nombre || 'Anónimo' }}</strong> -
-            {{ tiempoRelativo(tema.fechaCreacion) }}
+            <div class="text-end" *ngIf="!mostrarFormularioTema">
+              <button class="btn btn-primary" (click)="mostrarFormularioCrearTema()">
+                <i class="fas fa-plus me-2"></i>
+                Crear nuevo tema
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lista de temas -->
+        <div class="mt-4">
+          <h5 class="mb-3">Temas de Discusión ({{ temas.length }})</h5>
+          
+          <div *ngIf="cargando" class="text-center my-4">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Cargando...</span>
+            </div>
+          </div>
+
+          <div *ngIf="!cargando && temas.length === 0" class="text-center py-4 text-muted">
+            <i class="fas fa-comments fa-3x mb-3"></i>
+            <p>Aún no hay temas de discusión. ¡Sé el primero en crear uno!</p>
+          </div>
+
+          <div *ngFor="let tema of temas; trackBy: trackByTema" class="card mb-3 fade-in">
+            <div class="card-body">
+              <div class="d-flex align-items-start">
+                <div class="avatar-circle me-3">
+                  <span class="fw-bold">{{ getIniciales(tema.nombreUsuario || 'Usuario') }}</span>
+                </div>
+                <div class="flex-grow-1">
+                  <div class="d-flex align-items-center mb-2">
+                    <h6 class="mb-0 me-2">{{ tema.titulo }}</h6>
+                    <small class="text-muted">Por {{ tema.nombreUsuario || 'Usuario' }} - {{ formatearFecha(tema.fechaCreacion) }}</small>
+                  </div>
+                  <p class="mb-2">{{ tema.contenido }}</p>
+                  
+                  <div class="d-flex gap-2">
+                    <button 
+                      class="btn btn-outline-primary btn-sm"
+                      (click)="abrirModal(tema)"
+                      data-bs-toggle="modal" 
+                      data-bs-target="#foroModal">
+                      <i class="fas fa-comments me-1"></i>
+                      Ver discusión
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="col-lg-4">
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">
+              <i class="fas fa-info-circle me-2"></i>
+              Información del Foro
+            </h5>
+          </div>
+          <div class="card-body">
+            <div class="mb-3">
+              <strong>Temas activos:</strong> {{ temas.length }}
+            </div>
+            <div class="mb-3">
+              <strong>Estado:</strong> 
+              <span class="badge bg-success">Activo</span>
+            </div>
+            <div class="mb-3">
+              <strong>Moderador:</strong> Administrador Municipal
+            </div>
+            <div class="mb-3" *ngIf="isUserAuthenticated">
+              <strong>Usuario:</strong> {{ currentUser?.nombre }} {{ currentUser?.apellido }}
+            </div>
+            <div class="mb-3" *ngIf="!isUserAuthenticated">
+              <div class="alert alert-info small">
+                <i class="fas fa-info-circle me-2"></i>
+                Inicia sesión para participar en los foros
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card mt-4">
+          <div class="card-header bg-secondary text-white">
+            <h5 class="mb-0">
+              <i class="fas fa-rules me-2"></i>
+              Reglas del Foro
+            </h5>
+          </div>
+          <div class="card-body">
+            <ul class="list-unstyled mb-0">
+              <li class="mb-2">
+                <i class="fas fa-check text-success me-2"></i>
+                Mantén un tono respetuoso
+              </li>
+              <li class="mb-2">
+                <i class="fas fa-check text-success me-2"></i>
+                No publiques información personal
+              </li>
+              <li class="mb-2">
+                <i class="fas fa-check text-success me-2"></i>
+                Evita el spam o contenido irrelevante
+              </li>
+              <li class="mb-2">
+                <i class="fas fa-check text-success me-2"></i>
+                Usa un lenguaje apropiado
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Estadísticas -->
+        <div class="card mt-4" *ngIf="foroSeleccionado">
+          <div class="card-header bg-info text-white">
+            <h5 class="mb-0">
+              <i class="fas fa-chart-bar me-2"></i>
+              Estadísticas del Tema
+            </h5>
+          </div>
+          <div class="card-body">
+            <div class="mb-2">
+              <small class="text-muted">Participantes únicos:</small>
+              <div class="fw-bold">{{ getParticipantesUnicos() }}</div>
+            </div>
+            <div class="mb-2">
+              <small class="text-muted">Total comentarios:</small>
+              <div class="fw-bold">{{ getTotalComentarios() }}</div>
+            </div>
+            <div class="mb-2">
+              <small class="text-muted">Última actividad:</small>
+              <div class="fw-bold">{{ getUltimaActividad() }}</div>
+            </div>
+            <div class="mb-2">
+              <small class="text-muted">Comentarios hoy:</small>
+              <div class="fw-bold">{{ getComentariosHoy() }}</div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-<!-- Modal -->
+<!-- Modal de Discusión -->
 <div class="modal fade" id="foroModal" tabindex="-1" aria-labelledby="foroModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
     <div class="modal-content">
-
       <div class="modal-header">
         <h5 class="modal-title" id="foroModalLabel">{{ foroSeleccionado?.titulo }}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
       </div>
 
       <div class="modal-body" *ngIf="foroSeleccionado">
-        <p>{{ foroSeleccionado.contenido }}</p>
+        <div class="row">
+          <div class="col-md-8">
+            <!-- Contenido del tema -->
+            <div class="card mb-4">
+              <div class="card-body">
+                <div class="d-flex align-items-start mb-3">
+                  <div class="avatar-circle me-3">
+                    <span class="fw-bold">{{ getIniciales(foroSeleccionado.nombreUsuario || 'Usuario') }}</span>
+                  </div>
+                  <div class="flex-grow-1">
+                    <h6 class="mb-1">{{ foroSeleccionado.nombreUsuario || 'Usuario' }}</h6>
+                    <small class="text-muted">{{ formatearFecha(foroSeleccionado.fechaCreacion) }}</small>
+                  </div>
+                </div>
+                <p>{{ foroSeleccionado.contenido }}</p>
+                
+                <div class="mb-3" *ngIf="isUserAuthenticated">
+                  <button class="btn btn-sm btn-outline-success me-2" (click)="votarForo('LIKE')">
+                    <i class="fas fa-thumbs-up me-1"></i> Me gusta
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger me-2" (click)="votarForo('DISLIKE')">
+                    <i class="fas fa-thumbs-down me-1"></i> No me gusta
+                  </button>
+                </div>
+              </div>
+            </div>
 
-        <div class="mb-3">
-          <button class="btn btn-sm btn-outline-success me-2" (click)="votarForo('LIKE')">👍 Like</button>
-          <button class="btn btn-sm btn-outline-danger me-2" (click)="votarForo('DISLIKE')">👎 Dislike</button>
+            <!-- Formulario para agregar comentario -->
+            <div class="card bg-light mb-4" *ngIf="mostrarFormulario">
+              <div class="card-body">
+                <h6 class="fw-bold mb-3">Agregar comentario</h6>
+                <form (ngSubmit)="agregarComentario()" #comentarioForm="ngForm">
+                  <div class="mb-3">
+                    <label class="form-label">Comentario:</label>
+                    <textarea 
+                      class="form-control" 
+                      rows="4"
+                      [(ngModel)]="nuevoComentario"
+                      name="contenido"
+                      placeholder="Escribe tu comentario aquí..."
+                      required></textarea>
+                  </div>
+                  <div class="d-flex gap-2">
+                    <button 
+                      type="submit" 
+                      class="btn btn-primary"
+                      [disabled]="!comentarioForm.form.valid">
+                      <i class="fas fa-paper-plane me-2"></i>
+                      Publicar Comentario
+                    </button>
+                    <button 
+                      type="button" 
+                      class="btn btn-secondary"
+                      (click)="cancelarComentario()">
+                      <i class="fas fa-times me-2"></i>
+                      Cancelar
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <div class="text-end mb-4" *ngIf="!mostrarFormulario && isUserAuthenticated">
+              <button class="btn btn-primary" (click)="mostrarFormularioComentario()">
+                <i class="fas fa-plus me-2"></i>
+                Agregar comentario
+              </button>
+            </div>
+
+            <!-- Lista de comentarios -->
+            <h6 class="mb-3">Comentarios ({{ comentarios.length }})</h6>
+            
+            <div *ngIf="comentarios.length === 0" class="text-center py-4 text-muted">
+              <i class="fas fa-comments fa-3x mb-3"></i>
+              <p>Aún no hay comentarios. ¡Sé el primero en participar!</p>
+            </div>
+
+            <div *ngFor="let comentario of comentarios; trackBy: trackByComentario" class="card mb-3 fade-in">
+              <div class="card-body">
+                <div class="d-flex align-items-start">
+                  <div class="avatar-circle me-3">
+                    <span class="fw-bold">{{ getIniciales(comentario.usuario?.nombre || 'Usuario') }}</span>
+                  </div>
+                  <div class="flex-grow-1">
+                    <div class="d-flex align-items-center mb-2">
+                      <h6 class="mb-0 me-2">{{ comentario.usuario?.nombre || 'Usuario' }}</h6>
+                      <small class="text-muted">{{ formatearFecha(comentario.fechaCreacion) }}</small>
+                    </div>
+                    <p class="mb-2">{{ comentario.contenido }}</p>
+                    
+                    <div class="d-flex gap-2" *ngIf="isUserAuthenticated">
+                      <button 
+                        class="btn btn-link btn-sm p-0 text-success"
+                        (click)="votarComentario(comentario.id!, 'LIKE')">
+                        <i class="fas fa-thumbs-up me-1"></i>
+                      </button>
+                      <button 
+                        class="btn btn-link btn-sm p-0 text-danger me-3"
+                        (click)="votarComentario(comentario.id!, 'DISLIKE')">
+                        <i class="fas fa-thumbs-down me-1"></i>
+                      </button>
+                      <button 
+                        class="btn btn-link btn-sm p-0 text-primary"
+                        (click)="toggleRespuesta(comentario)">
+                        <i class="fas fa-reply me-1"></i>
+                        Responder
+                      </button>
+                      <button 
+                        class="btn btn-link btn-sm p-0 text-danger"
+                        (click)="eliminarComentario(comentario.id!)">
+                        <i class="fas fa-trash me-1"></i>
+                        Eliminar
+                      </button>
+                    </div>
+
+                    <!-- Formulario de respuesta -->
+                    <div *ngIf="comentario.respondiendo" class="mt-3">
+                      <div class="card bg-light">
+                        <div class="card-body">
+                          <h6 class="fw-bold mb-3">Responder a {{ comentario.usuario?.nombre || 'Usuario' }}</h6>
+                          <form (ngSubmit)="responderComentario(comentario)" #respuestaForm="ngForm">
+                            <div class="mb-3">
+                              <label class="form-label">Respuesta:</label>
+                              <textarea 
+                                class="form-control" 
+                                rows="3"
+                                [(ngModel)]="nuevaRespuesta.contenido"
+                                name="contenidoRespuesta"
+                                placeholder="Escribe tu respuesta..."
+                                required></textarea>
+                            </div>
+                            <div class="d-flex gap-2">
+                              <button 
+                                type="submit" 
+                                class="btn btn-primary btn-sm"
+                                [disabled]="!respuestaForm.form.valid">
+                                <i class="fas fa-paper-plane me-1"></i>
+                                Responder
+                              </button>
+                              <button 
+                                type="button" 
+                                class="btn btn-secondary btn-sm"
+                                (click)="cancelarRespuesta(comentario)">
+                                <i class="fas fa-times me-1"></i>
+                                Cancelar
+                              </button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Respuestas existentes -->
+                    <div *ngIf="comentario.respuestas && comentario.respuestas.length > 0" class="mt-3">
+                      <div *ngFor="let respuesta of comentario.respuestas" class="card bg-light ms-4">
+                        <div class="card-body">
+                          <div class="d-flex align-items-start">
+                            <div class="avatar-circle-small me-2">
+                              <span class="fw-bold">{{ getIniciales(respuesta.usuario?.nombre || 'Usuario') }}</span>
+                            </div>
+                            <div class="flex-grow-1">
+                              <div class="d-flex align-items-center mb-1">
+                                <h6 class="mb-0 me-2 small">{{ respuesta.usuario?.nombre || 'Usuario' }}</h6>
+                                <small class="text-muted">{{ formatearFecha(respuesta.fechaCreacion) }}</small>
+                              </div>
+                              <p class="mb-1 small">{{ respuesta.contenido }}</p>
+                              <button 
+                                class="btn btn-link btn-sm p-0 text-danger small"
+                                (click)="eliminarRespuesta(comentario.id!, respuesta.id!)"
+                                *ngIf="isUserAuthenticated">
+                                <i class="fas fa-trash me-1"></i>
+                                Eliminar
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sidebar del modal -->
+          <div class="col-md-4">
+            <div class="card">
+              <div class="card-header bg-info text-white">
+                <h6 class="mb-0">
+                  <i class="fas fa-chart-bar me-2"></i>
+                  Estadísticas
+                </h6>
+              </div>
+              <div class="card-body">
+                <div class="mb-2">
+                  <small class="text-muted">Participantes únicos:</small>
+                  <div class="fw-bold">{{ getParticipantesUnicos() }}</div>
+                </div>
+                <div class="mb-2">
+                  <small class="text-muted">Total comentarios:</small>
+                  <div class="fw-bold">{{ getTotalComentarios() }}</div>
+                </div>
+                <div class="mb-2">
+                  <small class="text-muted">Comentarios hoy:</small>
+                  <div class="fw-bold">{{ getComentariosHoy() }}</div>
+                </div>
+                <div class="mb-2">
+                  <small class="text-muted">Usuario más activo:</small>
+                  <div class="fw-bold">{{ getUsuarioMasActivo() }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-
-        <hr />
-
-        <h6>Comentarios</h6>
-        <div *ngIf="comentarios.length === 0">No hay comentarios aún.</div>
-
-        <div *ngFor="let comment of comentarios" class="mb-3 border rounded p-2">
-          <p>{{ comment.contenido }}</p>
-          <small>Publicado por {{ comment.usuario?.nombre || 'Anónimo' }} - {{ tiempoRelativo(comment.fechaCreacion) }}</small>
-          <br />
-          <button class="btn btn-sm btn-outline-success me-2" (click)="votarComentario(comment.id!, 'LIKE')">👍</button>
-          <button class="btn btn-sm btn-outline-danger me-2" (click)="votarComentario(comment.id!, 'DISLIKE')">👎</button>
-        </div>
-
-        <hr />
-
-        <textarea
-          class="form-control"
-          rows="3"
-          placeholder="Escribe un comentario..."
-          [(ngModel)]="nuevoComentario"
-        ></textarea>
-        <button class="btn btn-primary mt-2" (click)="agregarComentario()">Agregar Comentario</button>
       </div>
 
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
       </div>
-
     </div>
   </div>
 </div>

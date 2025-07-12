@@ -18,7 +18,7 @@ export class CommentService {
   constructor(private http: HttpClient) {}
 
   obtenerComentariosPorForo(foroId: number) {
-    return this.http.get<Comment[]>(`${this.baseUrl}/comentarios/foro/${foroId}`);
+    return this.http.get<Comment[]>(`${this.baseUrl}/comentarios/foro/${foroId}/publicos`);
   }
 
   crearComentario(foroId: number, comment: Partial<Comment>) {
