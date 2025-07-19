@@ -29,6 +29,15 @@ import { ForumListComponent } from './pages/forum-list/forum-list.component';
 import { CrearNoticiaComponent } from './pages/noticias/crear-noticia/crear-noticia.component';
 import { ListarNoticiasComponent } from './pages/noticias/listar-noticias/listar-noticias.component';
 import { NoticiasComponent } from './pages/noticias/noticias/noticias.component';
+import { TramitesComponent } from './pages/tramites/tramites.component';
+import { LicenciasPermisosComponent } from './pages/tramites/licencias-permisos/licencias-permisos.component';
+import { TributosMunicipalesComponent } from './pages/tramites/tributos-municipales/tributos-municipales.component';
+import { RegistrosCivilesComponent } from './pages/tramites/registros-civiles/registros-civiles.component';
+import { ObrasConstruccionComponent } from './pages/tramites/obras-construccion/obras-construccion.component';
+import { ComercioPublicidadComponent } from './pages/tramites/comercio-publicidad/comercio-publicidad.component';
+import { TransporteVialidadComponent } from './pages/tramites/transporte-vialidad/transporte-vialidad.component';
+import { ServiciosPublicosComponent } from './pages/tramites/servicios-publicos/servicios-publicos.component';
+import { OtrosTramitesComponent } from './pages/tramites/otros-tramites/otros-tramites.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +51,16 @@ import { NoticiasComponent } from './pages/noticias/noticias/noticias.component'
     ForumListComponent,
     CrearNoticiaComponent,
     ListarNoticiasComponent,
-    NoticiasComponent
+    NoticiasComponent,
+    TramitesComponent,
+    LicenciasPermisosComponent,
+    TributosMunicipalesComponent,
+    RegistrosCivilesComponent,
+    ObrasConstruccionComponent,
+    ComercioPublicidadComponent,
+    TransporteVialidadComponent,
+    ServiciosPublicosComponent,
+    OtrosTramitesComponent
   ],
   imports: [
     BrowserModule,

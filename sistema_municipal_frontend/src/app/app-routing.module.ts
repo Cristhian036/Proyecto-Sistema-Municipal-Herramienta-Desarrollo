@@ -9,6 +9,15 @@ import { ForumListComponent } from './pages/forum-list/forum-list.component';
 import { CrearNoticiaComponent } from './pages/noticias/crear-noticia/crear-noticia.component';
 import { ListarNoticiasComponent } from './pages/noticias/listar-noticias/listar-noticias.component';
 import { NoticiasComponent } from './pages/noticias/noticias/noticias.component';
+import { TramitesComponent } from './pages/tramites/tramites.component';
+import { LicenciasPermisosComponent } from './pages/tramites/licencias-permisos/licencias-permisos.component';
+import { TributosMunicipalesComponent } from './pages/tramites/tributos-municipales/tributos-municipales.component';
+import { RegistrosCivilesComponent } from './pages/tramites/registros-civiles/registros-civiles.component';
+import { ObrasConstruccionComponent } from './pages/tramites/obras-construccion/obras-construccion.component';
+import { ComercioPublicidadComponent } from './pages/tramites/comercio-publicidad/comercio-publicidad.component';
+import { TransporteVialidadComponent } from './pages/tramites/transporte-vialidad/transporte-vialidad.component';
+import { ServiciosPublicosComponent } from './pages/tramites/servicios-publicos/servicios-publicos.component';
+import { OtrosTramitesComponent } from './pages/tramites/otros-tramites/otros-tramites.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
@@ -70,6 +79,42 @@ const routes: Routes = [
   {
     path: 'test-noticias',
     component: NoticiasComponent
+  },
+  {
+    path: 'tramites',
+    component: TramitesComponent
+  },
+  {
+    path: 'tramites/licencias-permisos',
+    component: LicenciasPermisosComponent
+  },
+  {
+    path: 'tramites/tributos-municipales',
+    component: TributosMunicipalesComponent
+  },
+  {
+    path: 'tramites/registros-civiles',
+    component: RegistrosCivilesComponent
+  },
+  {
+    path: 'tramites/obras-construccion',
+    component: ObrasConstruccionComponent
+  },
+  {
+    path: 'tramites/comercio-publicidad',
+    component: ComercioPublicidadComponent
+  },
+  {
+    path: 'tramites/transporte-vialidad',
+    component: TransporteVialidadComponent
+  },
+  {
+    path: 'tramites/servicios-publicos',
+    component: ServiciosPublicosComponent
+  },
+  {
+    path: 'tramites/otros-tramites',
+    component: OtrosTramitesComponent
   },
   { path: '', redirectTo: '/foros', pathMatch: 'full' }
 ];
