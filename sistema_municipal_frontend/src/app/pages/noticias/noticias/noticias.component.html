@@ -1,0 +1,361 @@
+<div class="container-fluid">
+  <!-- Sección Hero -->
+  <div class="hero-section">
+    <div class="container-fluid text-center">
+      <h1 class="display-5 fw-bold mb-3">Noticias Municipales</h1>
+      <p class="lead">Mantente informado sobre las últimas noticias y eventos de la Municipalidad de Arequipa</p>
+    </div>
+  </div>
+
+  <div class="container">
+    
+    <div *ngIf="canManageNoticias() && !editando" class="card mb-4 shadow">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">
+          <i class="fas fa-plus-circle me-2"></i>
+          Publicar Nueva Noticia
+        </h5>
+      </div>
+      <div class="card-body">
+        <form (ngSubmit)="crearNoticia()" #noticiaForm="ngForm">
+          <div class="row">
+            <div class="col-md-8">
+              <div class="mb-3">
+                <label for="titulo" class="form-label">Título de la Noticia</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="titulo"
+                  [(ngModel)]="noticia.titulo" 
+                  name="titulo"
+                  placeholder="Ingrese el título de la noticia..."
+                  maxlength="200"
+                  required>
+                <small class="text-muted">
+                  {{ noticia.titulo.length }}/200 caracteres
+                </small>
+              </div>
+              
+              <div class="mb-3">
+                <label for="descripcion" class="form-label">Descripción</label>
+                <textarea 
+                  class="form-control" 
+                  id="descripcion"
+                  [(ngModel)]="noticia.descripcion" 
+                  name="descripcion"
+                  rows="5"
+                  placeholder="Escriba aquí la descripción completa de la noticia... (mínimo 10 caracteres)"
+                  maxlength="2000"
+                  required></textarea>
+                <small class="text-muted">
+                  {{ noticia.descripcion.length }}/2000 caracteres
+                  <span *ngIf="noticia.descripcion.length > 0 && noticia.descripcion.length < 10" class="text-danger">
+                    - Mínimo 10 caracteres requeridos
+                  </span>
+                </small>
+              </div>
+              
+              <div class="mb-3">
+                <label for="autor" class="form-label">Autor</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="autor"
+                  [(ngModel)]="noticia.autor" 
+                  name="autor"
+                  placeholder="Nombre del autor..."
+                  maxlength="100"
+                  required>
+              </div>
+            </div>
+            
+            <div class="col-md-4">
+              <div class="mb-3">
+                <label for="imagen" class="form-label">Imagen Principal</label>
+                <input 
+                  type="file" 
+                  class="form-control" 
+                  id="imagen"
+                  (change)="onImageSelected($event)"
+                  accept="image/*"
+                  required>
+                <small class="text-muted">Formatos: JPG, PNG, GIF. Máximo 5MB</small>
+              </div>
+              
+              <!-- Preview de la imagen -->
+              <div *ngIf="imagenPreview" class="mb-3">
+                <label class="form-label">Vista Previa</label>
+                <div class="text-center">
+                  <img [src]="imagenPreview" class="img-fluid rounded shadow" 
+                       style="max-height: 200px; object-fit: cover;" alt="Vista previa">
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="d-flex justify-content-between align-items-center">
+            <button 
+              type="button" 
+              class="btn btn-secondary" 
+              (click)="limpiarFormulario()"
+              [disabled]="enviando">
+              <i class="fas fa-eraser me-2"></i>
+              Limpiar
+            </button>
+            
+            <button 
+              type="submit" 
+              class="btn btn-primary"
+              [disabled]="enviando || !noticiaForm.form.valid || noticia.descripcion.length < 10">
+              <span *ngIf="enviando" class="spinner-border spinner-border-sm me-2"></span>
+              <i *ngIf="!enviando" class="fas fa-paper-plane me-2"></i>
+              {{ enviando ? 'Publicando...' : 'Publicar Noticia' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Formulario de edición de noticia (Solo TRABAJADOR) - Reemplaza al formulario de publicación -->
+    <div *ngIf="editando && canManageNoticias()" class="card mb-4 shadow border-warning">
+      <div class="card-header bg-warning text-dark">
+        <div class="d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">
+            <i class="fas fa-edit me-2"></i>
+            Editar Noticia: "{{ noticiaEditando!.titulo }}"
+          </h5>
+          <button 
+            type="button" 
+            class="btn btn-outline-dark btn-sm"
+            (click)="cancelarEdicion()"
+            title="Cancelar edición">
+            <i class="fas fa-times me-1"></i>
+            Cancelar
+          </button>
+        </div>
+      </div>
+      <div class="card-body">
+        <form (ngSubmit)="actualizarNoticia()" #editForm="ngForm">
+          <div class="row">
+            <div class="col-md-8">
+              <div class="mb-3">
+                <label for="tituloEdit" class="form-label">Título de la Noticia</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="tituloEdit"
+                  [(ngModel)]="noticiaEditando!.titulo" 
+                  name="tituloEdit"
+                  placeholder="Ingrese el título de la noticia..."
+                  maxlength="200"
+                  required>
+                <small class="text-muted">
+                  {{ noticiaEditando!.titulo.length }}/200 caracteres
+                </small>
+              </div>
+              
+              <div class="mb-3">
+                <label for="descripcionEdit" class="form-label">Descripción</label>
+                <textarea 
+                  class="form-control" 
+                  id="descripcionEdit"
+                  [(ngModel)]="noticiaEditando!.descripcion" 
+                  name="descripcionEdit"
+                  rows="5"
+                  placeholder="Escriba aquí la descripción completa de la noticia... (mínimo 10 caracteres)"
+                  maxlength="2000"
+                  required></textarea>
+                <small class="text-muted">
+                  {{ noticiaEditando!.descripcion.length }}/2000 caracteres
+                  <span *ngIf="noticiaEditando!.descripcion.length > 0 && noticiaEditando!.descripcion.length < 10" class="text-danger">
+                    - Mínimo 10 caracteres requeridos
+                  </span>
+                </small>
+              </div>
+              
+              <div class="mb-3">
+                <label for="autorEdit" class="form-label">Autor</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="autorEdit"
+                  [(ngModel)]="noticiaEditando!.autor" 
+                  name="autorEdit"
+                  placeholder="Nombre del autor..."
+                  maxlength="100"
+                  required>
+              </div>
+            </div>
+            
+            <div class="col-md-4">
+              <div class="mb-3">
+                <label for="imagenEdit" class="form-label">Imagen Principal</label>
+                <input 
+                  type="file" 
+                  class="form-control" 
+                  id="imagenEdit"
+                  (change)="onImageEditSelected($event)"
+                  accept="image/*">
+                <small class="text-muted">Formatos: JPG, PNG, GIF. Máximo 5MB (Opcional - deje vacío para mantener la imagen actual)</small>
+              </div>
+              
+              <!-- Preview de la imagen -->
+              <div *ngIf="imagenEditandoPreview" class="mb-3">
+                <label class="form-label">Vista Previa</label>
+                <div class="text-center">
+                  <img [src]="imagenEditandoPreview" class="img-fluid rounded shadow" 
+                       style="max-height: 200px; object-fit: cover;" alt="Vista previa">
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="d-flex justify-content-end align-items-center">
+            <button 
+              type="submit" 
+              class="btn btn-warning"
+              [disabled]="enviando || !editForm.form.valid || noticiaEditando!.descripcion.length < 10">
+              <span *ngIf="enviando" class="spinner-border spinner-border-sm me-2"></span>
+              <i *ngIf="!enviando" class="fas fa-save me-2"></i>
+              {{ enviando ? 'Actualizando...' : 'Actualizar Noticia' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="cargando" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando noticias...</span>
+      </div>
+      <p class="mt-3 text-muted">Cargando noticias...</p>
+    </div>
+
+    <!-- Lista de Noticias -->
+    <div *ngIf="!cargando" class="row">
+      <!-- Noticia Principal (noticia seleccionada o primera noticia) -->
+      <div class="col-lg-8" *ngIf="noticias.length > 0">
+        <div class="card mb-4 shadow position-relative">
+          <!-- Indicador de noticia principal -->
+          <div class="noticia-principal-indicator">
+            <i class="fas fa-star me-1"></i>
+            Noticia Principal
+          </div>
+          
+          <img [src]="'http://localhost:8080/noticias/imagen/' + getNoticiaPrincipal().imagen" 
+               class="card-img-top" [alt]="getNoticiaPrincipal().titulo" 
+               style="height: 400px; object-fit: cover;"
+               onerror="this.src='assets/images/noticia.jpeg'">
+          <div class="card-body">
+            <div class="d-flex align-items-center mb-2">
+              <i class="fas fa-calendar-alt text-primary me-2"></i>
+              <small class="text-muted">{{ formatearFecha(getNoticiaPrincipal().fecha!) }}</small>
+              
+              <!-- Botones de acción para trabajadores -->
+              <div *ngIf="canManageNoticias()" class="ms-auto">
+                <button 
+                  class="btn btn-outline-primary btn-sm me-2"
+                  (click)="iniciarEdicion(getNoticiaPrincipal())"
+                  title="Editar noticia">
+                  <i class="fas fa-edit me-1"></i>
+                  Editar
+                </button>
+                <button 
+                  class="btn btn-outline-danger btn-sm"
+                  (click)="eliminarNoticia(getNoticiaPrincipal().id!)"
+                  title="Eliminar noticia">
+                  <i class="fas fa-trash me-1"></i>
+                  Eliminar
+                </button>
+              </div>
+            </div>
+            
+            <h2 class="card-title">{{ getNoticiaPrincipal().titulo }}</h2>
+            <p class="card-text">{{ getNoticiaPrincipal().descripcion }}</p>
+            
+            <div class="d-flex align-items-center">
+              <div class="author-avatar me-2">
+                {{ getInitials(getNoticiaPrincipal().autor) }}
+              </div>
+              <small class="text-muted">Por {{ getNoticiaPrincipal().autor }}</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar con noticias recientes -->
+      <div class="col-lg-4">
+        <div class="card shadow">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">
+              <i class="fas fa-newspaper me-2"></i>
+              Noticias Recientes
+            </h5>
+            <small class="opacity-75">
+              <i class="fas fa-hand-pointer me-1"></i>
+              Haz clic para ver como principal
+            </small>
+          </div>
+          <div class="card-body p-0">
+            <div class="list-group list-group-flush">
+              <div *ngFor="let noticia of getNoticiasRecientes(); let i = index" 
+                   class="list-group-item list-group-item-action" 
+                   [class.active]="noticia.id === noticiaSeleccionada?.id"
+                   (click)="seleccionarNoticia(noticia)"
+                   style="cursor: pointer;"
+                   title="Hacer clic para ver como noticia principal">
+                <div class="d-flex align-items-center mb-2">
+                  <img [src]="'http://localhost:8080/noticias/imagen/' + noticia.imagen" 
+                       class="rounded me-3" [alt]="noticia.titulo" 
+                       style="width: 60px; height: 60px; object-fit: cover;"
+                       onerror="this.src='assets/images/noticia-placeholder.jpg'">
+                  <div class="flex-grow-1">
+                    <small class="text-muted">{{ formatearFecha(noticia.fecha!) }}</small>
+                    <h6 class="mb-1">{{ noticia.titulo }}</h6>
+                    <small class="text-muted">Por {{ noticia.autor }}</small>
+                    
+                    <!-- Botones de acción para trabajadores -->
+                    <div *ngIf="canManageNoticias()" class="mt-2">
+                      <button 
+                        class="btn btn-outline-primary btn-sm me-2"
+                        (click)="iniciarEdicion(noticia); $event.stopPropagation()"
+                        title="Editar noticia">
+                        <i class="fas fa-edit me-1"></i>
+                        Editar
+                      </button>
+                      <button 
+                        class="btn btn-outline-danger btn-sm"
+                        (click)="eliminarNoticia(noticia.id!); $event.stopPropagation()"
+                        title="Eliminar noticia">
+                        <i class="fas fa-trash me-1"></i>
+                        Eliminar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Mensaje cuando no hay noticias recientes -->
+              <div *ngIf="noticias.length === 0" class="list-group-item text-center py-4">
+                <i class="fas fa-newspaper text-muted mb-2" style="font-size: 2rem;"></i>
+                <p class="text-muted mb-0">No hay noticias disponibles</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mensaje cuando no hay noticias -->
+    <div *ngIf="!cargando && noticias.length === 0" class="text-center py-5">
+      <i class="fas fa-newspaper text-muted mb-3" style="font-size: 4rem;"></i>
+      <h3 class="text-muted">No hay noticias publicadas</h3>
+      <p class="text-muted">
+        <span *ngIf="canManageNoticias()">Utilice el formulario anterior para publicar la primera noticia.</span>
+        <span *ngIf="!canManageNoticias()">Pronto se publicarán nuevas noticias.</span>
+      </p>
+    </div>
+  </div>
+</div>
+

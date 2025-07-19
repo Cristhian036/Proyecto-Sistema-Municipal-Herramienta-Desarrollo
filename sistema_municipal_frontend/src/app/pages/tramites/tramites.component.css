@@ -1,0 +1,78 @@
+.tramite-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: none;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.tramite-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.tramite-icon {
+  transition: transform 0.3s ease;
+}
+
+.tramite-card:hover .tramite-icon {
+  transform: scale(1.1);
+}
+
+.hero-section {
+  background: linear-gradient(135deg, #721121 0%, #9a031e 100%);
+  color: white;
+  padding: 80px 0;
+  margin-bottom: 50px;
+}
+
+.btn-outline-wine {
+  color: #721121;
+  border-color: #721121;
+}
+
+.btn-outline-wine:hover {
+  color: white;
+  background-color: #721121;
+  border-color: #721121;
+}
+
+/* Estilos para la búsqueda */
+.form-control:focus {
+  border-color: #721121;
+  box-shadow: 0 0 0 0.2rem rgba(114, 17, 33, 0.25);
+}
+
+.input-group-text {
+  background-color: #f8f9fa;
+  border-color: #ced4da;
+  color: #721121;
+}
+
+/* Animación para las tarjetas filtradas */
+.tramite-card {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 40px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Estado cuando no hay resultados */
+.no-results {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

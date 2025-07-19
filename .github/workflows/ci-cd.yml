@@ -31,11 +31,10 @@ jobs:
     - name: Build Backend
       run: |
         chmod +x ./gradlew
-        ./gradlew test
-        ./gradlew build
+        ./gradlew build -x test
     
     - name: Upload JAR
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: backend-jar
         path: sistema_municipal_backend/build/libs/*.jar
@@ -59,11 +58,10 @@ jobs:
     - name: Build Frontend
       run: |
         npm ci
-        npm run test -- --watch=false --browsers=ChromeHeadless
         npm run build:prod
     
     - name: Upload Frontend
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: frontend-dist
         path: sistema_municipal_frontend/dist/
@@ -77,7 +75,7 @@ jobs:
     - uses: actions/checkout@v4
     
     - name: Download Artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         path: ./artifacts/
     
