@@ -1,0 +1,38 @@
+    body {
+      background-color: #f8f9fa;
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+    }
+    .forum-header {
+      text-align: center;
+      margin-bottom: 2rem;
+      color: #2c3e50;
+    }
+    .card-topic {
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease;
+      cursor: pointer;
+    }
+    .card-topic:hover {
+      transform: scale(1.02);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    }
+    .topic-title {
+      font-weight: 600;
+      color: #34495e;
+    }
+    .topic-meta {
+      font-size: 0.85rem;
+      color: #7f8c8d;
+    }
+    .btn-submit {
+      background-color: #007bff;
+      border: none;
+    }
+    .btn-submit:hover {
+      background-color: #0056b3;
+    }
+    textarea.form-control {
+      resize: vertical;
+      min-height: 100px;
+    }

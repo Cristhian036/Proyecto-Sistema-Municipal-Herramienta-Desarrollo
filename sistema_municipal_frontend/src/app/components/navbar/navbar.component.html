@@ -1,0 +1,102 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-wine shadow fixed-top">
+  <div class="container">
+    <a class="navbar-brand text-white d-flex align-items-center" [routerLink]="['/']">
+      <img src="assets/images/logo-municipal-aqp.png" alt="Escudo de Arequipa" class="escudo-logo me-3">
+      <div class="brand-text">
+        <div class="brand-title">Municipalidad</div>
+        <div class="brand-subtitle">de Arequipa</div>
+      </div>
+    </a>
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link text-white" [routerLink]="['/']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <i class="fas fa-home me-1"></i> Inicio
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" [routerLink]="['/noticias']" routerLinkActive="active">
+            <i class="fas fa-newspaper me-1"></i> Noticias
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" [routerLink]="['/tramites']" routerLinkActive="active">
+            <i class="fas fa-file-alt me-1"></i> Gestión de trámites
+          </a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link text-white dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-file-invoice me-1"></i> Multas
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <a class="dropdown-item" [routerLink]="['/formulario']" routerLinkActive="active">
+                <i class="fas fa-plus me-1"></i> Nueva Multa
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" [routerLink]="['/buscar']" routerLinkActive="active">
+                <i class="fas fa-search me-1"></i> Buscar Multa
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" [routerLink]="['/lista']" routerLinkActive="active">
+                <i class="fas fa-list me-1"></i> Listado de Multas
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" [routerLink]="['/foros']" routerLinkActive="active">
+            <i class="fas fa-comments me-1"></i> Foros
+          </a>
+        </li>
+        
+        <!-- Login cuando NO está logueado -->
+        <li class="nav-item" *ngIf="!isLoggedIn">
+          <a class="nav-link text-white" [routerLink]="['/login']" routerLinkActive="active">
+            <i class="fas fa-sign-in-alt me-1"></i> Login
+          </a>
+        </li>
+        
+        <!-- Usuario logueado - Reemplaza al Login -->
+        <li class="nav-item dropdown" *ngIf="isLoggedIn && user" (click)="forceUpdateAuthStatus()">
+          <a class="nav-link text-white dropdown-toggle user-dropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <div class="user-avatar me-2">
+              {{ getUserInitials() }}
+            </div>
+            <span class="user-name">{{ user.nombre || user.username }}</span>
+            <span class="user-role">({{ getUserRole() }})</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li>
+              <div class="dropdown-header">
+                <strong>{{ user.nombre || user.username }}</strong>
+                <br>
+                <small class="text-muted">{{ user.email }}</small>
+              </div>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            
+            <!-- Opciones para TRABAJADOR y USUARIO -->
+            <li *ngIf="isTrabajador() || isUsuario()">
+              <a class="dropdown-item" href="#" (click)="$event.preventDefault();">
+                <i class="fas fa-user me-2"></i> Mi Perfil
+              </a>
+            </li>
+            <li *ngIf="isTrabajador() || isUsuario()">
+              <a class="dropdown-item text-danger" (click)="logout()" style="cursor: pointer;">
+                <i class="fas fa-sign-out-alt me-2"></i> Cerrar sesión
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
