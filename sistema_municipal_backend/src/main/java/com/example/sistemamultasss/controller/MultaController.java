@@ -5,149 +5,117 @@ import com.example.sistemamultasss.model.Pago;
 import com.example.sistemamultasss.service.MultaService;
 import com.example.sistemamultasss.service.PagoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
 import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-
-
-
 import java.util.List;
+import java.util.Map;
 
-@Controller
-@RequestMapping("/multas")
+import java.util.stream.Collectors;
+@RestController
+@RequestMapping("/api/multas")
 public class MultaController {
 
 	@Autowired
 	private MultaService multaService;
+
 	@Autowired
 	private PagoService pagoService;
 
-
-
-
-	@GetMapping("/pago")
-	public String mostrarPago(@RequestParam Long id, Model model) {
+	@GetMapping("/{id}/pago")
+	public ResponseEntity<Multa> mostrarPago(@PathVariable Long id) {
 		Multa multa = multaService.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("ID de multa inválido: " + id));
-		model.addAttribute("multa", multa);
-		return "pago";
+		return ResponseEntity.ok(multa);
 	}
 
-	@PostMapping("/pagar")
-	public String procesarPago(@RequestParam Long id, @RequestParam String cardNumber, @RequestParam String monto) {
+	@PostMapping("/{id}/procesar-pago")
+	public ResponseEntity<Multa> procesarPago(@PathVariable Long id, @RequestParam String cardNumber, @RequestParam String monto) {
 		Multa multa = multaService.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("ID de multa inválido: " + id));
 		multa.setEstado("PAGADO");
 		multaService.save(multa);
-
-		// Guardar detalles del pago
 		pagoService.guardarPago(multa.getCodigo(), cardNumber, monto);
-
-		return "redirect:/multas/pago-exitoso?id=" + id;
+		return ResponseEntity.ok(multa);
 	}
 
-
-
-
-	@GetMapping("/pago-exitoso")
-	public String pagoExitoso(Model model, @RequestParam Long id) {
-		model.addAttribute("multaId", id);
-		return "pago-exitoso";
+	@GetMapping("/{id}/pago-exitoso")
+	public ResponseEntity<Map<String, Long>> pagoExitoso(@PathVariable Long id) {
+		Map<String, Long> response = new HashMap<>();
+		response.put("multaId", id);
+		return ResponseEntity.ok(response);
 	}
-
-
-
-
 
 	@GetMapping("/buscar")
-	public String buscarMulta() {
-		return "buscar";
+	public ResponseEntity<List<Multa>> buscarMulta() {
+		List<Multa> multas = multaService.findAll();
+		return ResponseEntity.ok(multas);
 	}
 
 	@PostMapping("/buscar")
-	public String resultadoMulta(@RequestParam String codigoMulta, Model model) {
+	public ResponseEntity<Multa> resultadoMulta(@RequestParam String codigoMulta) {
 		Multa multa = multaService.findByCodigo(codigoMulta)
 				.orElseThrow(() -> new IllegalArgumentException("Código de multa inválido"));
-		model.addAttribute("multa", multa);
-		return "resultado";
+		return ResponseEntity.ok(multa);
 	}
 
 	@GetMapping
-	public String findAll(@RequestParam(value = "search", required = false) String search, Model model) {
+	public ResponseEntity<List<Multa>> findAll(@RequestParam(value = "search", required = false) String search) {
 		List<Multa> multas;
 		if (search != null && !search.isEmpty()) {
 			multas = multaService.findByCodigoOrPlaca(search);
 		} else {
 			multas = multaService.findAll();
 		}
-		model.addAttribute("multas", multas);
-		return "list";
-	}
-
-	@GetMapping("/nuevo")
-	public String showFormForAdd(Model model) {
-		Multa multa = new Multa();
-		model.addAttribute("multa", multa);
-		return "form";
+		return ResponseEntity.ok(multas);
 	}
 
 	@PostMapping
-	public String save(@ModelAttribute Multa multa) {
+	public ResponseEntity<Multa> save(@RequestBody Multa multa) {
 		if (multa.getCodigo() == null || multa.getCodigo().isEmpty()) {
 			multa.setCodigo(generateUniqueCode());
 		}
-		multaService.save(multa);
-		return "redirect:/multas";
+		Multa savedMulta = multaService.save(multa);
+		return ResponseEntity.ok(savedMulta);
 	}
 
-	@GetMapping("/editar/{id}")
-	public String showFormForUpdate(@PathVariable Long id, Model model) {
-		Multa multa = multaService.findById(id)
+	@PutMapping("/{id}")
+	public ResponseEntity<Multa> update(@PathVariable Long id, @RequestBody Multa multa) {
+		Multa existingMulta = multaService.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("ID de multa inválido: " + id));
-		model.addAttribute("multa", multa);
-		return "form";
+		multa.setId(id);
+		Multa updatedMulta = multaService.save(multa);
+		return ResponseEntity.ok(updatedMulta);
 	}
 
-	@GetMapping("/eliminar/{id}")
-	public String deleteById(@PathVariable Long id) {
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> deleteById(@PathVariable Long id) {
 		multaService.deleteById(id);
-		return "redirect:/multas";
+		return ResponseEntity.noContent().build();
 	}
 
-	@GetMapping("/pagar/{id}")
-	public String pagarMulta(@PathVariable Long id) {
+	@PostMapping("/{id}/pagar")
+	public ResponseEntity<Void> pagarMulta(@PathVariable Long id) {
 		multaService.pagarMulta(id);
-		return "redirect:/multas";
+		return ResponseEntity.noContent().build();
 	}
 
-	private String generateUniqueCode() {
-		return "MUL" + System.currentTimeMillis();
-	}
-
-
-	@GetMapping("/resultado")
-	public String verResultado(@RequestParam Long id, Model model) {
+	@GetMapping("/{id}/resultado")
+	public ResponseEntity<Multa> verResultado(@PathVariable Long id) {
 		Multa multa = multaService.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("ID de multa inválido: " + id));
-		model.addAttribute("multa", multa);
-		return "resultado";
+		return ResponseEntity.ok(multa);
 	}
 
 	@GetMapping("/pagos")
-	public String verPagos(@RequestParam(required = false) String search, Model model) {
+	public ResponseEntity<List<Map<String, Object>>> verPagos(@RequestParam(required = false) String search) {
 		List<Pago> pagos;
 		if (search != null && !search.isEmpty()) {
 			pagos = pagoService.buscarPorDniOCodigoMulta(search);
 		} else {
 			pagos = pagoService.obtenerTodosLosPagos();
 		}
-
 		List<Map<String, Object>> pagosConDetalles = pagos.stream().map(pago -> {
 			Multa multa = multaService.findByCodigo(pago.getCodigoMulta()).orElse(null);
 			Map<String, Object> detalles = new HashMap<>();
@@ -156,8 +124,10 @@ public class MultaController {
 			detalles.put("placaCarro", multa != null ? multa.getPlaca() : "No disponible");
 			return detalles;
 		}).collect(Collectors.toList());
+		return ResponseEntity.ok(pagosConDetalles);
+	}
 
-		model.addAttribute("pagos", pagosConDetalles);
-		return "pagos";
+	private String generateUniqueCode() {
+		return "MUL" + System.currentTimeMillis();
 	}
 }
