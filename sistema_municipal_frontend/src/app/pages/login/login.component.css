@@ -1,7 +1,10 @@
 /* Asegurar que el HTML y body tomen la altura completa del viewport */
 html, body {
   height: 100%;
-  margin: 0;/* Tarjeta del formulario */
+  margin: 0;
+}
+
+/* Tarjeta del formulario */
 .login-form-card {
   background: white;
   border-radius: 15px;
@@ -13,7 +16,6 @@ html, body {
   overflow-y: auto;
   width: 100%;
   max-width: 420px;
-};
 }
 
 /* Prevenir overflow horizontal */

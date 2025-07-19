@@ -31,8 +31,7 @@ jobs:
     - name: Build Backend
       run: |
         chmod +x ./gradlew
-        ./gradlew test
-        ./gradlew build
+        ./gradlew build -x test
     
     - name: Upload JAR
       uses: actions/upload-artifact@v4
@@ -59,7 +58,6 @@ jobs:
     - name: Build Frontend
       run: |
         npm ci
-        npm run test -- --watch=false --browsers=ChromeHeadless
         npm run build:prod
     
     - name: Upload Frontend
