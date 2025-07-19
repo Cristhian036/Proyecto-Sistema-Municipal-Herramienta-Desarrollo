@@ -1,0 +1,101 @@
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Plataforma Municipal</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="crear-noticia.component.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<div class="bootstrap-wrapper">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <mat-card class="mt-4">
+          <mat-card-header>
+            <mat-card-title class="text-center">Crear Nueva Noticia</mat-card-title>
+          </mat-card-header>
+          
+          <mat-card-content>
+            <form (ngSubmit)="crearNoticia()">
+              
+              <!-- Título -->
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Título de la Noticia</mat-label>
+                <input 
+                  matInput 
+                  [(ngModel)]="noticia.titulo" 
+                  name="titulo" 
+                  required
+                  placeholder="Ingrese el título de la noticia">
+              </mat-form-field>
+
+              <!-- Autor -->
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Autor</mat-label>
+                <input 
+                  matInput 
+                  [(ngModel)]="noticia.autor" 
+                  name="autor" 
+                  required
+                  placeholder="Ingrese el nombre del autor">
+              </mat-form-field>
+
+              <!-- Descripción -->
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Descripción</mat-label>
+                <textarea 
+                  matInput 
+                  [(ngModel)]="noticia.descripcion" 
+                  name="descripcion" 
+                  required
+                  rows="4"
+                  placeholder="Ingrese la descripción de la noticia">
+                </textarea>
+              </mat-form-field>
+
+              <!-- Selección de Imagen -->
+              <div class="mb-3">
+                <label class="form-label fw-bold">Imagen de la Noticia</label>
+                <input 
+                  type="file" 
+                  class="form-control" 
+                  accept="image/*"
+                  (change)="onImageSelected($event)">
+              </div>
+
+              <!-- Preview de la imagen -->
+              <div *ngIf="imagenPreview" class="mb-3 text-center">
+                <img 
+                  [src]="imagenPreview" 
+                  alt="Preview" 
+                  class="img-preview">
+              </div>
+
+              <!-- Botones -->
+              <div class="d-flex justify-content-between">
+                <button 
+                  type="button" 
+                  mat-raised-button 
+                  color="accent"
+                  (click)="limpiarFormulario()">
+                  <mat-icon>clear</mat-icon>
+                  Limpiar
+                </button>
+                
+                <button 
+                  type="submit" 
+                  mat-raised-button 
+                  class="btn-wine">
+                  <mat-icon>save</mat-icon>
+                  Crear Noticia
+                </button>
+              </div>
+
+            </form>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

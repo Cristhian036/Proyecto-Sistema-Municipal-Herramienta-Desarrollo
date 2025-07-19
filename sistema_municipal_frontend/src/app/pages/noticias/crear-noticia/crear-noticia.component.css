@@ -1,0 +1,63 @@
+/* PALETA DE COLORES */
+.btn-wine {
+  background-color: #9a031e !important;
+  color: white !important;
+}
+
+.btn-wine:hover {
+  background-color: #d90429 !important;
+}
+
+/* ESTILOS DEL FORMULARIO */
+.full-width {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.bootstrap-wrapper {
+  padding: 20px 0;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+/* PREVIEW DE IMAGEN */
+.img-preview {
+  max-width: 300px;
+  max-height: 200px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* ESTILOS PARA TARJETA */
+mat-card {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(114, 17, 33, 0.1);
+}
+
+mat-card-title {
+  color: #721121;
+  font-weight: bold;
+}
+
+/* BOTONES */
+button {
+  margin: 5px;
+  border-radius: 8px;
+}
+
+/* INPUT FILE */
+.form-control {
+  border-radius: 8px;
+  border: 2px solid #e0e0e0;
+  padding: 10px;
+}
+
+.form-control:focus {
+  border-color: #721121;
+  box-shadow: 0 0 0 0.2rem rgba(114, 17, 33, 0.25);
+}
+
+.form-label {
+  color: #721121;
+  margin-bottom: 8px;
+}

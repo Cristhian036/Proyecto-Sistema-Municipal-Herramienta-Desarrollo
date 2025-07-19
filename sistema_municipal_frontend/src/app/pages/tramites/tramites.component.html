@@ -1,0 +1,95 @@
+<div class="container-fluid">
+  <div class="hero-section">
+    <div class="container text-center">
+      <h1 class="display-5 fw-bold mb-3">Guía de Trámites Municipales</h1>
+      <p class="lead">Encuentra información sobre los trámites municipales más comunes y cómo realizarlos de manera eficiente.</p>
+      
+      <div class="row justify-content-center mt-4">
+        <div class="col-md-6">
+          <div class="input-group position-relative">
+            <input 
+              type="text" 
+              class="form-control form-control-lg pe-5" 
+              placeholder="Buscar trámite..."
+              [(ngModel)]="searchTerm"
+              (input)="onSearchChange($event)">
+            <button 
+              *ngIf="searchTerm && searchTerm.trim() !== ''" 
+              class="btn position-absolute end-0 top-50 translate-middle-y me-5 p-0 border-0 bg-transparent"
+              style="z-index: 10; margin-right: 3.5rem !important;"
+              (click)="searchTerm = ''"
+              title="Limpiar búsqueda">
+              <i class="fas fa-times text-muted"></i>
+            </button>
+            <span class="input-group-text btn-light">
+              <i class="fas fa-search"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="mb-0">Categorías de Trámites</h2>
+      <small class="text-muted" *ngIf="searchTerm && searchTerm.trim() !== ''">
+        {{ filteredTramites.length }} resultado(s) encontrado(s)
+      </small>
+    </div>
+    
+    <!-- Mostrar mensaje cuando no hay resultados -->
+    <div *ngIf="filteredTramites.length === 0" class="text-center py-5 no-results">
+      <i class="fas fa-search fa-3x text-muted mb-3"></i>
+      <h4 class="text-muted">No se encontraron trámites</h4>
+      <p class="text-muted">Intenta con otros términos de búsqueda como: "licencia", "impuesto", "registro", etc.</p>
+      <button class="btn btn-outline-wine" (click)="searchTerm = ''">
+        <i class="fas fa-times me-2"></i>
+        Limpiar búsqueda
+      </button>
+    </div>
+    
+    <div class="row" *ngIf="filteredTramites.length > 0">
+      <div class="col-lg-3 col-md-6 mb-4" *ngFor="let tramite of filteredTramites">
+        <div class="card h-100 text-center tramite-card">
+          <div class="card-body">
+            <div class="tramite-icon mb-3">
+              <i [class]="tramite.icon"></i>
+            </div>
+            <h5 class="card-title">{{ tramite.title }}</h5>
+            <p class="card-text">{{ tramite.description }}</p>
+            <a [routerLink]="tramite.route" class="btn btn-outline-wine">
+              Ver trámites <i class="fas fa-arrow-right ms-2"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección de ayuda -->
+    <div class="row mt-5">
+      <div class="col-12">
+        <div class="card bg-light">
+          <div class="card-body text-center">
+            <h4 class="mb-3">¿Necesitas ayuda con un trámite?</h4>
+            <p class="mb-4">Nuestro equipo está disponible para asistirte en cualquier consulta relacionada con trámites municipales</p>
+            <div class="row justify-content-center">
+              <div class="col-md-3">
+                <button class="btn btn-outline-wine w-100">
+                  <i class="fas fa-phone me-2"></i>
+                  Contactar Mesa de Partes
+                </button>
+              </div>
+              <div class="col-md-3">
+                <button class="btn btn-wine w-100">
+                  <i class="fas fa-phone-alt me-2"></i>
+                  Llamar al (054) 38-2000
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

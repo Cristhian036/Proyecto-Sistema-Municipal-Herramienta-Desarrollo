@@ -16,7 +16,6 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfigurationSource;
 
 @EnableWebSecurity
 @Configuration
@@ -30,26 +29,26 @@ public class MySecurityConfig {
     private UserDetailsServiceImpl userDetailsServiceImpl;
 
     @Autowired
-    private CorsConfigurationSource corsConfigurationSource;
-
-    @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configurationSource(corsConfigurationSource))
+                .cors(cors -> cors.disable()) // Deshabilitar CORS de Spring Security para usar nuestro filtro global
                 .authorizeHttpRequests(auth -> auth
-                        // Endpoints completamente públicos (no requieren autenticación)
-                        .requestMatchers("/generate-token", "/usuarios/").permitAll()
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Permitir preflight requests
+                        // Permitir preflight requests (OPTIONS) primero - MUY IMPORTANTE
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        
+                        // Endpoints completamente públicos (no requieren autenticación) - ORDEN IMPORTANTE
+                        .requestMatchers("/generate-token").permitAll()
+                        .requestMatchers("/usuarios/").permitAll()
                         .requestMatchers("/uploads/**").permitAll()
                         .requestMatchers("/noticias/imagen/**").permitAll()
                         
-                        // Endpoints de foros (públicos para lectura)
+                        // Endpoints de foros (públicos para lectura) - MUY ESPECÍFICOS
+                        .requestMatchers(HttpMethod.GET, "/foros/publicos").permitAll()
                         .requestMatchers(HttpMethod.GET, "/foros/**").permitAll()
-                        .requestMatchers("/foros/publicos").permitAll()
                         .requestMatchers(HttpMethod.POST, "/foros/**").hasAnyAuthority("TRABAJADOR", "USUARIO")
                         
                         // Endpoints de comentarios (públicos para lectura)
