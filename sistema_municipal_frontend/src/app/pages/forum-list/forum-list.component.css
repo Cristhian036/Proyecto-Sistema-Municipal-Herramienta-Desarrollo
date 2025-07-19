@@ -1,5 +1,5 @@
 .hero-section {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #721121 0%, #9a031e 100%);
   color: white;
   padding: 4rem 0;
   margin-bottom: 2rem;
@@ -7,7 +7,7 @@
 
 .forum-header {
   font-weight: bold;
-  color: #2c3e50;
+  color: #721121;
 }
 
 .card-topic {
@@ -20,7 +20,7 @@
 }
 
 .topic-title {
-  color: #34495e;
+  color: #721121;
 }
 
 .topic-meta {
@@ -30,19 +30,19 @@
 }
 
 .btn-submit {
-  background-color: #007bff;
+  background-color: #721121;
   border: none;
 }
 
 .btn-submit:hover {
-  background-color: #0056b3;
+  background-color: #9a031e;
 }
 
 .avatar-circle {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background-color: #28a745;
+  background-color: #721121;
   color: white;
   display: flex;
   align-items: center;
@@ -55,7 +55,7 @@
   width: 35px;
   height: 35px;
   border-radius: 50%;
-  background-color: #6c757d;
+  background-color: #9a031e;
   color: white;
   display: flex;
   align-items: center;

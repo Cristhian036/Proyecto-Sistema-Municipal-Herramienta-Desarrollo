@@ -10,7 +10,7 @@
     <div class="row">
       <div class="col-lg-8">
         <div class="card">
-          <div class="card-header bg-light">
+          <div class="card-header bg-wine text-white">
             <h4 class="mb-0">Descripción</h4>
           </div>
           <div class="card-body">
@@ -56,7 +56,7 @@
                   <div class="d-flex gap-2">
                     <button 
                       type="submit" 
-                      class="btn btn-primary"
+                      class="btn btn-wine"
                       [disabled]="!temaForm.form.valid">
                       <i class="fas fa-paper-plane me-2"></i>
                       Crear Tema
@@ -74,7 +74,7 @@
             </div>
 
             <div class="text-end" *ngIf="!mostrarFormularioTema">
-              <button class="btn btn-primary" (click)="mostrarFormularioCrearTema()">
+              <button class="btn btn-wine" (click)="mostrarFormularioCrearTema()">
                 <i class="fas fa-plus me-2"></i>
                 Crear nuevo tema
               </button>
@@ -87,7 +87,7 @@
           <h5 class="mb-3">Temas de Discusión ({{ temas.length }})</h5>
           
           <div *ngIf="cargando" class="text-center my-4">
-            <div class="spinner-border text-primary" role="status">
+            <div class="spinner-border text-wine" role="status">
               <span class="visually-hidden">Cargando...</span>
             </div>
           </div>
@@ -112,7 +112,7 @@
                   
                   <div class="d-flex gap-2">
                     <button 
-                      class="btn btn-outline-primary btn-sm"
+                      class="btn btn-outline-wine btn-sm"
                       (click)="abrirModal(tema)"
                       data-bs-toggle="modal" 
                       data-bs-target="#foroModal">
@@ -130,7 +130,7 @@
       <!-- Sidebar -->
       <div class="col-lg-4">
         <div class="card">
-          <div class="card-header bg-primary text-white">
+          <div class="card-header bg-wine text-white">
             <h5 class="mb-0">
               <i class="fas fa-info-circle me-2"></i>
               Información del Foro
@@ -160,8 +160,8 @@
         </div>
 
         <div class="card mt-4">
-          <div class="card-header bg-secondary text-white">
-            <h5 class="mb-0">
+          <div class="card-header bg-wine-light">
+            <h5 class="mb-0 text-wine">
               <i class="fas fa-rules me-2"></i>
               Reglas del Foro
             </h5>
@@ -169,19 +169,19 @@
           <div class="card-body">
             <ul class="list-unstyled mb-0">
               <li class="mb-2">
-                <i class="fas fa-check text-success me-2"></i>
+                <i class="fas fa-check text-wine me-2"></i>
                 Mantén un tono respetuoso
               </li>
               <li class="mb-2">
-                <i class="fas fa-check text-success me-2"></i>
+                <i class="fas fa-check text-wine me-2"></i>
                 No publiques información personal
               </li>
               <li class="mb-2">
-                <i class="fas fa-check text-success me-2"></i>
+                <i class="fas fa-check text-wine me-2"></i>
                 Evita el spam o contenido irrelevante
               </li>
               <li class="mb-2">
-                <i class="fas fa-check text-success me-2"></i>
+                <i class="fas fa-check text-wine me-2"></i>
                 Usa un lenguaje apropiado
               </li>
             </ul>
@@ -190,7 +190,7 @@
 
         <!-- Estadísticas -->
         <div class="card mt-4" *ngIf="foroSeleccionado">
-          <div class="card-header bg-info text-white">
+          <div class="card-header bg-wine text-white">
             <h5 class="mb-0">
               <i class="fas fa-chart-bar me-2"></i>
               Estadísticas del Tema
@@ -246,7 +246,7 @@
                 <p>{{ foroSeleccionado.contenido }}</p>
                 
                 <div class="mb-3" *ngIf="isUserAuthenticated">
-                  <button class="btn btn-sm btn-outline-success me-2" (click)="votarForo('LIKE')">
+                  <button class="btn btn-sm btn-outline-wine me-2" (click)="votarForo('LIKE')">
                     <i class="fas fa-thumbs-up me-1"></i> Me gusta
                   </button>
                   <button class="btn btn-sm btn-outline-danger me-2" (click)="votarForo('DISLIKE')">
@@ -274,7 +274,7 @@
                   <div class="d-flex gap-2">
                     <button 
                       type="submit" 
-                      class="btn btn-primary"
+                      class="btn btn-wine"
                       [disabled]="!comentarioForm.form.valid">
                       <i class="fas fa-paper-plane me-2"></i>
                       Publicar Comentario
@@ -292,7 +292,7 @@
             </div>
 
             <div class="text-end mb-4" *ngIf="!mostrarFormulario && isUserAuthenticated">
-              <button class="btn btn-primary" (click)="mostrarFormularioComentario()">
+              <button class="btn btn-wine" (click)="mostrarFormularioComentario()">
                 <i class="fas fa-plus me-2"></i>
                 Agregar comentario
               </button>
@@ -321,7 +321,7 @@
                     
                     <div class="d-flex gap-2" *ngIf="isUserAuthenticated">
                       <button 
-                        class="btn btn-link btn-sm p-0 text-success"
+                        class="btn btn-link btn-sm p-0 text-wine"
                         (click)="votarComentario(comentario.id!, 'LIKE')">
                         <i class="fas fa-thumbs-up me-1"></i>
                       </button>
@@ -331,7 +331,7 @@
                         <i class="fas fa-thumbs-down me-1"></i>
                       </button>
                       <button 
-                        class="btn btn-link btn-sm p-0 text-primary"
+                        class="btn btn-link btn-sm p-0 text-wine"
                         (click)="toggleRespuesta(comentario)">
                         <i class="fas fa-reply me-1"></i>
                         Responder
@@ -363,7 +363,7 @@
                             <div class="d-flex gap-2">
                               <button 
                                 type="submit" 
-                                class="btn btn-primary btn-sm"
+                                class="btn btn-wine btn-sm"
                                 [disabled]="!respuestaForm.form.valid">
                                 <i class="fas fa-paper-plane me-1"></i>
                                 Responder
@@ -416,7 +416,7 @@
           <!-- Sidebar del modal -->
           <div class="col-md-4">
             <div class="card">
-              <div class="card-header bg-info text-white">
+              <div class="card-header bg-wine text-white">
                 <h6 class="mb-0">
                   <i class="fas fa-chart-bar me-2"></i>
                   Estadísticas

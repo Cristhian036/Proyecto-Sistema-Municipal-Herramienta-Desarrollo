@@ -82,6 +82,15 @@ section {
   color: #721121 !important;
 }
 
+.text-white {
+  color: white !important;
+}
+
+.bg-wine {
+  background-color: #721121 !important;
+  color: white !important;
+}
+
 .bg-wine-light {
   background-color: rgba(114, 17, 33, 0.05) !important;
 }
