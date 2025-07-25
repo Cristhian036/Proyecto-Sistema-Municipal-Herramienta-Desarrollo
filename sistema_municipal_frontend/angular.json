@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "sistema-examenes-frontend": {
+    "sistema-municipal-frontend": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:application": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/sistema-examenes-frontend",
+            "outputPath": "dist/sistema-municipal-frontend",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -43,8 +43,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "10kb",
+                  "maximumError": "15kb"
                 }
               ],
               "fileReplacements": [
@@ -70,10 +70,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "sistema-examenes-frontend:build:production"
+              "browserTarget": "sistema-municipal-frontend:build:production"
             },
             "development": {
-              "browserTarget": "sistema-examenes-frontend:build:development"
+              "browserTarget": "sistema-municipal-frontend:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -81,7 +81,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "sistema-examenes-frontend:build"
+            "browserTarget": "sistema-municipal-frontend:build"
           }
         },
         "test": {
@@ -105,7 +105,7 @@
       }
     }
   },
-  "defaultProject": "sistema-examenes-frontend",
+  "defaultProject": "sistema-municipal-frontend",
   "cli": {
     "analytics": false
   }

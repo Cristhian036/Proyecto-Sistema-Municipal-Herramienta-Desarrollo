@@ -5,8 +5,6 @@
 /tmp
 /out-tsc
 /bazel-out
-next-env.d.ts
-/.next
 
 # Node
 /node_modules

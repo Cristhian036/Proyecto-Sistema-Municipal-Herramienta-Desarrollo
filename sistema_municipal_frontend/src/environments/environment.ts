@@ -3,7 +3,22 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  apiUrl: 'http://localhost:8080/api',
+  baseUrl: 'http://localhost:8080',
+  // Configuración de la aplicación
+  appName: 'Sistema Municipal',
+  appVersion: '1.0.0',
+  // Configuración de JWT
+  jwtTokenKey: 'token',
+  // Configuración de archivos
+  maxFileSize: 10485760, // 10MB en bytes
+  allowedFileTypes: ['image/jpeg', 'image/png', 'image/gif', 'application/pdf'],
+  // Configuración de la base de datos (para referencia)
+  dbName: 'sistema_municipal',
+  // Configuración de paginación
+  defaultPageSize: 10,
+  pageSizeOptions: [5, 10, 20, 50]
 };
 
 /*
