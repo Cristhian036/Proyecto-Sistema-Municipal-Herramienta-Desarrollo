@@ -1,17 +1,60 @@
-# Proyecto-Herramientas-Desarrollo
-Plataforma de Gestión y Difusión de la Municipalidad
+# Sistema Municipal - Plataforma de Gestión y Difusión
 
-Es un sistema integral que abarca diversas funcionalidades clave para el funcionamiento eficiente de la municipalidad. Entre sus principales características se encuentran:
+[![Docker](https://img.shields.io/badge/Docker-Ready-blue?logo=docker)](https://docker.com)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4.5-green?logo=spring)](https://spring.io/projects/spring-boot)
+[![Angular](https://img.shields.io/badge/Angular-14-red?logo=angular)](https://angular.io)
 
-- **Comunicación Ciudadana**: Canales de difusión de información relevante para los ciudadanos, incluyendo noticias, avisos y alertas.
-- **Transparencia y Acceso a la Información**: Portales de transparencia que permiten a los ciudadanos acceder a datos públicos y seguir el estado de los proyectos municipales.
-- **Participación Ciudadana**: Plataformas para la participación activa de los ciudadanos en la toma de decisiones y en la propuesta de mejoras por medio de foros de discucion.
+## 📋 Descripción
 
-La plataforma también incluirá una sección dedicada a la gestión y manejo de foros sobre los servicios que ofrece la municipalidad. Esta sección estará disponible exclusivamente para los usuarios registrados y permitirá:
+Sistema integral para la gestión municipal que incluye:
 
-- **Creación y Gestión de Foros**: Los usuarios podrán crear nuevos foros y gestionar los existentes.
-- **Participación Activa**: Los usuarios podrán participar en discusiones, hacer preguntas y compartir experiencias.
-- **Moderación**: Herramientas para moderar el contenido y asegurar un ambiente respetuoso y constructivo.
-- **Notificaciones**: Sistema de notificaciones para mantener a los usuarios informados sobre nuevas publicaciones y respuestas.
+- **Comunicación Ciudadana**: Noticias, avisos y alertas
+- **Transparencia**: Acceso a información pública
+- **Participación Ciudadana**: Foros de discusión con sistema de valoración
+- **Gestión de Usuarios**: Autenticación JWT y roles
 
-Este proyecto tiene como objetivo fomentar la comunicación y el intercambio de información entre los ciudadanos, mejorando así la calidad de los servicios municipales y la satisfacción de los usuarios.
+## 🏗️ Tecnologías
+
+- **Frontend**: Angular
+- **Backend**: Spring Boot
+- **Base de Datos**: MySQL
+- **Containerización**: Docker
+
+## 🚀 Instalación
+
+### Prerrequisitos
+- Docker Desktop instalado
+
+### Instalación Rápida
+```bash
+# Clonar repositorio
+git clone https://github.com/Cristhian036/Proyecto-Sistema-Municipal-Herramienta-Desarrollo.git
+cd Proyecto-Sistema-Municipal-Herramienta-Desarrollo
+
+# Levantar sistema completo
+docker-compose up -d
+
+
+### 🌐 Acceso
+- **Frontend**: http://localhost
+- **Backend API**: http://localhost:8080
+- **Base de Datos**: localhost:3307
+
+### ⚙️ Comandos Básicos
+```bash
+# Ver estado
+docker ps
+
+# Ver logs
+docker-compose logs -f
+
+# Detener sistema
+docker-compose down
+
+# Reiniciar
+docker-compose down && docker-compose up -d
+```
+
+---
+
+**Desarrollado por**: Cristhian036, yhojan-yauli y YinyerAle05 

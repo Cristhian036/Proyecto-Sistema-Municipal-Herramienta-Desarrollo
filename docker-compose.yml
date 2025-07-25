@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  # MySQL Database
+  mysql-db:
+    image: mysql:8.0
+    container_name: sistema-municipal-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: sistema_municipal
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./base_datos_sistema_municipal/bd.sql:/docker-entrypoint-initdb.d/bd.sql:ro
+    networks:
+      - sistema-network
+    restart: unless-stopped
+
+  # Spring Boot Backend
+  backend:
+    image: sistema-backend:latest
+    container_name: sistema-municipal-backend
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/sistema_municipal
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    depends_on:
+      - mysql-db
+    networks:
+      - sistema-network
+    restart: unless-stopped
+    volumes:
+      - backend_uploads:/app/uploads
+
+  # Angular Frontend
+  frontend:
+    image: sistema-frontend:latest
+    container_name: sistema-municipal-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - sistema-network
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
+  backend_uploads:
+
+networks:
+  sistema-network:
+    driver: bridge

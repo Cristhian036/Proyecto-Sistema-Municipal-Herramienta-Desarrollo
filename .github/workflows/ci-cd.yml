@@ -74,16 +74,10 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - name: Download Artifacts
-      uses: actions/download-artifact@v4
-      with:
-        path: ./artifacts/
+    - name: Setup Docker Buildx
+      uses: docker/setup-buildx-action@v3
     
     - name: Build Docker Images
       run: |
-        docker build -t sistema-backend:latest \
-          --build-arg JAR_FILE=artifacts/backend-jar/*.jar \
-          -f docker/backend/Dockerfile .
-        docker build -t sistema-frontend:latest \
-          --build-arg DIST_PATH=artifacts/frontend-dist \
-          -f docker/frontend/Dockerfile .
+        docker build -t sistema-backend:latest -f sistema_municipal_backend/Dockerfile sistema_municipal_backend/
+        docker build -t sistema-frontend:latest -f sistema_municipal_frontend/Dockerfile sistema_municipal_frontend/
