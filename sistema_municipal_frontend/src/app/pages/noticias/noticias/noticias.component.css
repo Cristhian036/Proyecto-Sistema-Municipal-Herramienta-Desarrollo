@@ -1,0 +1,874 @@
+/* Estilos para el componente de noticias */
+
+/* Sección Hero */
+.hero-section {
+  background: linear-gradient(135deg, #721c24 0%, #8b252e 100%);
+  color: white;
+  padding: 40px 0;
+  margin-bottom: 40px;
+}
+
+.hero-section h1 {
+  font-weight: 700;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hero-section .lead {
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+/* Estilos de cards */
+.card {
+  border: none;
+  border-radius: 12px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+}
+
+.card-header {
+  border-radius: 12px 12px 0 0 !important;
+  background: linear-gradient(135deg, #721c24 0%, #8b252e 100%) !important;
+  border: none;
+}
+
+.card-header h5 {
+  font-weight: 600;
+}
+
+/* Avatares de autor */
+.author-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #721c24 0%, #8b252e 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.author-avatar-sm {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #721c24 0%, #8b252e 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+/* Formulario */
+.form-control:focus {
+  border-color: #721c24;
+  box-shadow: 0 0 0 0.2rem rgba(114, 28, 36, 0.25);
+}
+
+.form-control {
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  transition: all 0.3s ease;
+}
+
+.form-control:hover {
+  border-color: #721c24;
+}
+
+/* Botones */
+.btn-primary {
+  background: linear-gradient(135deg, #721c24 0%, #8b252e 100%);
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  padding: 10px 20px;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #5a1519 0%, #6d1b22 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(114, 28, 36, 0.3);
+}
+
+.btn-primary:disabled {
+  background: #6c757d;
+  opacity: 0.7;
+}
+
+.btn-outline-danger {
+  border-color: #dc3545;
+  color: #dc3545;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-danger:hover {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  color: white;
+  transform: translateY(-1px);
+}
+
+/* Imágenes */
+.card-img-top {
+  border-radius: 12px 12px 0 0;
+  transition: transform 0.3s ease;
+}
+
+.card:hover .card-img-top {
+  transform: scale(1.02);
+}
+
+.img-fluid {
+  border-radius: 8px;
+}
+
+/* Lista de noticias en sidebar */
+.list-group-item {
+  border: none;
+  border-bottom: 1px solid #eee;
+  padding: 15px;
+  transition: background-color 0.3s ease;
+}
+
+.list-group-item:hover {
+  background-color: #f8f9fa;
+}
+
+.list-group-item:last-child {
+  border-bottom: none;
+}
+
+/* Vista previa de imagen */
+.img-fluid.rounded.shadow {
+  border: 2px solid #eee;
+  transition: border-color 0.3s ease;
+}
+
+.img-fluid.rounded.shadow:hover {
+  border-color: #721c24;
+}
+
+/* Spinner de carga */
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Texto muted personalizado */
+.text-muted {
+  color: #6c757d !important;
+}
+
+/* Iconos */
+.fas, .far {
+  color: #721c24;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero-section {
+    padding: 40px 0;
+  }
+  
+  .hero-section h1 {
+    font-size: 2rem;
+  }
+  
+  .card-body {
+    padding: 15px;
+  }
+  
+  .author-avatar {
+    width: 35px;
+    height: 35px;
+    font-size: 12px;
+  }
+  
+  .author-avatar-sm {
+    width: 25px;
+    height: 25px;
+    font-size: 10px;
+  }
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Efectos de hover para los botones del formulario */
+.btn-secondary {
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Estilos para los badges */
+.badge {
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+/* Estilos para alertas personalizadas */
+.alert {
+  border: none;
+  border-radius: 12px;
+  border-left: 4px solid #721c24;
+}
+
+/* Estilos para inputs de archivo */
+.form-control[type="file"] {
+  border: 2px dashed #ddd;
+  padding: 20px;
+  text-align: center;
+  background: #fafafa;
+  transition: all 0.3s ease;
+}
+
+.form-control[type="file"]:hover {
+  border-color: #721c24;
+  background: #f5f5f5;
+}
+
+/* Loading state */
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Mejoras para la legibilidad */
+.card-title {
+  font-weight: 600;
+  color: #333;
+  line-height: 1.3;
+}
+
+.card-text {
+  color: #555;
+  line-height: 1.6;
+}
+
+/* Estilos para validación */
+.is-invalid {
+  border-color: #dc3545;
+}
+
+.invalid-feedback {
+  display: block;
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.is-valid {
+  border-color: #28a745;
+}
+
+.valid-feedback {
+  display: block;
+  color: #28a745;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+/* Estilos para contadores de caracteres */
+.text-muted small {
+  font-size: 0.8rem;
+}
+
+.text-danger {
+  font-weight: 500;
+}
+
+/* Estados de hover para elementos interactivos */
+.clickable {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.clickable:hover {
+  opacity: 0.8;
+}
+
+/* Estilos para el contenedor principal */
+.container-fluid {
+  padding: 0;
+}
+
+.container {
+  max-width: 1200px;
+}
+
+/* Efectos de sombra mejorados */
+.shadow {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+}
+
+.shadow:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+}
+
+.text-wine {
+  color: #721121;
+}
+
+.badge-wine {
+  background-color: #9a031e;
+  color: white;
+  font-size: 0.75rem;
+  padding: 0.25em 0.5em;
+  border-radius: 10px;
+}
+
+/* ============ LAYOUT PRINCIPAL ============ */
+.bootstrap-wrapper {
+  padding: 20px 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.container-fluid {
+  max-width: 1400px;
+}
+
+/* ============ COMPONENTES MATERIAL ============ */
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.mat-mdc-card {
+  border-radius: 16px !important;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1) !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.mat-mdc-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 35px rgba(0,0,0,0.15) !important;
+}
+
+/* ============ PANEL DE AUTENTICACIÓN ============ */
+.auth-required-panel .alert {
+  border-radius: 16px;
+  border: none;
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  color: #0d47a1;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.alert-info-custom {
+  border-radius: 16px;
+  border: none;
+  background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
+  color: #2e7d32;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.large-icon {
+  font-size: 3rem !important;
+  width: 3rem !important;
+  height: 3rem !important;
+  margin-bottom: 1rem;
+  color: #1976d2;
+}
+
+/* ============ AVATARES ============ */
+.admin-avatar {
+  background: linear-gradient(45deg, #9a031e, #d90429) !important;
+  color: white !important;
+}
+
+.worker-avatar {
+  background: linear-gradient(45deg, #1565c0, #1976d2) !important;
+  color: white !important;
+}
+
+.news-avatar {
+  background: linear-gradient(45deg, #1976d2, #42a5f5) !important;
+  color: white !important;
+}
+
+.author-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, #6c757d, #adb5bd);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.875rem;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+/* ============ FORMULARIO ============ */
+.form-card {
+  position: sticky;
+  top: 20px;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+}
+
+.form-card .mat-mdc-card-content {
+  padding: 1.5rem;
+}
+
+/* ============ PREVIEW DE IMAGEN ============ */
+.preview-container {
+  position: relative;
+  display: inline-block;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.preview-container:hover {
+  transform: scale(1.02);
+}
+
+.img-preview {
+  max-width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.preview-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.7);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.preview-container:hover .preview-overlay {
+  opacity: 1;
+}
+
+.preview-overlay mat-icon {
+  font-size: 2rem;
+  width: 2rem;
+  height: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+/* ============ LISTA DE NOTICIAS ============ */
+.list-card {
+  max-height: calc(100vh - 40px);
+  display: flex;
+  flex-direction: column;
+}
+
+.list-card .mat-mdc-card-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+}
+
+.noticias-container {
+  padding: 0;
+}
+
+.noticia-item {
+  padding: 1.5rem 0;
+  border-radius: 12px;
+  transition: background-color 0.3s ease;
+}
+
+.noticia-item:hover {
+  background-color: rgba(158, 158, 158, 0.04);
+}
+
+/* ============ HEADER DE NOTICIA ============ */
+.noticia-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.author-info {
+  display: flex;
+  align-items: center;
+}
+
+.author-details {
+  flex: 1;
+}
+
+.author-name {
+  margin: 0;
+  font-weight: 600;
+  color: #495057;
+  font-size: 0.95rem;
+}
+
+.publish-date {
+  margin: 0;
+  color: #6c757d;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.noticia-acciones {
+  display: flex;
+  gap: 8px;
+}
+
+/* ============ CONTENIDO DE NOTICIA ============ */
+.noticia-titulo {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #721121;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+
+.noticia-imagen {
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.noticia-imagen img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.noticia-imagen img:hover {
+  transform: scale(1.02);
+}
+
+.noticia-contenido {
+  margin: 1rem 0;
+}
+
+.noticia-descripcion {
+  color: #495057;
+  line-height: 1.6;
+  font-size: 1rem;
+  text-align: justify;
+  margin: 0;
+}
+
+/* ============ ESTADOS VACÍOS ============ */
+.empty-icon {
+  font-size: 4rem !important;
+  width: 4rem !important;
+  height: 4rem !important;
+  color: #adb5bd;
+  margin-bottom: 1rem;
+}
+
+/* ============ ICONOS PEQUEÑOS ============ */
+.icon-small {
+  font-size: 1rem !important;
+  width: 1rem !important;
+  height: 1rem !important;
+  vertical-align: middle;
+}
+
+/* ============ SPINNER PERSONALIZADO ============ */
+.mat-mdc-progress-spinner {
+  margin: 0 auto;
+}
+
+/* ============ FOOTER ============ */
+.footer-info {
+  padding: 1rem;
+  border-top: 1px solid #e9ecef;
+  margin-top: 2rem;
+}
+
+/* ============ RESPONSIVIDAD ============ */
+@media (max-width: 768px) {
+  .bootstrap-wrapper {
+    padding: 10px 0;
+  }
+  
+  .form-card,
+  .list-card {
+    position: static;
+    max-height: none;
+  }
+  
+  .noticia-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .noticia-acciones {
+    align-self: flex-end;
+  }
+  
+  .author-info {
+    width: 100%;
+  }
+  
+  .title-wine {
+    font-size: 1.75rem;
+  }
+  
+  .container-fluid {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
+
+@media (max-width: 576px) {
+  .mat-mdc-card-content {
+    padding: 1rem !important;
+  }
+  
+  .noticia-titulo {
+    font-size: 1.1rem;
+  }
+  
+  .auth-required-panel .alert {
+    padding: 1.5rem;
+  }
+  
+  .large-icon {
+    font-size: 2.5rem !important;
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+  }
+}
+
+/* ============ ANIMACIONES ============ */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.noticia-item {
+  animation: slideInUp 0.3s ease;
+}
+
+/* ============ SCROLLBAR PERSONALIZADA ============ */
+.list-card .mat-mdc-card-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.list-card .mat-mdc-card-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.list-card .mat-mdc-card-content::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.list-card .mat-mdc-card-content::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* ============ EFECTOS DE FOCUS ============ */
+.mat-mdc-form-field.mat-focused .mat-mdc-select-arrow,
+.mat-mdc-form-field.mat-focused .mat-mdc-form-field-icon-suffix {
+  color: #9a031e;
+}
+
+.mat-mdc-form-field.mat-focused .mat-mdc-floating-label {
+  color: #9a031e !important;
+}
+
+/* ============ MEJORAS DE ACCESIBILIDAD ============ */
+.mat-mdc-raised-button:focus,
+.mat-mdc-icon-button:focus {
+  outline: 2px solid #9a031e;
+  outline-offset: 2px;
+}
+
+/* ============ MODO OSCURO (Opcional) ============ */
+@media (prefers-color-scheme: dark) {
+  .bootstrap-wrapper {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    color: #e0e0e0;
+  }
+  
+  .mat-mdc-card {
+    background-color: #2d2d2d !important;
+    color: #e0e0e0 !important;
+  }
+  
+  .noticia-descripcion {
+    color: #b0b0b0;
+  }
+  
+  .author-name {
+    color: #d0d0d0;
+  }
+}
+
+/* Estilos para noticias seleccionables */
+.list-group-item-action {
+  transition: all 0.3s ease;
+  border-left: 4px solid transparent;
+}
+
+.list-group-item-action:hover {
+  background-color: #f8f9fa;
+  border-left-color: #721c24;
+  transform: translateX(2px);
+}
+
+.list-group-item-action.active {
+  background-color: #e8f4f8;
+  border-left-color: #721c24;
+  color: #721c24;
+  font-weight: 500;
+}
+
+.list-group-item-action:hover:not(.active) {
+  background-color: #f1f3f4;
+}
+
+/* Indicador visual de noticia principal */
+.noticia-principal-indicator {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: linear-gradient(135deg, #721c24 0%, #8b252e 100%);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilos para el formulario de edición */
+.border-warning {
+  border-color: #ffc107 !important;
+  border-width: 2px !important;
+}
+
+.bg-warning {
+  background: linear-gradient(135deg, #ffc107 0%, #ffca2c 100%) !important;
+}
+
+.btn-warning {
+  background: linear-gradient(135deg, #ffc107 0%, #ffca2c 100%);
+  border-color: #ffc107;
+  color: #000;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-warning:hover {
+  background: linear-gradient(135deg, #e0a800 0%, #ffb400 100%);
+  border-color: #e0a800;
+  color: #000;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
+}
+
+.btn-outline-primary {
+  border-color: #721c24;
+  color: #721c24;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+  background-color: #721c24;
+  border-color: #721c24;
+  color: white;
+  transform: translateY(-1px);
+}
+
+.btn-outline-dark {
+  border-color: #495057;
+  color: #495057;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.btn-outline-dark:hover {
+  background-color: #495057;
+  border-color: #495057;
+  color: white;
+  transform: translateY(-1px);
+}
+
+/* Animación de aparición para el formulario de edición */
+.card.border-warning {
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

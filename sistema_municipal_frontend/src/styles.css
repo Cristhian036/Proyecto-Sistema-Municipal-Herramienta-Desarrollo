@@ -1,0 +1,209 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background: #f5f5f5;
+}
+
+/* GLOBAL LAYOUT IMPROVEMENTS */
+.container, .container-fluid {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+/* Content sections spacing */
+section {
+  padding: 2rem 0;
+}
+
+.card {
+  margin-bottom: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* Better spacing between page elements */
+.page-section {
+  margin-bottom: 3rem;
+  padding: 1.5rem 0;
+}
+
+.page-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.page-header h1 {
+  color: #721121;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.page-header p {
+  color: #6c757d;
+  font-size: 1.1rem;
+  margin-bottom: 0;
+}
+
+/* GLOBAL PAGE LAYOUT UTILITIES */
+.page-container {
+  min-height: calc(100vh - 160px);
+  padding: 2rem 0;
+}
+
+/* FORM IMPROVEMENTS */
+.form-container {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  margin-bottom: 2rem;
+}
+
+.auth-panel {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* WINE THEME UTILITIES */
+.text-wine {
+  color: #721121 !important;
+}
+
+.text-white {
+  color: white !important;
+}
+
+.bg-wine {
+  background-color: #721121 !important;
+  color: white !important;
+}
+
+.bg-wine-light {
+  background-color: rgba(114, 17, 33, 0.05) !important;
+}
+
+.border-wine {
+  border-color: #721121 !important;
+}
+
+/* CONTENT SPACING */
+.content-section {
+  margin-bottom: 3rem;
+}
+
+.content-block {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* RESPONSIVE GRID IMPROVEMENTS */
+.row.g-4 > * {
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+  .row.g-4 > * {
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* BUTTON IMPROVEMENTS */
+.btn {
+  border-radius: 6px;
+  padding: 0.6rem 1.2rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn-wine {
+  background-color: #721121;
+  border-color: #721121;
+  color: white;
+}
+
+.btn-wine:hover {
+  background-color: #9a031e;
+  border-color: #9a031e;
+  color: white;
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+  .container {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  
+  section {
+    padding: 1.5rem 0;
+  }
+  
+  .page-section {
+    margin-bottom: 2rem;
+    padding: 1rem 0;
+  }
+}
+
+.text-center{
+  text-align: center;
+}
+
+.full-width{
+  width: 100%;
+}
+
+.ml20{
+  margin-left: 20px !important;
+}
+
+.mr20{
+  margin-right: 20px !important;
+}
+
+.mt20{
+  margin-top: 20px !important;
+}
+
+.mb20{
+  margin-bottom: 20px !important;
+}
+
+.ml10{
+  margin-left: 10px !important;
+}
+
+.mr10{
+  margin-right: 10px !important;
+}
+
+.mt10{
+  margin-top: 10px !important;
+}
+
+.mb10{
+  margin-bottom: 10px !important;
+}
+
+.ml70{
+  margin-left: 70px !important;
+}
