@@ -1,13 +1,15 @@
+
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Multa } from '../models/multa.model';
+import baserUrl from './helper';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MultaService {
-  private apiUrl = 'http://localhost:8080/multas';
+  private apiUrl = `${baserUrl}/multas`;
 
   constructor(private http: HttpClient) { }
 

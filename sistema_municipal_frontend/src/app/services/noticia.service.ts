@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import baseUrl from './helper';
+import baserUrl from './helper';
 
 export interface Noticia {
   id?: number;
@@ -21,31 +21,31 @@ export class NoticiaService {
 
   // Listar todas las noticias
   listarNoticias(): Observable<Noticia[]> {
-    return this.http.get<Noticia[]>(`${baseUrl}/noticias/`);
+    return this.http.get<Noticia[]>(`${baserUrl}/noticias/`);
   }
 
   // Obtener una noticia por ID
   obtenerNoticia(id: number): Observable<Noticia> {
-    return this.http.get<Noticia>(`${baseUrl}/noticias/${id}`);
+    return this.http.get<Noticia>(`${baserUrl}/noticias/${id}`);
   }
 
   // Crear una nueva noticia con imagen
   crearNoticia(formData: FormData): Observable<Noticia> {
-    return this.http.post<Noticia>(`${baseUrl}/noticias/`, formData);
+    return this.http.post<Noticia>(`${baserUrl}/noticias/`, formData);
   }
 
   // Eliminar una noticia
   eliminarNoticia(id: number): Observable<any> {
-    return this.http.delete(`${baseUrl}/noticias/${id}`);
+    return this.http.delete(`${baserUrl}/noticias/${id}`);
   }
 
   // Actualizar una noticia existente
   actualizarNoticia(id: number, formData: FormData): Observable<Noticia> {
-    return this.http.put<Noticia>(`${baseUrl}/noticias/${id}`, formData);
+    return this.http.put<Noticia>(`${baserUrl}/noticias/${id}`, formData);
   }
 
   // Obtener URL de imagen
   obtenerUrlImagen(nombreImagen: string): string {
-    return `${baseUrl}/noticias/imagen/${nombreImagen}`;
+    return `${baserUrl}/noticias/imagen/${nombreImagen}`;
   }
 }

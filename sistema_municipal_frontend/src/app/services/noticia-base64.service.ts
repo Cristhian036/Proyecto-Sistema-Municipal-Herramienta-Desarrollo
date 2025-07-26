@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import baseUrl from './helper';
+import baserUrl from './helper';
 
 export interface NoticiaBase64 {
   id?: number;
@@ -22,17 +22,17 @@ export class NoticiaBase64Service {
 
   // Listar todas las noticias
   listarNoticias(): Observable<NoticiaBase64[]> {
-    return this.http.get<NoticiaBase64[]>(`${baseUrl}/noticias/`);
+    return this.http.get<NoticiaBase64[]>(`${baserUrl}/noticias/`);
   }
 
   // Obtener una noticia por ID
   obtenerNoticia(id: number): Observable<NoticiaBase64> {
-    return this.http.get<NoticiaBase64>(`${baseUrl}/noticias/${id}`);
+    return this.http.get<NoticiaBase64>(`${baserUrl}/noticias/${id}`);
   }
 
   // Crear noticia con imagen Base64
   crearNoticiaBase64(noticia: NoticiaBase64): Observable<NoticiaBase64> {
-    return this.http.post<NoticiaBase64>(`${baseUrl}/noticias/base64`, noticia);
+    return this.http.post<NoticiaBase64>(`${baserUrl}/noticias/base64`, noticia);
   }
 
   // Convertir archivo a Base64
@@ -47,6 +47,6 @@ export class NoticiaBase64Service {
 
   // Eliminar una noticia
   eliminarNoticia(id: number): Observable<any> {
-    return this.http.delete(`${baseUrl}/noticias/${id}`);
+    return this.http.delete(`${baserUrl}/noticias/${id}`);
   }
 }
