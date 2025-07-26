@@ -353,7 +353,7 @@ export class NoticiasComponent implements OnInit {
   iniciarEdicion(noticia: Noticia): void {
     this.editando = true;
     this.noticiaEditando = { ...noticia }; // Crear una copia para editar
-    this.imagenEditandoPreview = `http://localhost:8081/noticias/imagen/${noticia.imagen}`;
+    this.imagenEditandoPreview = `http://localhost:8080/noticias/imagen/${noticia.imagen}`;
     this.imagenEditandoSeleccionada = null;
     console.log('✏️ Iniciando edición de noticia:', noticia.titulo);
   }
