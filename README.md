@@ -55,11 +55,6 @@ docker-compose down
 docker-compose down && docker-compose up -d
 ```
 
-### � Problemas Comunes
-- **MySQL no conecta**: Esperar 30-60 segundos para inicialización
-- **Frontend no carga**: Verificar `docker logs sistema-municipal-frontend`
-- **Limpiar instalación**: `docker-compose down -v && docker system prune -f`
-
 ---
 
-**Desarrollado por**: Cristhian036 | **Versión**: 1.0.0
+**Desarrollado por**: Cristhian036, yhojan-yauli y YinyerAle05 

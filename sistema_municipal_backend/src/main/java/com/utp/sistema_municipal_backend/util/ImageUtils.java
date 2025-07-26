@@ -10,7 +10,7 @@ import java.util.UUID;
 public class ImageUtils {
     
     private static final List<String> ALLOWED_EXTENSIONS = Arrays.asList(
-        "jpg", "jpeg", "png", "gif", "bmp", "avif"
+        "jpg", "jpeg", "png", "gif", "bmp"
     );
     
     private static final long MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB

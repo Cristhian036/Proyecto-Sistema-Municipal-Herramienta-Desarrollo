@@ -2,15 +2,12 @@ package com.utp.sistema_municipal_backend.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.nio.file.Paths;
 
-/**
- * Configuración web para manejo de recursos estáticos.
- * NOTA: La configuración CORS se maneja en CorsConfig.java
- */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
@@ -40,5 +37,12 @@ public class WebConfig implements WebMvcConfigurer {
                 .addResourceLocations(uploadsPath);
     }
 
-    // CORS configuration removed - now handled in CorsConfig.java for centralized management
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOriginPatterns("*")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
+                .allowCredentials(false);
+    }
 }
