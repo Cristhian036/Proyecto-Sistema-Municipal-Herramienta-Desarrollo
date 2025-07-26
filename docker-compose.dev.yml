@@ -7,7 +7,7 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: sistema_municipal
     ports:
-      - "3307:3306"
+      - "3306:3306"
     volumes:
       - mysql_data_dev:/var/lib/mysql
       - ./base_datos_sistema_municipal/bd.sql:/docker-entrypoint-initdb.d/bd.sql:ro
@@ -23,7 +23,7 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/sistema_municipal
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_DATASOURCE_PASSWORD: 
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
     depends_on:
       - mysql-db

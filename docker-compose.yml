@@ -19,8 +19,10 @@ services:
 
   # Spring Boot Backend
   backend:
-    image: sistema-backend:latest
-    container_name: sistema-municipal-backend
+    build:
+      context: ./sistema_municipal_backend
+      dockerfile: Dockerfile
+    container_name: sistema-backend
     ports:
       - "8080:8080"
     environment:
@@ -38,7 +40,9 @@ services:
 
   # Angular Frontend
   frontend:
-    image: sistema-frontend:latest
+    build:
+      context: ./sistema_municipal_frontend
+      dockerfile: Dockerfile
     container_name: sistema-municipal-frontend
     ports:
       - "80:80"
