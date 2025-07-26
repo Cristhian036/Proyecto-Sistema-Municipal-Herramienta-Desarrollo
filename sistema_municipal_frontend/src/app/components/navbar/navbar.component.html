@@ -35,18 +35,18 @@
           </a>
           <ul class="dropdown-menu">
             <li>
-              <a class="dropdown-item" [routerLink]="['/formulario']" routerLinkActive="active">
-                <i class="fas fa-plus me-1"></i> Nueva Multa
-              </a>
-            </li>
-            <li>
-              <a class="dropdown-item" [routerLink]="['/buscar']" routerLinkActive="active">
+              <a class="dropdown-item" [routerLink]="['/buscar-multa']" routerLinkActive="active">
                 <i class="fas fa-search me-1"></i> Buscar Multa
               </a>
             </li>
             <li>
-              <a class="dropdown-item" [routerLink]="['/lista']" routerLinkActive="active">
+              <a class="dropdown-item" [routerLink]="['/lista-multas']" routerLinkActive="active" *ngIf="isLoggedIn && user?.authorities[0]?.authority === 'TRABAJADOR'">
                 <i class="fas fa-list me-1"></i> Listado de Multas
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" [routerLink]="['/formulario-multa']" routerLinkActive="active" *ngIf="isLoggedIn && user?.authorities[0]?.authority === 'TRABAJADOR'">
+                <i class="fas fa-plus me-1"></i> Nueva Multa
               </a>
             </li>
           </ul>

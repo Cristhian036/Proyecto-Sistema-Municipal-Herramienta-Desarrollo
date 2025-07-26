@@ -3,7 +3,6 @@ package com.utp.sistema_municipal_backend.config;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -13,15 +12,22 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.nio.charset.StandardCharsets;
+import javax.crypto.spec.SecretKeySpec;
 
 @Component
 public class JwtUtils {
 
     private Key secretKey;
+    
+    // Clave secreta fija para evitar que cambie en cada reinicio
+    private static final String JWT_SECRET = "SistemaMunicipalArequipaSecretKey2024ForJWTTokens123456";
 
     @PostConstruct
     public void init() {
-        this.secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+        // Usar una clave secreta fija en lugar de generar una aleatoria
+        byte[] keyBytes = JWT_SECRET.getBytes(StandardCharsets.UTF_8);
+        this.secretKey = new SecretKeySpec(keyBytes, SignatureAlgorithm.HS256.getJcaName());
     }
 
     public String extractUsername(String token) {

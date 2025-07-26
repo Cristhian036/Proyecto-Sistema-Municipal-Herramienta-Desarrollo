@@ -18,6 +18,11 @@ import { ComercioPublicidadComponent } from './pages/tramites/comercio-publicida
 import { TransporteVialidadComponent } from './pages/tramites/transporte-vialidad/transporte-vialidad.component';
 import { ServiciosPublicosComponent } from './pages/tramites/servicios-publicos/servicios-publicos.component';
 import { OtrosTramitesComponent } from './pages/tramites/otros-tramites/otros-tramites.component';
+// Componentes de Multas
+import { BuscarMultaComponent } from './pages/multas/buscar-multa/buscar-multa.component';
+import { ResultadoMultaComponent } from './pages/multas/resultado-multa/resultado-multa.component';
+import { ListaMultasComponent } from './pages/multas/lista-multas/lista-multas.component';
+import { FormularioMultaComponent } from './pages/multas/formulario-multa/formulario-multa.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
@@ -115,6 +120,25 @@ const routes: Routes = [
   {
     path: 'tramites/otros-tramites',
     component: OtrosTramitesComponent
+  },
+  // Rutas de Multas
+  {
+    path: 'buscar-multa',
+    component: BuscarMultaComponent
+  },
+  {
+    path: 'resultado-multa/:codigo',
+    component: ResultadoMultaComponent
+  },
+  {
+    path: 'lista-multas',
+    component: ListaMultasComponent,
+    canActivate: [AdminGuard]
+  },
+  {
+    path: 'formulario-multa',
+    component: FormularioMultaComponent,
+    canActivate: [AdminGuard]
   },
   { path: '', redirectTo: '/foros', pathMatch: 'full' }
 ];

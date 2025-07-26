@@ -39,6 +39,12 @@ import { TransporteVialidadComponent } from './pages/tramites/transporte-vialida
 import { ServiciosPublicosComponent } from './pages/tramites/servicios-publicos/servicios-publicos.component';
 import { OtrosTramitesComponent } from './pages/tramites/otros-tramites/otros-tramites.component';
 
+// Componentes de Multas
+import { BuscarMultaComponent } from './pages/multas/buscar-multa/buscar-multa.component';
+import { ResultadoMultaComponent } from './pages/multas/resultado-multa/resultado-multa.component';
+import { ListaMultasComponent } from './pages/multas/lista-multas/lista-multas.component';
+import { FormularioMultaComponent } from './pages/multas/formulario-multa/formulario-multa.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -60,7 +66,12 @@ import { OtrosTramitesComponent } from './pages/tramites/otros-tramites/otros-tr
     ComercioPublicidadComponent,
     TransporteVialidadComponent,
     ServiciosPublicosComponent,
-    OtrosTramitesComponent
+    OtrosTramitesComponent,
+    // Componentes de Multas
+    BuscarMultaComponent,
+    ResultadoMultaComponent,
+    ListaMultasComponent,
+    FormularioMultaComponent
   ],
   imports: [
     BrowserModule,

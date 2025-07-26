@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/votos")
-@CrossOrigin("*")
 public class LikeDislikeController {
 
     @Autowired

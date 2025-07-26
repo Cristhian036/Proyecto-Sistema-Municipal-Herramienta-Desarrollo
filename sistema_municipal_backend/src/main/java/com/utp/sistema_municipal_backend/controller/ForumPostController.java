@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/foros")
-@CrossOrigin("*")
 public class ForumPostController {
 
     @Autowired

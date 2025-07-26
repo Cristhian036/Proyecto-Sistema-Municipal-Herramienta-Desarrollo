@@ -309,7 +309,7 @@
                   <img [src]="'http://localhost:8080/noticias/imagen/' + noticia.imagen" 
                        class="rounded me-3" [alt]="noticia.titulo" 
                        style="width: 60px; height: 60px; object-fit: cover;"
-                       onerror="this.src='assets/images/noticia-placeholder.jpg'">
+                       onerror="this.src='assets/images/noticia.jpeg'">
                   <div class="flex-grow-1">
                     <small class="text-muted">{{ formatearFecha(noticia.fecha!) }}</small>
                     <h6 class="mb-1">{{ noticia.titulo }}</h6>

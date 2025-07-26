@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 @EnableWebSecurity
 @Configuration
@@ -31,11 +32,14 @@ public class MySecurityConfig {
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    @Autowired
+    private CorsConfigurationSource corsConfigurationSource;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.disable()) // Deshabilitar CORS de Spring Security para usar nuestro filtro global
+                .cors(cors -> cors.configurationSource(corsConfigurationSource)) // Usar configuración CORS centralizada
                 .authorizeHttpRequests(auth -> auth
                         // Permitir preflight requests (OPTIONS) primero - MUY IMPORTANTE
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
@@ -61,6 +65,15 @@ public class MySecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/noticias/**").hasAnyAuthority("TRABAJADOR")
                         .requestMatchers(HttpMethod.PUT, "/noticias/**").hasAuthority("TRABAJADOR")
                         .requestMatchers(HttpMethod.DELETE, "/noticias/**").hasAuthority("TRABAJADOR")
+                        
+                        // Endpoints de multas (públicos para consulta, admin para gestión)
+                        .requestMatchers(HttpMethod.GET, "/multas/codigo/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/multas/dni/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/multas/pendientes/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/multas/pagar/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/multas/tipos-infraccion").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/multas/estados").permitAll()
+                        .requestMatchers("/multas/**").hasAuthority("TRABAJADOR")
                         
                         // Endpoints que requieren autenticación
                         .requestMatchers("/votos/**").hasAnyAuthority("TRABAJADOR", "USUARIO")
